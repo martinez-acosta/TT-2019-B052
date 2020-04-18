@@ -91,7 +91,7 @@ export default {
     name: { required, maxLength: maxLength(40) },
     username: { required, maxLength: maxLength(10) },
     password: { required },
-    confirmPassword: {
+    passwordConfirmation: {
       required,
       sameAsPassword: sameAs('password')
     },
@@ -109,9 +109,6 @@ export default {
       username: '',
       email: '',
       checkbox: false,
-      value: null,
-      title: 'Enter new password',
-      update: ' Reset Password',
       show: false,
       password: '',
       passwordConfirmation: '',
@@ -146,13 +143,6 @@ export default {
       !this.$v.name.maxLength &&
         errors.push('Name must be at most 40 characters long')
       !this.$v.name.required && errors.push('Name is required.')
-      return errors
-    },
-    passwordErrors() {
-      const errors = []
-      if (!this.$v.password.$dirty) return errors
-      !this.$v.password && errors.push('Must be valid e-mail')
-      !this.$v.confirmPassword && errors.push('E-mail is required')
       return errors
     },
     emailErrors() {
