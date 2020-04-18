@@ -1,6 +1,6 @@
-# prueba
+# TT 2019-B052
 
-> My mathematical Nuxt.js project
+> TT 2019-B052 project
 
 ## Build Setup
 
