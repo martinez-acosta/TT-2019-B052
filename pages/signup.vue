@@ -1,81 +1,80 @@
 <template>
-  <v-container>
-    <v-card-text>
-      <h1>Signup</h1>
-      <v-form>
-        <v-text-field
-          v-model="name"
-          :error-messages="nameErrors"
-          :counter="40"
-          label="Name"
-          required
-          prepend-icon="mdi-format-text"
-          @input="$v.name.$touch()"
-          @blur="$v.name.$touch()"
-        ></v-text-field>
+  <v-container outlined tile flat width="400" class="mx-auto mt-5">
+    <h1>Signup</h1>
+    <v-form>
+      <v-text-field
+        v-model="name"
+        :error-messages="nameErrors"
+        :counter="40"
+        label="Name"
+        required
+        prepend-icon="mdi-format-text"
+        @input="$v.name.$touch()"
+        @blur="$v.name.$touch()"
+      ></v-text-field>
 
-        <v-text-field
-          v-model="username"
-          :error-messages="usernameErrors"
-          :counter="10"
-          label="Username"
-          required
-          prepend-icon="mdi-format-text"
-          @input="$v.username.$touch()"
-          @blur="$v.username.$touch()"
-        ></v-text-field>
+      <v-text-field
+        v-model="username"
+        :error-messages="usernameErrors"
+        :counter="10"
+        label="Username"
+        required
+        prepend-icon="mdi-format-text"
+        @input="$v.username.$touch()"
+        @blur="$v.username.$touch()"
+      ></v-text-field>
 
-        <v-text-field
-          v-model="password"
-          :rules="passwordRules"
-          :append-icon="show ? 'visibility_off' : 'visibility'"
-          :type="show ? 'text' : 'password'"
-          label="Password"
-          placeholder="Enter password"
-          required
-          tile
-          @click:append="show = !show"
-        />
-        <v-text-field
-          v-model="passwordConfirmation"
-          :rules="passwordRules"
-          :append-icon="show ? 'visibility_off' : 'visibility'"
-          :type="show ? 'text' : 'password'"
-          label="Password"
-          placeholder="Confirm Password"
-          required
-          tile
-          @click:append="show = !show"
-        />
+      <v-text-field
+        v-model="password"
+        :rules="passwordRules"
+        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="show ? 'text' : 'password'"
+        label="Password"
+        placeholder="Enter password"
+        required
+        prepend-icon="mdi-form-textbox-password"
+        @click:append="show = !show"
+      />
+      <v-text-field
+        v-model="passwordConfirmation"
+        :rules="passwordRules"
+        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="show ? 'text' : 'password'"
+        label="Password"
+        placeholder="Confirm Password"
+        required
+        tile
+        prepend-icon="mdi-form-textbox-password"
+        @click:append="show = !show"
+      />
 
-        <v-file-input label="Attach profile picture"></v-file-input>
+      <v-file-input label="Attach profile picture"></v-file-input>
 
-        <v-text-field
-          v-model="email"
-          :error-messages="emailErrors"
-          label="E-mail"
-          type="email"
-          required
-          prepend-icon="mdi-email"
-          @input="$v.email.$touch()"
-          @blur="$v.email.$touch()"
-        ></v-text-field>
+      <v-text-field
+        v-model="email"
+        :error-messages="emailErrors"
+        label="E-mail"
+        type="email"
+        required
+        prepend-icon="mdi-email"
+        @input="$v.email.$touch()"
+        @blur="$v.email.$touch()"
+      ></v-text-field>
 
-        <v-checkbox
-          v-model="checkbox"
-          :error-messages="checkboxErrors"
-          label="Do you agree?"
-          required
-          @change="$v.checkbox.$touch()"
-          @blur="$v.checkbox.$touch()"
-        ></v-checkbox>
+      <v-checkbox
+        v-model="checkbox"
+        :error-messages="checkboxErrors"
+        label="Do you agree?"
+        required
+        @change="$v.checkbox.$touch()"
+        @blur="$v.checkbox.$touch()"
+      ></v-checkbox>
 
-        <v-btn class="mr-4" color="primary" dark rounded @click="submit"
-          >submit</v-btn
-        >
-        <v-btn color="primary" rounded @click="clear">clear</v-btn>
-      </v-form>
-    </v-card-text>
+      <v-btn class="mr-4" color="primary" dark rounded @click="submit"
+        >submit</v-btn
+      >
+      <v-btn color="primary" rounded @click="clear">clear</v-btn>
+    </v-form>
   </v-container>
 </template>
 <script>
