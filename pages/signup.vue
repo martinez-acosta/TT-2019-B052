@@ -1,0 +1,180 @@
+<template>
+  <v-container>
+    <v-card-text>
+      <h1>Signup</h1>
+      <v-form>
+        <v-text-field
+          v-model="name"
+          :error-messages="nameErrors"
+          :counter="40"
+          label="Name"
+          required
+          prepend-icon="mdi-format-text"
+          @input="$v.name.$touch()"
+          @blur="$v.name.$touch()"
+        ></v-text-field>
+
+        <v-text-field
+          v-model="username"
+          :error-messages="usernameErrors"
+          :counter="10"
+          label="Username"
+          required
+          prepend-icon="mdi-format-text"
+          @input="$v.username.$touch()"
+          @blur="$v.username.$touch()"
+        ></v-text-field>
+
+        <v-text-field
+          v-model="password"
+          :rules="passwordRules"
+          :append-icon="show ? 'visibility_off' : 'visibility'"
+          :type="show ? 'text' : 'password'"
+          label="Password"
+          placeholder="Enter password"
+          required
+          tile
+          @click:append="show = !show"
+        />
+        <v-text-field
+          v-model="passwordConfirmation"
+          :rules="passwordRules"
+          :append-icon="show ? 'visibility_off' : 'visibility'"
+          :type="show ? 'text' : 'password'"
+          label="Password"
+          placeholder="Confirm Password"
+          required
+          tile
+          @click:append="show = !show"
+        />
+
+        <v-file-input label="Attach profile picture"></v-file-input>
+
+        <v-text-field
+          v-model="email"
+          :error-messages="emailErrors"
+          label="E-mail"
+          type="email"
+          required
+          prepend-icon="mdi-email"
+          @input="$v.email.$touch()"
+          @blur="$v.email.$touch()"
+        ></v-text-field>
+
+        <v-checkbox
+          v-model="checkbox"
+          :error-messages="checkboxErrors"
+          label="Do you agree?"
+          required
+          @change="$v.checkbox.$touch()"
+          @blur="$v.checkbox.$touch()"
+        ></v-checkbox>
+
+        <v-btn class="mr-4" color="primary" dark rounded @click="submit"
+          >submit</v-btn
+        >
+        <v-btn color="primary" rounded @click="clear">clear</v-btn>
+      </v-form>
+    </v-card-text>
+  </v-container>
+</template>
+<script>
+import { validationMixin } from 'vuelidate'
+import { required, maxLength, email, sameAs } from 'vuelidate/lib/validators'
+
+export default {
+  mixins: [validationMixin],
+
+  validations: {
+    name: { required, maxLength: maxLength(40) },
+    username: { required, maxLength: maxLength(10) },
+    password: { required },
+    confirmPassword: {
+      required,
+      sameAsPassword: sameAs('password')
+    },
+    email: { required, email },
+    checkbox: {
+      checked(val) {
+        return val
+      }
+    }
+  },
+
+  data() {
+    return {
+      name: '',
+      username: '',
+      email: '',
+      checkbox: false,
+      value: null,
+      title: 'Enter new password',
+      update: ' Reset Password',
+      show: false,
+      password: '',
+      passwordConfirmation: '',
+      passwordRules: [
+        (password) => !!password || 'Password is required',
+        (password) =>
+          password.length >= 6 || 'Password must be at least 6 characters',
+        (confirmation) =>
+          confirmation === this.password || 'Passwords must match'
+      ]
+    }
+  },
+
+  computed: {
+    checkboxErrors() {
+      const errors = []
+      if (!this.$v.checkbox.$dirty) return errors
+      !this.$v.checkbox.checked && errors.push('You must agree to continue!')
+      return errors
+    },
+    usernameErrors() {
+      const errors = []
+      if (!this.$v.username.$dirty) return errors
+      !this.$v.username.maxLength &&
+        errors.push('Username must be at most 10 characters long')
+      !this.$v.username.required && errors.push('Username is required.')
+      return errors
+    },
+    nameErrors() {
+      const errors = []
+      if (!this.$v.name.$dirty) return errors
+      !this.$v.name.maxLength &&
+        errors.push('Name must be at most 40 characters long')
+      !this.$v.name.required && errors.push('Name is required.')
+      return errors
+    },
+    passwordErrors() {
+      const errors = []
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password && errors.push('Must be valid e-mail')
+      !this.$v.confirmPassword && errors.push('E-mail is required')
+      return errors
+    },
+    emailErrors() {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('Must be valid e-mail')
+      !this.$v.email.required && errors.push('E-mail is required')
+      return errors
+    }
+  },
+
+  methods: {
+    submit() {
+      this.$v.$touch()
+    },
+    clear() {
+      this.$v.$reset()
+      this.username = ''
+      this.password = ''
+      this.passwordConfirmation = ''
+      this.name = ''
+      this.email = ''
+      this.checkbox = false
+    }
+  }
+}
+</script>
