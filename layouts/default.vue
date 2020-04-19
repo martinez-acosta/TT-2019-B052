@@ -3,8 +3,10 @@
     <div id="app">
       <NavBar :links="links" />
       <v-content>
-        <nuxt />
-        <!--Aquí es donde los elementos de Nuxtjs son renderizados (las pages) -->
+        <transition name="fade" mode="out-in">
+          <nuxt />
+          <!--Aquí es donde los elementos de Nuxtjs son renderizados (las pages) -->
+        </transition>
       </v-content>
       <Footer />
     </div>
@@ -43,3 +45,16 @@ export default {
   }
 }
 </script>
+<style>
+/* Transitions */
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-out;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
