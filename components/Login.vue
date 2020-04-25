@@ -7,7 +7,7 @@
       <h1 class="display-1">Login</h1>
     </v-card-title>
     <v-card-text>
-      <v-form>
+      <v-form @submit.prevent="login">
         <v-text-field label="Username" prepend-icon="mdi-account-circle" />
         <v-text-field
           :type="showPassword ? 'text' : 'password'"
@@ -22,7 +22,7 @@
     <v-card-actions>
       <v-btn color="primary" text rounded to="/signup">Signup</v-btn>
       <v-spacer></v-spacer>
-      <v-btn color="primary" text rounded>Login</v-btn>
+      <v-btn color="primary" type="submit" text rounded>Login</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -32,6 +32,21 @@ export default {
   data() {
     return {
       showPassword: false
+    }
+  },
+  methods: {
+    login() {
+      // Ejecutamos la vuex action login
+      // Enviamos el usuario y la contraseña
+      // Después los enviamos a la ruta protegida
+      this.$store
+        .dispatch('login', {
+          email: this.email,
+          password: this.password
+        })
+        .then(() => {
+          this.$router.push({ name: 'dashboard' })
+        })
     }
   }
 }

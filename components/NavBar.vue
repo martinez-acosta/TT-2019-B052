@@ -17,6 +17,7 @@
   </div>
 </template>
 <!--Recibimos todos los links de layout.vue-->
+<!--Es el arreglo "links" el props que pasa los links-->
 <script>
 export default {
   props: {
