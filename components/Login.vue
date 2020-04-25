@@ -8,22 +8,27 @@
     </v-card-title>
     <v-card-text>
       <v-form @submit.prevent="login">
-        <v-text-field label="Username" prepend-icon="mdi-account-circle" />
         <v-text-field
+          v-model="email"
+          label="email"
+          prepend-icon="mdi-account-circle"
+        />
+        <v-text-field
+          v-model="password"
           :type="showPassword ? 'text' : 'password'"
           label="Password"
           prepend-icon="mdi-lock"
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="showPassword = !showPassword"
         />
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn color="primary" text rounded to="/register">Signup</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" type="submit" text rounded>Login</v-btn>
+        </v-card-actions>
       </v-form>
     </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-btn color="primary" text rounded to="/signup">Signup</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn color="primary" type="submit" text rounded>Login</v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 
@@ -31,7 +36,9 @@
 export default {
   data() {
     return {
-      showPassword: false
+      email: '',
+      showPassword: false,
+      password: ''
     }
   },
   methods: {
@@ -40,12 +47,15 @@ export default {
       // Enviamos el usuario y la contraseña
       // Después los enviamos a la ruta protegida
       this.$store
-        .dispatch('login', {
+        .dispatch('calls/login', {
           email: this.email,
           password: this.password
         })
         .then(() => {
           this.$router.push({ name: 'dashboard' })
+        })
+        .catch((err) => {
+          this.error = err.response.data.error
         })
     }
   }
