@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <RegisterUser />
-  </div>
+  <v-app>
+    <div>
+      <RegisterUser />
+    </div>
+  </v-app>
 </template>
 <script>
 import RegisterUser from '@/components/RegisterUser.vue'
