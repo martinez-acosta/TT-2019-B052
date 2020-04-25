@@ -105,13 +105,13 @@ export default {
 
   data() {
     return {
-      name: 'prueba m',
-      username: 'prueba',
-      email: 'lalo@gmail.com',
+      name: '',
+      username: '',
+      email: '',
       checkbox: false,
       show: false,
-      password: 'lalolalo',
-      passwordConfirmation: 'lalolalo',
+      password: '',
+      passwordConfirmation: '',
       passwordRules: [
         (password) => !!password || 'Password is required',
         (password) =>
