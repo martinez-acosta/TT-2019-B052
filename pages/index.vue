@@ -2,16 +2,15 @@
   <v-app>
     <v-layout align-center justify-center>
       <div>
-        <h1>Welcome to the App!</h1>
-        <!--<div v-if="!loggedIn">-->
-        <div>
-          To use this app you'll need to
+        <h1 class="text-center">¡Bienvenido!</h1>
+        <div v-if="!loggedIn">
+          Para usar esta aplicación tienes que
           <nuxt-link to="/login">
-            Login
+            iniciar sesión
           </nuxt-link>
-          or
+          o
           <nuxt-link to="/register">
-            Register
+            registrarte
           </nuxt-link>
         </div>
       </div>
@@ -21,7 +20,12 @@
 
 <script>
 export default {
-  components: {}
+  computed: {
+    loggedIn() {
+      // llamada al getter loggedIn que está en store/calls.js
+      return this.$store.getters['calls/loggedIn']
+    }
+  }
 }
 </script>
 

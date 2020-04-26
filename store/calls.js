@@ -8,6 +8,10 @@ export const mutations = {
     state.user = userData
     localStorage.setItem('user', JSON.stringify(userData))
     axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
+  },
+  CLEAR_USER_DATA() {
+    localStorage.removeItem('user')
+    location.reload()
   }
 }
 export const actions = {
@@ -24,6 +28,17 @@ export const actions = {
       .then(({ data }) => {
         commit('SET_USER_DATA', data)
       })
+  },
+  logout({ commit }) {
+    commit('CLEAR_USER_DATA')
+  },
+  nuxtClientInit({ commit }, { req }) {
+    const userString = localStorage.getItem('user') // grab user data from local storage
+    if (userString) {
+      // check to see if there is indeed a user
+      const userData = JSON.parse(userString) // parse user data into JSON
+      commit('SET_USER_DATA', userData) // restore user data with Vuex
+    }
   }
 }
 export const getters = {

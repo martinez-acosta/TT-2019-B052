@@ -33,6 +33,10 @@ export default {
   plugins: [
     {
       src: '@/plugins/vuelidate'
+    },
+    {
+      src: '@/plugins/vuex-client-init',
+      mode: 'client'
     }
   ],
   /*
