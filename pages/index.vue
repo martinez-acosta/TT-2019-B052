@@ -19,12 +19,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   computed: {
-    loggedIn() {
-      // llamada al getter loggedIn que está en store/calls.js
-      return this.$store.getters['calls/loggedIn']
-    }
+    //  loggedIn() {
+    // llamada al getter loggedIn que está en store/calls.js
+    //  return this.$store.getters['calls/loggedIn']
+    // },
+    ...mapGetters({
+      loggedIn: 'calls/loggedIn'
+    })
   }
 }
 </script>
