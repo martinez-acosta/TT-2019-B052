@@ -10,7 +10,8 @@ import RegisterUser from '@/components/RegisterUser.vue'
 export default {
   components: {
     RegisterUser
-  }
+  },
+  middleware: 'authLogin'
 }
 </script>
 
