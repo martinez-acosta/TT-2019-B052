@@ -8,9 +8,11 @@ export const mutations = {
     state.user = userData
     localStorage.setItem('user', JSON.stringify(userData))
     axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
+    state.logged = !!state.user
   },
   CLEAR_USER_DATA() {
     localStorage.removeItem('user')
+    state.logged = false
     location.reload()
   }
 }

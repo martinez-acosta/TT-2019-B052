@@ -29,6 +29,7 @@
 <!--Recibimos todos los links de layout.vue-->
 <!--Es el arreglo "links" el props que pasa los links-->
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     links: {
@@ -37,10 +38,9 @@ export default {
     }
   },
   computed: {
-    loggedIn() {
-      // llamada al getter loggedIn que está en store/calls.js
-      return this.$store.getters['calls/loggedIn']
-    }
+    ...mapGetters({
+      loggedIn: 'calls/loggedIn'
+    })
   },
   methods: {
     logout() {
