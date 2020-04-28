@@ -52,7 +52,7 @@ export default {
           password: this.password
         })
         .then(() => {
-          this.$router.push({ name: 'dashboard' })
+          this.$router.push({ name: 'workspace' })
         })
         .catch((err) => {
           this.error = err.response.data.error

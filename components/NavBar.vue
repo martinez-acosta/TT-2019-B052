@@ -19,6 +19,9 @@
         <v-btn text rounded :to="links[0].url">
           {{ links[0].label }}
         </v-btn>
+        <v-btn text rounded to="/workspace">
+          workspace
+        </v-btn>
         <v-btn text rounded @click="logout">
           Logout
         </v-btn>

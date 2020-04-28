@@ -43,10 +43,8 @@ app.post('/register', (req, res) => {
   if (req.body) {
     const user = {
       name: req.body.name,
-      username: req.body.username,
       email: req.body.email,
       password: req.body.password
-      // In a production app, you'll want to encrypt the password
     }
     const data = JSON.stringify(user, null, 2)
     console.log('req recibido: ' + data)
@@ -71,7 +69,7 @@ app.post('/register', (req, res) => {
           res.json({
             token,
             email: user.email,
-            username: user.username
+            name: user.name
           })
         }
       })

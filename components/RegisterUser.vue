@@ -17,17 +17,6 @@
         ></v-text-field>
 
         <v-text-field
-          v-model="username"
-          :error-messages="usernameErrors"
-          :counter="10"
-          label="username"
-          prepend-icon="mdi-format-text"
-          required
-          @input="$v.username.$touch()"
-          @blur="$v.username.$touch()"
-        ></v-text-field>
-
-        <v-text-field
           v-model="password"
           :rules="passwordRules"
           :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -47,8 +36,6 @@
           prepend-icon="mdi-form-textbox-password"
           @click:append="show = !show"
         />
-
-        <v-file-input label="Attach profile picture"></v-file-input>
 
         <v-text-field
           v-model="email"
@@ -85,7 +72,6 @@ export default {
 
   validations: {
     name: { required, maxLength: maxLength(40) },
-    username: { required, maxLength: maxLength(10) },
     password: { required },
     passwordConfirmation: {
       required,
@@ -102,7 +88,6 @@ export default {
   data() {
     return {
       name: '',
-      username: '',
       email: '',
       checkbox: false,
       show: false,
@@ -123,14 +108,6 @@ export default {
       const errors = []
       if (!this.$v.checkbox.$dirty) return errors
       !this.$v.checkbox.checked && errors.push('You must agree to continue!')
-      return errors
-    },
-    usernameErrors() {
-      const errors = []
-      if (!this.$v.username.$dirty) return errors
-      !this.$v.username.maxLength &&
-        errors.push('username must be at most 10 characters long')
-      !this.$v.username.required && errors.push('username is required.')
       return errors
     },
     nameErrors() {
@@ -156,12 +133,11 @@ export default {
         .dispatch('calls/register', {
           // Enviamos un objeto, denotado por {}, que contiene el nombre, username, email y password
           name: this.name,
-          username: this.username,
           email: this.email,
           password: this.password
         })
         .then(() => {
-          this.$router.push({ name: 'dashboard' })
+          this.$router.push({ name: 'login' })
         })
         .catch((err) => {
           this.errors = err.response.data.errors
@@ -169,7 +145,6 @@ export default {
     },
     clear() {
       this.$v.$reset()
-      this.username = ''
       this.password = ''
       this.passwordConfirmation = ''
       this.name = ''
