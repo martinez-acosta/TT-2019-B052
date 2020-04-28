@@ -37,7 +37,8 @@ export default {
     {
       src: '@/plugins/vuex-client-init',
       mode: 'client'
-    }
+    },
+    { src: '@/plugins/fabric.js', mode: 'client' }
   ],
   /*
    ** Nuxt.js dev-modules
