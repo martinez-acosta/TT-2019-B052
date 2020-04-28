@@ -12,6 +12,7 @@
           v-model="email"
           label="email"
           prepend-icon="mdi-account-circle"
+          :error-messages="errores"
         />
         <v-text-field
           v-model="password"
@@ -38,7 +39,14 @@ export default {
     return {
       email: '',
       showPassword: false,
-      password: ''
+      password: '',
+      errores: null
+    }
+  },
+  computed: {
+    loginErrors() {
+      const errors = this.error
+      return errors
     }
   },
   methods: {
@@ -55,7 +63,7 @@ export default {
           this.$router.push({ name: 'workspace' })
         })
         .catch((err) => {
-          this.error = err.response.data.error
+          this.errores = err.response.data.error
         })
     }
   }
