@@ -3,12 +3,11 @@
     <div style="width: 100%; display: flex; justify-content: space-between">
       <div
         id="myDiagramDiv"
-        ref="hola"
-        style="flex-grow: 1; height: 500px; border: solid 1px black"
+        style="flex-grow: 1; height: 600px; border: solid 1px black"
       ></div>
       <div
         id="myPaletteDiv"
-        style="width: 100px; background-color: whitesmoke; border: solid 1px black"
+        style="width: 200px; background-color: whitesmoke; border: solid 1px black"
       ></div>
     </div>
     <div id="buttons">
@@ -16,7 +15,11 @@
       <v-btn color="primary" @click="loadModel">Load</v-btn>
       <v-btn @click="addNode">Add Child to Gamma</v-btn>
 
-      <v-textarea style="width:100%;height:250px">{{ savedModel }}</v-textarea>
+      <v-textarea
+        v-model="diagramaObtenido"
+        auto-grow
+        style="width:100%;height:250px"
+      ></v-textarea>
     </div>
   </v-app>
 </template>
@@ -51,8 +54,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      existeDiagrama: 'diagramas/existDiagram',
-      diagramaObtenido: 'diagramas/getDiagram'
+      existeDiagrama: 'diagram/existDiagram',
+      diagramaObtenido: 'diagram/getDiagram'
     }),
     currentNodeText: {
       get() {
@@ -153,6 +156,9 @@ export default {
       )
     }
   },
+  beforeDestroy() {
+    this.saveModel()
+  },
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
   methods: {
@@ -233,8 +239,8 @@ export default {
       this.saveDiagramProperties()
       this.savedModel = this.myDiagram.model.toJson()
       this.myDiagram.isModified = false
-      console.log('savedModel' + this.savedModel)
-      this.$store.dispatch('diagramas/save', {
+      //  console.log('savedModel: ' + this.savedModel)
+      this.$store.dispatch('diagram/save', {
         savedModel: this.savedModel
       })
     },
