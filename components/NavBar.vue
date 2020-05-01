@@ -29,7 +29,7 @@
     </v-app-bar>
   </div>
 </template>
-<!--Recibimos todos los links de layout.vue-->
+<!--Recibimos todos los links de layout/default.vue-->
 <!--Es el arreglo "links" el props que pasa los links-->
 <script>
 import { mapGetters } from 'vuex'

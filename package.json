@@ -13,9 +13,8 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
-    "@nuxtjs/firebase": "^5.0.7",
+    "gojs": "^2.1.15",
     "nuxt": "^2.0.0",
-    "vue-fabric-wrapper": "^0.3.71",
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {

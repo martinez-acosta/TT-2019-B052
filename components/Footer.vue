@@ -9,10 +9,7 @@
   </v-footer>-->
   <v-footer app color="primary darken-1 py-4 text-center white--text">
     <v-spacer />
-    <span
-      >Instituto Politécnico Nacional - &copy;
-      {{ new Date().getFullYear() }}</span
-    >
+    <span>Instituto Politécnico Nacional - {{ new Date().getFullYear() }}</span>
     <v-spacer />
   </v-footer>
 </template>

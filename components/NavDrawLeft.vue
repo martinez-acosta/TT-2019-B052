@@ -26,7 +26,7 @@
             <v-list-item-title>My Files</v-list-item-title>
           </v-list-item>
 
-          <v-list-item link nuxt to="/workspace/diagram">
+          <v-list-item link nuxt to="/workspace/whiteboard">
             <v-list-item-icon>
               <v-icon>mdi-vector-polyline-edit</v-icon>
             </v-list-item-icon>

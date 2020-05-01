@@ -16,8 +16,8 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || ''
       }
-    ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    ] /*,
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }] */
   },
   /*
    ** Customize the progress-bar color
@@ -37,8 +37,7 @@ export default {
     {
       src: '@/plugins/vuex-client-init',
       mode: 'client'
-    },
-    { src: '@/plugins/fabric.js', mode: 'client' }
+    }
   ],
   /*
    ** Nuxt.js dev-modules

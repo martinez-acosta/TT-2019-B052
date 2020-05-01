@@ -34,7 +34,6 @@ export default {
     Footer,
     NavDrawLeft
   },
-  data: () => ({}),
   methods: {
     logout() {
       this.$store.dispatch('calls/logout')
