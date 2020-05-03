@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Diagram></Diagram>
+    <Diagram v-if="isStripeLoaded"></Diagram>
   </div>
 </template>
 
@@ -10,9 +10,29 @@ import Diagram from '@/components/Diagram.vue'
 export default {
   middleware: 'authenticated',
   layout: 'workspace',
+
   components: {
     Diagram
   },
-  methods: {}
+  data() {
+    return {
+      isStripeLoaded: false
+    }
+  },
+  methods: {},
+  head() {
+    return {
+      script: [
+        {
+          src: '/Figures.js',
+          defer: true,
+          // Changed after script load
+          callback: () => {
+            this.isStripeLoaded = true
+          }
+        }
+      ]
+    }
+  }
 }
 </script>

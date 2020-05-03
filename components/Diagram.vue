@@ -86,22 +86,7 @@ export default {
       go.Diagram,
       'myDiagramDiv', // must name or refer to the DIV HTML element
       {
-        grid: $(
-          go.Panel,
-          'Grid',
-          $(go.Shape, 'LineH', { stroke: 'lightgray', strokeWidth: 0.5 }),
-          $(go.Shape, 'LineH', {
-            stroke: 'gray',
-            strokeWidth: 0.5,
-            interval: 10
-          }),
-          $(go.Shape, 'LineV', { stroke: 'lightgray', strokeWidth: 0.5 }),
-          $(go.Shape, 'LineV', {
-            stroke: 'gray',
-            strokeWidth: 0.5,
-            interval: 10
-          })
-        ),
+        grid: $(go.Panel, 'Grid'),
         'draggingTool.dragsLink': true,
         'draggingTool.isGridSnapEnabled': true,
         'linkingTool.isUnconnectedLinkValid': true,
@@ -238,6 +223,7 @@ export default {
       new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(
         go.Point.stringify
       ),
+
       {
         selectable: true,
         selectionAdornmentTemplate: nodeSelectionAdornmentTemplate
@@ -247,7 +233,10 @@ export default {
         resizeObjectName: 'PANEL',
         resizeAdornmentTemplate: nodeResizeAdornmentTemplate
       },
-      { rotatable: true, rotateAdornmentTemplate: nodeRotateAdornmentTemplate },
+      {
+        rotatable: false,
+        rotateAdornmentTemplate: nodeRotateAdornmentTemplate
+      },
       new go.Binding('angle').makeTwoWay(),
       // the main object is a Panel that surrounds a TextBlock with a Shape
       $(
@@ -402,11 +391,7 @@ export default {
                 fill: null,
                 stroke: 'deepskyblue',
                 strokeWidth: 0
-              }),
-              $(
-                go.Shape, // the arrowhead
-                { toArrow: 'Standard', stroke: null }
-              )
+              })
             )
           },
           {
@@ -419,10 +404,6 @@ export default {
           $(
             go.Shape, // the link path shape
             { isPanelMain: true, strokeWidth: 2 }
-          ),
-          $(
-            go.Shape, // the arrowhead
-            { toArrow: 'Standard', stroke: null }
           )
         ),
         model: new go.GraphLinksModel(
@@ -433,6 +414,12 @@ export default {
               text: 'Entidad',
               figure: 'Rectangle',
               fill: 'white'
+            },
+            {
+              category: 'weakRelation',
+              text: 'Entidad débil',
+              figure: 'FramedRectangle',
+              fill: 'yellow'
             },
             {
               category: 'relation',
