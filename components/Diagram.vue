@@ -320,7 +320,7 @@ export default {
         routing: go.Link.AvoidsNodes,
         curve: go.Link.JumpOver,
         corner: 5,
-        toShortLength: 4
+        toShortLength: 0
       },
       new go.Binding('points').makeTwoWay(),
       $(
@@ -329,7 +329,7 @@ export default {
       ),
       $(
         go.Shape, // the arrowhead
-        { toArrow: 'Standard', stroke: null }
+        { toArrow: '', stroke: null }
       ),
       $(
         go.Panel,
