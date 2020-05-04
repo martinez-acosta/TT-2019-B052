@@ -411,6 +411,59 @@ export default {
       return geo
     })
 
+    go.Shape.defineFigureGenerator('FramedEllipse', function(shape, w, h) {
+      const geo = new go.Geometry()
+      geo.add(
+        new go.PathFigure(0, 0)
+          .add(new go.PathSegment(go.PathSegment.Line, w, 0))
+          .add(new go.PathSegment(go.PathSegment.Line, w, h))
+          .add(new go.PathSegment(go.PathSegment.Line, 0, h))
+          .add(new go.PathSegment(go.PathSegment.Line, 0, 0))
+      )
+      geo.add(
+        new go.PathFigure(0, 0).add(
+          new go.PathSegment(
+            go.PathSegment.Arc,
+            180,
+            360,
+            w / 2,
+            h / 2,
+            w / 2,
+            h / 2
+          )
+        )
+      )
+      geo.spot1 = new go.Spot(0, 0, 25, 25)
+      geo.spot2 = new go.Spot(1, 1, -25, -25)
+      return geo
+    })
+
+    go.Shape.defineFigureGenerator('FramedRectangle', function(shape, w, h) {
+      let param1 = shape ? shape.parameter1 : NaN
+      let param2 = shape ? shape.parameter2 : NaN
+      if (isNaN(param1)) param1 = 8 // default values PARAMETER 1 is for WIDTH
+      if (isNaN(param2)) param2 = 8 // default values PARAMETER 2 is for HEIGHT
+
+      const geo = new go.Geometry()
+      const fig = new go.PathFigure(0, 0, true)
+      geo.add(fig)
+      // outer rectangle, clockwise
+      fig.add(new go.PathSegment(go.PathSegment.Line, w, 0))
+      fig.add(new go.PathSegment(go.PathSegment.Line, w, h))
+      fig.add(new go.PathSegment(go.PathSegment.Line, 0, h).close())
+      if (param1 < w / 2 && param2 < h / 2) {
+        // inner rectangle, counter-clockwise
+        fig.add(new go.PathSegment(go.PathSegment.Move, param1, param2)) // subpath
+        fig.add(new go.PathSegment(go.PathSegment.Line, param1, h - param2))
+        fig.add(new go.PathSegment(go.PathSegment.Line, w - param1, h - param2))
+        fig.add(
+          new go.PathSegment(go.PathSegment.Line, w - param1, param2).close()
+        )
+      }
+      geo.setSpots(0, 0, 1, 1, param1, param2, -param1, -param2)
+      return geo
+    })
+
     // Para cargar el diagrama por si hay uno ya existente
 
     /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
@@ -481,6 +534,12 @@ export default {
               category: 'atribute',
               text: 'Atributo',
               figure: 'Ellipse',
+              fill: 'white'
+            },
+            {
+              category: 'atributeComposite',
+              text: 'Att compuesto',
+              figure: 'FramedEllipse',
               fill: 'white'
             },
             {
