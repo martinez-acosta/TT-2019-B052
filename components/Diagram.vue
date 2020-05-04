@@ -355,6 +355,62 @@ export default {
       )
     )
 
+    go.Shape.defineFigureGenerator('EllipseInRectangle', function(shape, w, h) {
+      const geo = new go.Geometry()
+      geo.add(
+        new go.PathFigure(0, 0)
+          .add(new go.PathSegment(go.PathSegment.Line, w, 0))
+          .add(new go.PathSegment(go.PathSegment.Line, w, h))
+          .add(new go.PathSegment(go.PathSegment.Line, 0, h))
+          .add(new go.PathSegment(go.PathSegment.Line, 0, 0))
+      )
+      geo.add(
+        new go.PathFigure(0, 0).add(
+          new go.PathSegment(
+            go.PathSegment.Arc,
+            180,
+            360,
+            w / 2,
+            h / 2,
+            w / 2,
+            h / 2
+          )
+        )
+      )
+      geo.spot1 = new go.Spot(0, 0, 25, 25)
+      geo.spot2 = new go.Spot(1, 1, -25, -25)
+      return geo
+    })
+
+    go.Shape.defineFigureGenerator('weakDiamond', function(shape, w, h) {
+      let param1 = shape ? shape.parameter1 : NaN
+      let param2 = shape ? shape.parameter2 : NaN
+      if (isNaN(param1)) param1 = 8 // default values PARAMETER 1 is for WIDTH
+      if (isNaN(param2)) param2 = 8 // default values PARAMETER 2 is for HEIGHT
+
+      const geo = new go.Geometry()
+      const fig = new go.PathFigure(0.5 * w, 0, true)
+      geo.add(fig)
+      // outer diamond, clockwise
+      fig.add(new go.PathSegment(go.PathSegment.Line, 0, 0.5 * h))
+      fig.add(new go.PathSegment(go.PathSegment.Line, 0.5 * w, h))
+      fig.add(new go.PathSegment(go.PathSegment.Line, w, 0.5 * h).close())
+      if (param1 < w / 2 && param2 < h / 2) {
+        // inner diamond, counter-clockwise
+        fig.add(new go.PathSegment(go.PathSegment.Move, 0.5 * w, param2)) // subpath
+        fig.add(
+          new go.PathSegment(go.PathSegment.Line, w - param1 * 2, 0.5 * h)
+        )
+        fig.add(new go.PathSegment(go.PathSegment.Line, 0.5 * w, h - param2))
+        fig.add(
+          new go.PathSegment(go.PathSegment.Line, param1 * 2, 0.5 * h).close()
+        )
+      }
+      geo.spot1 = new go.Spot(0, 0, 25, 25)
+      geo.spot2 = new go.Spot(1, 1, -25, -25)
+      return geo
+    })
+
     // Para cargar el diagrama por si hay uno ya existente
 
     /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
@@ -416,10 +472,22 @@ export default {
               fill: 'white'
             },
             {
-              category: 'weakRelation',
+              category: 'weakEntity',
               text: 'Entidad débil',
               figure: 'FramedRectangle',
               fill: 'yellow'
+            },
+            {
+              category: 'atribute',
+              text: 'Atributo',
+              figure: 'Ellipse',
+              fill: 'white'
+            },
+            {
+              category: 'weakRelation',
+              text: 'Relación débil',
+              figure: 'weakDiamond',
+              fill: 'white'
             },
             {
               category: 'relation',
