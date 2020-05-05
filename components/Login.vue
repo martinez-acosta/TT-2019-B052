@@ -64,6 +64,8 @@ export default {
           this.$router.push({ name: 'workspace' })
         })
         .catch((err) => {
+          this.$nuxt.$loading.fail()
+          this.$nuxt.$loading.finish()
           this.errores = err.response.data.error
         })
     }

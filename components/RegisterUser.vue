@@ -141,6 +141,8 @@ export default {
           this.$router.push({ name: 'login' })
         })
         .catch((err) => {
+          this.$nuxt.$loading.fail()
+          this.$nuxt.$loading.finish()
           this.errors = err.response.data.errors
         })
     },
