@@ -34,6 +34,14 @@ export default {
     Footer,
     NavDrawLeft
   },
+  data: () => ({
+    items: [
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me 2' }
+    ]
+  }),
   methods: {
     logout() {
       this.$store.dispatch('calls/logout')

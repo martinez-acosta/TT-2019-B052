@@ -13,7 +13,6 @@
     <div id="buttons">
       <v-btn color="primary" @click="saveModel">Save</v-btn>
       <v-btn color="primary" @click="loadModel">Load</v-btn>
-      <v-btn @click="addNode">Add Child to Gamma</v-btn>
 
       <v-textarea
         v-model="diagramaObtenido"
@@ -613,23 +612,6 @@ export default {
       // set Diagram.initialPosition, not Diagram.position, to handle initialization side-effects
       const pos = this.myDiagram.model.modelData.position
       if (pos) this.myDiagram.initialPosition = go.Point.parse(pos)
-    },
-    // Here we modify the GoJS Diagram's Model using its methods,
-    // which can be much more efficient than modifying some memory and asking
-    // the GoJS Diagram to find differences and update accordingly.
-    // Undo and Redo will work as expected.
-    addNode() {
-      const model = this.myDiagram.model
-      model.startTransaction()
-      model.setDataProperty(model.findNodeDataForKey(4), 'color', 'purple')
-      const data = { text: 'NEW ' + this.counter++, color: 'yellow' }
-      model.addNodeData(data)
-      model.addLinkData({ from: 3, to: model.getKeyForNodeData(data) })
-      model.commitTransaction('added Node and Link')
-
-      // also manipulate the Diagram by changing its Diagram.selection collection
-      // const diagram = this.myDiagram.diagram
-      // diagram.select(diagram.findNodeForData(data))
     },
 
     // Here we modify VUE's view model directly, and

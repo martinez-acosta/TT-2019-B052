@@ -63,6 +63,7 @@ export default {
           this.$router.push({ name: 'workspace' })
         })
         .catch((err) => {
+          // this.errores = err.response.data.response
           this.errores = err.response.data.error
         })
     }
