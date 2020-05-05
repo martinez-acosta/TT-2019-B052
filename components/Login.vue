@@ -54,6 +54,7 @@ export default {
       // Ejecutamos la vuex action login
       // Enviamos el usuario y la contraseña
       // Después los enviamos a la ruta protegida
+      this.$nuxt.$loading.start()
       this.$store
         .dispatch('calls/login', {
           email: this.email,
@@ -63,7 +64,6 @@ export default {
           this.$router.push({ name: 'workspace' })
         })
         .catch((err) => {
-          // this.errores = err.response.data.response
           this.errores = err.response.data.error
         })
     }

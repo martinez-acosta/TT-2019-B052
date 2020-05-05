@@ -17,7 +17,7 @@ export const mutations = {
 }
 export const actions = {
   register({ commit }, signupInfo) {
-    return Service.login(signupInfo).then(({ data }) => {
+    return Service.register(signupInfo).then(({ data }) => {
       commit('SET_USER_DATA', data)
     })
   },

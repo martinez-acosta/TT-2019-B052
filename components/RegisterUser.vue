@@ -129,6 +129,7 @@ export default {
 
   methods: {
     register() {
+      this.$nuxt.$loading.start()
       this.$store
         .dispatch('calls/register', {
           // Enviamos un objeto, denotado por {}, que contiene el nombre, username, email y password
