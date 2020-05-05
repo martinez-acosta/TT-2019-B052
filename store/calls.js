@@ -1,4 +1,4 @@
-import axios from 'axios'
+import Service from '@/services/Service.js'
 
 export const state = () => ({
   user: null
@@ -7,7 +7,8 @@ export const mutations = {
   SET_USER_DATA(state, userData) {
     state.user = userData
     localStorage.setItem('user', JSON.stringify(userData))
-    axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
+    // axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
+    Service.setToken(userData)
   },
   CLEAR_USER_DATA() {
     localStorage.removeItem('user')
@@ -15,19 +16,15 @@ export const mutations = {
   }
 }
 export const actions = {
-  register({ commit }, credentials) {
-    return axios
-      .post('//localhost:3000/register', credentials)
-      .then(({ data }) => {
-        commit('SET_USER_DATA', data)
-      })
+  register({ commit }, signupInfo) {
+    return Service.login(signupInfo).then(({ data }) => {
+      commit('SET_USER_DATA', data)
+    })
   },
   login({ commit }, credentials) {
-    return axios
-      .post('//localhost:3000/login', credentials)
-      .then(({ data }) => {
-        commit('SET_USER_DATA', data)
-      })
+    return Service.login(credentials).then(({ data }) => {
+      commit('SET_USER_DATA', data)
+    })
   },
   logout({ commit }) {
     commit('CLEAR_USER_DATA')
