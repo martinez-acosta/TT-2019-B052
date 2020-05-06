@@ -7,17 +7,29 @@
 
 Develop a web app that allows the edition of a database diagram under the entity-relationship model and performs its validation, later the diagram can be transformed into the relational model with the possibility of obtaining the database schema in SQL statements or get the document oriented database schema and have the possibility to implement the non-relational model in a NoSQL database as MongoDB.
 
+## Included
+
+- Nuxt
+- Vue 2
+- Vue Router 3
+- Vuex 3
+- Nuxtjs/Axios
+- Authentication with JWT Token
+- Vuetify
+
 ## Project Status
 
+- You can test the application at https://serene-haibt-2239b4.netlify.app/
+- Backend project in https://api-tt-2019-b052.herokuapp.com/ and the code in https://github.com/omaraparicio07/TT2019-B052
 - User management with jwt authentication
-- Currently entity-relationship diagrams can be made with GoJS libray.
+- Entity-Relationship diagrams can be made with GoJS libray.
 
 ## TODO
-- Entity-relationship diagram validations
-- Transformation from ER diagram to relational
+- ER diagram's validations
+- Mapping from ER Diagram to Relational Model
 - SQL script generation
-- NoSQL conceptual model from ER diagram
-- Generate CQL scripts for MongoDB’s query language
+- Mapping from ER Diagram to NoSQL Conceptual Model
+- Generate data schema for MongoDB with MongoDB’s query language
 
 ## Build Setup
 
