@@ -1,25 +1,72 @@
 <template>
   <v-app>
-    <div style="width: 100%; display: flex; justify-content: space-between">
-      <div
-        id="myDiagramDiv"
-        style="flex-grow: 1; height: 600px; border: solid 1px black"
-      ></div>
-      <div
-        id="myPaletteDiv"
-        style="width: 200px; background-color: whitesmoke; border: solid 1px black"
-      ></div>
-    </div>
-    <div id="buttons">
-      <!--<v-btn color="primary" @click="saveModel">Save</v-btn>
-      <v-btn color="primary" @click="loadModel">Load</v-btn>
-      -->
-      <v-textarea
-        v-model="diagramaObtenido"
-        auto-grow
-        style="width:100%;height:250px"
-      ></v-textarea>
-    </div>
+    <v-content>
+      <v-container fluid>
+        <v-row justify="center" align="center">
+          <v-toolbar dense short>
+            <v-toolbar-items class="hidden-sm-and-down">
+              <v-menu open-on-hover bottom offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn text v-on="on">
+                    File
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="saveModel()">
+                    <v-list-item-title>Save</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="loadModel()">
+                    <v-list-item-title>Load</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+              <v-divider vertical></v-divider>
+            </v-toolbar-items>
+            <v-toolbar-items class="hidden-sm-and-down">
+              <v-menu open-on-hover bottom offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn text v-on="on">
+                    Edit
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-title>Action1</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title>Action2</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+              <v-divider vertical></v-divider>
+            </v-toolbar-items>
+          </v-toolbar>
+        </v-row>
+        <v-row justify="center" align="center">
+          <v-col class="shrink">
+            <div
+              style="width: 100%; display: flex; justify-content: space-between"
+            >
+              <div
+                id="myDiagramDiv"
+                style="flex-grow: 1; height: 600px; border: solid 1px black"
+              ></div>
+              <div
+                id="myPaletteDiv"
+                style="width: 200px; background-color: whitesmoke; border: solid 1px black"
+              ></div>
+            </div>
+          </v-col>
+        </v-row>
+        <v-textarea
+          v-model="diagramaObtenido"
+          auto-grow
+          style="width:100%;height:250px"
+        ></v-textarea>
+      </v-container>
+    </v-content>
+
+    <div id="buttons"></div>
   </v-app>
 </template>
 
@@ -78,7 +125,6 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('diagram/setMenu')
     /* Siempre el objeto será creado cuando el componente entre en el hook mounted(). Es decir, debemos recuperar el estado anterior del diagrama mediante un estado compartido entre componentes en Vuex o por otro medio. Falta implementarlo. */
     const $ = go.GraphObject.make // for conciseness in defining templates
 
@@ -572,7 +618,6 @@ export default {
   },
   beforeDestroy() {
     this.saveModel()
-    this.$store.dispatch('diagram/clearMenu')
   },
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
