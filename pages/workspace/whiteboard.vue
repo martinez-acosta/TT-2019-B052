@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-    <Diagram v-if="isStripeLoaded"></Diagram>
-  </div>
+  <Diagram v-if="isStripeLoaded"></Diagram>
 </template>
 
 <script>
@@ -10,7 +8,6 @@ import Diagram from '@/components/Diagram.vue'
 export default {
   middleware: 'authenticated',
   layout: 'workspace',
-
   components: {
     Diagram
   },

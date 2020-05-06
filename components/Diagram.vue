@@ -11,9 +11,9 @@
       ></div>
     </div>
     <div id="buttons">
-      <v-btn color="primary" @click="saveModel">Save</v-btn>
+      <!--<v-btn color="primary" @click="saveModel">Save</v-btn>
       <v-btn color="primary" @click="loadModel">Load</v-btn>
-
+      -->
       <v-textarea
         v-model="diagramaObtenido"
         auto-grow
@@ -78,6 +78,7 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('diagram/setMenu')
     /* Siempre el objeto será creado cuando el componente entre en el hook mounted(). Es decir, debemos recuperar el estado anterior del diagrama mediante un estado compartido entre componentes en Vuex o por otro medio. Falta implementarlo. */
     const $ = go.GraphObject.make // for conciseness in defining templates
 
@@ -571,6 +572,7 @@ export default {
   },
   beforeDestroy() {
     this.saveModel()
+    this.$store.dispatch('diagram/clearMenu')
   },
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)

@@ -5,7 +5,7 @@ export const mutations = {
   SET_DATA_MODEL(state, dataModel) {
     state.diagram = dataModel.savedModel
   },
-  CLEAR_DATA_MODEL() {
+  CLEAR_DATA_MODEL(state) {
     state.diagram = null
     location.reload()
   }
