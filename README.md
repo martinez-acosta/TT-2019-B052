@@ -21,7 +21,7 @@ Develop a web app that allows the edition of a database diagram under the entity
 
 - You can test the application at https://serene-haibt-2239b4.netlify.app/
 - Backend project in https://api-tt-2019-b052.herokuapp.com/ and the code in https://github.com/omaraparicio07/TT2019-B052
-- User management with jwt authentication
+- User management with JWT Token
 - Entity-Relationship diagrams can be made with GoJS libray.
 
 ## TODO
