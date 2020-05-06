@@ -4,9 +4,9 @@
 
 ## Project goal
 
-```
+
 Develop a web app that allows the edition of a database diagram under the entity-relationship model and performs its validation, later the diagram can be transformed into the relational model with the possibility of obtaining the database schema in SQL statements or get the document oriented database schema and you will have the possibility to implement the non-relational model in a NoSQL database as MongoDB.
-```
+
 
 ## Build Setup
 
