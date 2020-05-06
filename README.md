@@ -2,7 +2,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ee76620c-2359-49f2-bcdf-ef7697dfefe0/deploy-status)](https://app.netlify.com/sites/serene-haibt-2239b4/deploys)
 > TT 2019-B052 project
 
-## Project goal
+## Project Goals
 
 
 Develop a web app that allows the edition of a database diagram under the entity-relationship model and performs its validation, later the diagram can be transformed into the relational model with the possibility of obtaining the database schema in SQL statements or get the document oriented database schema and have the possibility to implement the non-relational model in a NoSQL database as MongoDB.
