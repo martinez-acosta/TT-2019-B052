@@ -61,7 +61,7 @@ export default {
           password: this.password
         })
         .then(() => {
-          this.$router.push({ name: 'workspace' })
+          this.$router.push({ name: 'workspace-er' })
         })
         .catch((err) => {
           this.$nuxt.$loading.fail()
