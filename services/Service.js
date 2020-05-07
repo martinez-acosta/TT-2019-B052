@@ -13,7 +13,7 @@ const apiClient = axios.create({
 
 export default {
   async register(signupInfo) {
-    const ip = await apiClient.post('/user', signupInfo)
+    const ip = await apiClient.post('/register', signupInfo)
     return ip
   },
   async login(credentials) {
