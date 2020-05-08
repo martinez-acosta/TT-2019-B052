@@ -147,7 +147,7 @@ export default {
         .catch((err) => {
           this.$nuxt.$loading.fail()
           this.$nuxt.$loading.finish()
-          console.log(err.response)
+          // console.log(err.response)
           this.error = err.response.data.error
         })
     },
