@@ -56,6 +56,7 @@ export default {
       // Ejecutamos la vuex action login
       // Enviamos el usuario y la contraseña
       // Después los enviamos a la ruta protegida
+      this.error = ''
       this.$nuxt.$loading.start()
       this.$store
         .dispatch('calls/login', {

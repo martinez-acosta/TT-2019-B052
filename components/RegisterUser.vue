@@ -133,6 +133,7 @@ export default {
 
   methods: {
     register() {
+      this.error = ''
       this.$nuxt.$loading.start()
       this.$store
         .dispatch('calls/register', {
