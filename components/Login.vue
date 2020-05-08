@@ -12,7 +12,6 @@
           v-model="email"
           label="email"
           prepend-icon="mdi-account-circle"
-          :error-messages="errores"
         />
         <v-text-field
           v-model="password"
@@ -22,6 +21,9 @@
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="showPassword = !showPassword"
         />
+        <v-alert v-show="error" type="error">
+          {{ error }}
+        </v-alert>
         <v-divider></v-divider>
         <v-card-actions>
           <v-btn color="primary" text rounded to="/register">Signup</v-btn>
@@ -40,7 +42,7 @@ export default {
       email: '',
       showPassword: false,
       password: '',
-      errores: null
+      error: ''
     }
   },
   computed: {
@@ -61,13 +63,19 @@ export default {
           password: this.password
         })
         .then(() => {
-          this.$router.push({ name: 'workspace-er' })
+          this.$router.push({ name: 'workspace' })
         })
         .catch((err) => {
           this.$nuxt.$loading.fail()
           this.$nuxt.$loading.finish()
-          this.errores = err.response.data.error
+          console.log(err.response)
+          this.error = err.response.data.error
         })
+    },
+    clear() {
+      this.password = ''
+      this.error = ''
+      this.email = ''
     }
   }
 }

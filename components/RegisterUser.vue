@@ -56,6 +56,9 @@
           @change="$v.checkbox.$touch()"
           @blur="$v.checkbox.$touch()"
         ></v-checkbox>
+        <v-alert v-show="error" type="error">
+          {{ error }}
+        </v-alert>
 
         <v-btn color="primary" type="submit" dark rounded>submit</v-btn>
         <v-btn color="primary" rounded @click="clear">clear</v-btn>
@@ -89,6 +92,7 @@ export default {
     return {
       name: '',
       email: '',
+      error: '',
       checkbox: false,
       show: false,
       password: '',
@@ -143,13 +147,15 @@ export default {
         .catch((err) => {
           this.$nuxt.$loading.fail()
           this.$nuxt.$loading.finish()
-          this.errors = err.response.data.errors
+          console.log(err.response)
+          this.error = err.response.data.error
         })
     },
     clear() {
       this.$v.$reset()
       this.password = ''
       this.passwordConfirmation = ''
+      this.error = ''
       this.name = ''
       this.email = ''
       this.checkbox = false
