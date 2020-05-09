@@ -17,28 +17,25 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-container>
+    <v-container fluid fill-height>
       <v-row>
-        <v-col class="shrink">
+        <v-col>
           <div
             style="width: 100%; display: flex; justify-content: space-between"
           >
-            <div
-              id="myDiagramDiv"
-              style="flex-grow: 1; height: 600px; border: solid 1px black"
-            ></div>
+            <div id="myDiagramDiv" style="width: 100%; display: flex;"></div>
             <div
               id="myPaletteDiv"
-              style="width: 200px; background-color: whitesmoke; border: solid 1px black"
+              style="width: 300px; background-color: whitesmoke; border: solid 1px black"
             ></div>
           </div>
         </v-col>
       </v-row>
-      <v-textarea
-        v-model="diagramaObtenido"
-        auto-grow
-        style="width:100%;height:250px"
-      ></v-textarea>
+      <v-row>
+        <v-col>
+          <v-textarea v-model="diagramaObtenido"></v-textarea>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -51,51 +48,14 @@ export default {
   data() {
     return {
       myDiagram: '',
-      myPalette: '',
-      diagramData: {
-        // Diagrama prueba
-        nodeDataArray: [
-          { key: 1, text: 'Alpha', color: 'lightblue' },
-          { key: 2, text: 'Beta', color: 'orange' },
-          { key: 3, text: 'Gamma', color: 'lightgreen' },
-          { key: 4, text: 'Delta', color: 'pink' }
-        ],
-        linkDataArray: [
-          { from: 1, to: 2 },
-          { from: 1, to: 3 },
-          { from: 3, to: 4 }
-        ]
-      },
-      currentNode: '',
-      savedModel: '',
-      counter: 1, // used by addNode
-      counter2: 4 // used by modifyStuff
+      myPalette: ''
     }
   },
   computed: {
     ...mapGetters({
-      existeDiagrama: 'diagram/existDiagram',
+      thereIsDiagram: 'diagram/existDiagram',
       diagramaObtenido: 'diagram/getDiagram'
-    }),
-    currentNodeText: {
-      get() {
-        const node = this.currentNode
-        if (node instanceof go.Node) {
-          return node.data.text
-        } else {
-          return ''
-        }
-      },
-      set(val) {
-        const node = this.currentNode
-        if (node instanceof go.Node) {
-          const model = this.model()
-          model.startTransaction()
-          model.setDataProperty(node.data, 'text', val)
-          model.commitTransaction('edited text')
-        }
-      }
-    }
+    })
   },
   mounted() {
     /* Siempre el objeto será creado cuando el componente entre en el hook mounted(). Es decir, debemos recuperar el estado anterior del diagrama mediante un estado compartido entre componentes en Vuex o por otro medio. Falta implementarlo. */
@@ -131,10 +91,10 @@ export default {
           fill: 'lightblue',
           stroke: 'deepskyblue'
         }),
-        'rotatingTool.handleAngle': 270,
+        /* 'rotatingTool.handleAngle': 270,
         'rotatingTool.handleDistance': 30,
         'rotatingTool.snapAngleMultiple': 15,
-        'rotatingTool.snapAngleEpsilon': 15,
+        'rotatingTool.snapAngleEpsilon': 15, */
         'undoManager.isEnabled': true
       }
     )
@@ -146,6 +106,7 @@ export default {
         fill: null,
         stroke: 'deepskyblue',
         strokeWidth: 1.5,
+        /// // Este hace lineas punteadas
         strokeDashArray: [4, 2]
       }),
       $(go.Placeholder)
@@ -216,25 +177,6 @@ export default {
       })
     )
 
-    const nodeRotateAdornmentTemplate = $(
-      go.Adornment,
-      { locationSpot: go.Spot.Center, locationObjectName: 'CIRCLE' },
-      $(go.Shape, 'Circle', {
-        name: 'CIRCLE',
-        cursor: 'pointer',
-        desiredSize: new go.Size(7, 7),
-        fill: 'lightblue',
-        stroke: 'deepskyblue'
-      }),
-      $(go.Shape, {
-        geometryString: 'M3.5 7 L3.5 30',
-        isGeometryPositioned: true,
-        stroke: 'deepskyblue',
-        strokeWidth: 1.5,
-        strokeDashArray: [4, 2]
-      })
-    )
-
     this.myDiagram.nodeTemplate = $(
       go.Node,
       'Spot',
@@ -242,7 +184,6 @@ export default {
       new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(
         go.Point.stringify
       ),
-
       {
         selectable: true,
         selectionAdornmentTemplate: nodeSelectionAdornmentTemplate
@@ -252,11 +193,6 @@ export default {
         resizeObjectName: 'PANEL',
         resizeAdornmentTemplate: nodeResizeAdornmentTemplate
       },
-      {
-        rotatable: false,
-        rotateAdornmentTemplate: nodeRotateAdornmentTemplate
-      },
-      new go.Binding('angle').makeTwoWay(),
       // the main object is a Panel that surrounds a TextBlock with a Shape
       $(
         go.Panel,
@@ -273,8 +209,8 @@ export default {
             fromLinkable: true,
             toLinkable: true,
             cursor: 'pointer',
-            fill: 'white', // default color
-            strokeWidth: 2
+            fill: 'white' // default color
+            // strokeWidth: 2
           },
           new go.Binding('figure'),
           new go.Binding('fill')
@@ -282,10 +218,11 @@ export default {
         $(
           go.TextBlock,
           {
-            font: 'bold 11pt Helvetica, Arial, sans-serif',
-            margin: 8,
+            // font: 'bold 11pt Lato, Helvetica, Arial, sans-serif',
+            margin: 16,
             maxSize: new go.Size(160, NaN),
             wrap: go.TextBlock.WrapFit,
+            isMultiline: false,
             editable: true
           },
           new go.Binding('text').makeTwoWay()
@@ -295,8 +232,8 @@ export default {
       this.makePort('T', go.Spot.Top, false, true),
       this.makePort('L', go.Spot.Left, true, true),
       this.makePort('R', go.Spot.Right, true, true),
-      this.makePort('B', go.Spot.Bottom, true, false),
-      {
+      this.makePort('B', go.Spot.Bottom, true, false)
+      /* {
         // handle mouse enter/leave events to show/hide the ports
         mouseEnter(e, node) {
           // this.showSmallPorts(node, true)
@@ -316,7 +253,7 @@ export default {
             }
           })
         }
-      }
+      } */
     )
     const linkSelectionAdornmentTemplate = $(
       go.Adornment,
@@ -363,8 +300,8 @@ export default {
           go.TextBlock,
           {
             textAlign: 'center',
-            font: '10pt helvetica, arial, sans-serif',
-            stroke: '#919191',
+            // font: '10pt helvetica, arial, sans-serif',
+            // stroke: '#919191',
             margin: 2,
             minSize: new go.Size(10, NaN),
             editable: true
@@ -487,7 +424,7 @@ export default {
 
     /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
 
-    if (this.existeDiagrama) {
+    if (this.thereIsDiagram) {
       this.myDiagram.model = new go.GraphLinksModel()
       this.myDiagram.model = go.Model.fromJson(this.diagramaObtenido)
       const pos = this.myDiagram.model.modelData.position
@@ -509,18 +446,7 @@ export default {
           {
             // because the GridLayout.alignment is Location and the nodes have locationSpot == Spot.Center,
             // to line up the Link in the same manner we have to pretend the Link has the same location spot
-            locationSpot: go.Spot.Center,
-            selectionAdornmentTemplate: $(
-              go.Adornment,
-              'Link',
-              { locationSpot: go.Spot.Center },
-              $(go.Shape, {
-                isPanelMain: true,
-                fill: null,
-                stroke: 'deepskyblue',
-                strokeWidth: 0
-              })
-            )
+            locationSpot: go.Spot.Center
           },
           {
             routing: go.Link.AvoidsNodes,
@@ -595,11 +521,6 @@ export default {
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
   methods: {
-    // get access to the GoJS Model of the GoJS Diagram
-    model() {
-      return this.$refs.hola.model()
-    },
-
     // tell the GoJS Diagram to update based on the arbitrarily modified model data
     updateDiagramFromData() {
       this.$refs.diag.updateDiagramFromData()
@@ -610,17 +531,6 @@ export default {
       if (e.isTransactionFinished) {
         // show the model data in the page's TextArea
         this.savedModelText = e.model.toJson()
-      }
-    },
-
-    changedSelection(e) {
-      const node = e.diagram.selection.first()
-      if (node instanceof go.Node) {
-        this.currentNode = node
-        this.currentNodeText = node.data.text
-      } else {
-        this.currentNode = null
-        this.currentNodeText = ''
       }
     },
     saveDiagramProperties() {
@@ -639,7 +549,7 @@ export default {
     // This is less efficient than calling the appropriate GoJS Model methods.
     // NOTE: Undo will not be able to restore all of the state properly!!
     modifyStuff() {
-      const data = this.diagramData
+      /* const data = this.diagramData
       data.nodeDataArray[0].color = 'red'
       // Note here that because we do not have the GoJS Model,
       // we cannot find out what values would be unique keys, for reference by the link data.
@@ -649,7 +559,7 @@ export default {
         color: 'orange'
       })
       data.linkDataArray.push({ from: 2, to: this.counter2 })
-      this.updateDiagramFromData()
+      this.updateDiagramFromData() */
     },
     saveModel() {
       this.saveDiagramProperties()
@@ -680,7 +590,14 @@ export default {
         toSpot: spot, // declare where links may connect at this port
         fromLinkable: output,
         toLinkable: input, // declare whether the user may draw links to/from here
-        cursor: 'pointer' // show a different cursor to indicate potential link point
+        cursor: 'pointer', // show a different cursor to indicate potential link point
+        mouseEnter(e, port) {
+          // the PORT argument will be this Shape
+          if (!e.diagram.isReadOnly) port.fill = 'rgba(255,0,255,0.5)'
+        },
+        mouseLeave(e, port) {
+          port.fill = 'transparent'
+        }
       })
     },
     showSmallPorts(node, show) {
@@ -697,7 +614,6 @@ export default {
 
 <style>
 #myDiagramDiv {
-  width: 1000px;
   height: 1000px;
 }
 </style>
