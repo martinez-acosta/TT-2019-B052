@@ -106,9 +106,9 @@ export default {
       go.Adornment,
       'Auto',
       $(go.Shape, {
+        fill: 'transparent',
         stroke: 'deepskyblue',
         strokeWidth: 1.5,
-        /// // Este hace lineas punteadas
         strokeDashArray: [4, 2]
       }),
       $(go.Placeholder)
@@ -211,7 +211,7 @@ export default {
             fromLinkable: true,
             toLinkable: true,
             cursor: 'pointer',
-            fill: 'white' // default color
+            fill: 'transparent' // default color
             // strokeWidth: 2
           },
           new go.Binding('figure'),
@@ -264,7 +264,12 @@ export default {
       $(
         go.Shape,
         // isPanelMain declares that this Shape shares the Link.geometry
-        { isPanelMain: true, fill: null, stroke: 'deepskyblue', strokeWidth: 0 }
+        {
+          isPanelMain: true,
+          fill: 'null',
+          stroke: 'deepskyblue',
+          strokeWidth: 0
+        }
       ) // use selection object's strokeWidth
     )
 
