@@ -106,7 +106,6 @@ export default {
       go.Adornment,
       'Auto',
       $(go.Shape, {
-        fill: null,
         stroke: 'deepskyblue',
         strokeWidth: 1.5,
         /// // Este hace lineas punteadas
@@ -216,7 +215,8 @@ export default {
             // strokeWidth: 2
           },
           new go.Binding('figure'),
-          new go.Binding('fill')
+          new go.Binding('fill'),
+          new go.Binding('strokeDashArray')
         ),
         $(
           go.TextBlock,
@@ -397,32 +397,6 @@ export default {
       return geo
     })
 
-    go.Shape.defineFigureGenerator('FramedRectangle', function(shape, w, h) {
-      let param1 = shape ? shape.parameter1 : NaN
-      let param2 = shape ? shape.parameter2 : NaN
-      if (isNaN(param1)) param1 = 8 // default values PARAMETER 1 is for WIDTH
-      if (isNaN(param2)) param2 = 8 // default values PARAMETER 2 is for HEIGHT
-
-      const geo = new go.Geometry()
-      const fig = new go.PathFigure(0, 0, true)
-      geo.add(fig)
-      // outer rectangle, clockwise
-      fig.add(new go.PathSegment(go.PathSegment.Line, w, 0))
-      fig.add(new go.PathSegment(go.PathSegment.Line, w, h))
-      fig.add(new go.PathSegment(go.PathSegment.Line, 0, h).close())
-      if (param1 < w / 2 && param2 < h / 2) {
-        // inner rectangle, counter-clockwise
-        fig.add(new go.PathSegment(go.PathSegment.Move, param1, param2)) // subpath
-        fig.add(new go.PathSegment(go.PathSegment.Line, param1, h - param2))
-        fig.add(new go.PathSegment(go.PathSegment.Line, w - param1, h - param2))
-        fig.add(
-          new go.PathSegment(go.PathSegment.Line, w - param1, param2).close()
-        )
-      }
-      geo.setSpots(0, 0, 1, 1, param1, param2, -param1, -param2)
-      return geo
-    })
-
     // Para cargar el diagrama por si hay uno ya existente
 
     /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
@@ -476,7 +450,7 @@ export default {
               category: 'weakEntity',
               text: 'Entidad débil',
               figure: 'FramedRectangle',
-              fill: 'yellow'
+              fill: 'white'
             },
             {
               category: 'atribute',
@@ -484,6 +458,14 @@ export default {
               figure: 'Ellipse',
               fill: 'white'
             },
+            {
+              category: 'derivedAttribute',
+              text: 'att derivado',
+              figure: 'Ellipse',
+              fill: 'white',
+              strokeDashArray: [4, 2]
+            },
+
             {
               category: 'atributeComposite',
               text: 'Att compuesto',
