@@ -23,7 +23,10 @@
           <div
             style="width: 100%; display: flex; justify-content: space-between"
           >
-            <div id="myDiagramDiv" style="width: 100%; display: flex;"></div>
+            <div
+              id="myDiagramDiv"
+              style="width: 100%; display: flex;border: solid 1px black"
+            ></div>
             <div
               id="myPaletteDiv"
               style="width: 300px; background-color: whitesmoke; border: solid 1px black"
