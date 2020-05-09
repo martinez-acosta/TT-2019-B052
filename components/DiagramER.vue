@@ -33,7 +33,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-textarea v-model="diagramaObtenido"></v-textarea>
+          <v-textarea v-model="diagramaObtenido" auto-grow></v-textarea>
         </v-col>
       </v-row>
     </v-container>
