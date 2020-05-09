@@ -4,7 +4,7 @@
       <h1 class="display-1">Signup</h1>
     </v-card-title>
     <v-card-text>
-      <v-form @submit.prevent="register">
+      <v-form v-model="isFormValid" @submit.prevent="register">
         <v-text-field
           v-model="name"
           :error-messages="nameErrors"
@@ -60,7 +60,9 @@
           {{ error }}
         </v-alert>
 
-        <v-btn color="primary" type="submit" dark rounded>submit</v-btn>
+        <v-btn color="primary" :disabled="!isFormValid" type="submit" rounded
+          >submit</v-btn
+        >
         <v-btn color="primary" rounded @click="clear">clear</v-btn>
       </v-form>
     </v-card-text>
@@ -93,6 +95,7 @@ export default {
       name: '',
       email: '',
       error: '',
+      isFormValid: false,
       checkbox: false,
       show: false,
       password: '',
