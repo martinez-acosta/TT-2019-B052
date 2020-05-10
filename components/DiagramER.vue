@@ -25,7 +25,7 @@
           >
             <div
               id="myDiagramDiv"
-              style="width: 100%; display: flex;border: solid 1px black"
+              style="width: 100%; display: flex;border: solid 1px black; background: yellow"
             ></div>
             <div
               id="myPaletteDiv"
@@ -61,7 +61,7 @@ export default {
     })
   },
   mounted() {
-    /* Siempre el objeto será creado cuando el componente entre en el hook mounted(). Es decir, debemos recuperar el estado anterior del diagrama mediante un estado compartido entre componentes en Vuex o por otro medio. Falta implementarlo. */
+    /* Siempre el objeto será creado cuando el componente entre en el hook mounted(). Es decir, debemos recuperar el estado anterior del diagrama mediante un estado compartido entre componentes en Vuex o por otro medio. Está implementado en Vuex. */
     const $ = go.GraphObject.make // for conciseness in defining templates
 
     this.myDiagram = $(
@@ -106,7 +106,7 @@ export default {
       go.Adornment,
       'Auto',
       $(go.Shape, {
-        fill: 'transparent',
+        fill: null,
         stroke: 'deepskyblue',
         strokeWidth: 1.5,
         strokeDashArray: [4, 2]
@@ -221,22 +221,24 @@ export default {
         $(
           go.TextBlock,
           {
-            // font: 'bold 11pt Lato, Helvetica, Arial, sans-serif',
-            margin: 16,
+            font: 'bold 11pt Lato, Helvetica, Arial, sans-serif',
+            margin: 4,
             maxSize: new go.Size(160, NaN),
-            wrap: go.TextBlock.WrapFit,
-            isMultiline: false,
+            background: 'lightblue',
+            // wrap: go.TextBlock.WrapFit,
+            // isMultiline: false,
             editable: true
           },
-          new go.Binding('text').makeTwoWay()
+          new go.Binding('text').makeTwoWay(),
+          new go.Binding('isUnderline')
         )
       ),
       // four small named ports, one on each side:
       this.makePort('T', go.Spot.Top, false, true),
       this.makePort('L', go.Spot.Left, true, true),
       this.makePort('R', go.Spot.Right, true, true),
-      this.makePort('B', go.Spot.Bottom, true, false)
-      /* {
+      this.makePort('B', go.Spot.Bottom, true, false),
+      {
         // handle mouse enter/leave events to show/hide the ports
         mouseEnter(e, node) {
           // this.showSmallPorts(node, true)
@@ -256,8 +258,9 @@ export default {
             }
           })
         }
-      } */
+      }
     )
+
     const linkSelectionAdornmentTemplate = $(
       go.Adornment,
       'Link',
@@ -266,7 +269,7 @@ export default {
         // isPanelMain declares that this Shape shares the Link.geometry
         {
           isPanelMain: true,
-          fill: 'null',
+          fill: null,
           stroke: 'deepskyblue',
           strokeWidth: 0
         }
@@ -308,9 +311,10 @@ export default {
           go.TextBlock,
           {
             textAlign: 'center',
-            // font: '10pt helvetica, arial, sans-serif',
-            // stroke: '#919191',
-            margin: 2,
+            background: 'lightblue',
+            font: '10pt helvetica, arial, sans-serif',
+            stroke: '#919191',
+            margin: 8,
             minSize: new go.Size(10, NaN),
             editable: true
           },
@@ -446,25 +450,32 @@ export default {
           [
             // specify the contents of the Palette
             {
-              category: 'entity',
+              type: 'entity',
               text: 'Entidad',
               figure: 'Rectangle',
               fill: 'white'
             },
             {
-              category: 'weakEntity',
+              type: 'weakEntity',
               text: 'Entidad débil',
               figure: 'FramedRectangle',
               fill: 'white'
             },
             {
-              category: 'atribute',
+              type: 'atribute',
               text: 'Atributo',
               figure: 'Ellipse',
               fill: 'white'
             },
             {
-              category: 'derivedAttribute',
+              type: 'keyAttribute',
+              text: 'Atributo clave',
+              figure: 'Ellipse',
+              isUnderline: true,
+              fill: 'white'
+            },
+            {
+              type: 'derivedAttribute',
               text: 'att derivado',
               figure: 'Ellipse',
               fill: 'white',
@@ -472,19 +483,19 @@ export default {
             },
 
             {
-              category: 'atributeComposite',
+              type: 'atributeComposite',
               text: 'Att compuesto',
               figure: 'FramedEllipse',
               fill: 'white'
             },
             {
-              category: 'weakRelation',
+              type: 'weakRelation',
               text: 'Relación débil',
               figure: 'weakDiamond',
               fill: 'white'
             },
             {
-              category: 'relation',
+              type: 'relation',
               text: 'Relación',
               figure: 'Diamond',
               fill: 'lightskyblue'
