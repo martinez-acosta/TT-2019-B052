@@ -25,7 +25,7 @@
           >
             <div
               id="myDiagramDiv"
-              style="width: 100%; display: flex;border: solid 1px black; background: yellow"
+              style="width: 100%; display: flex;border: solid 1px black; "
             ></div>
             <div
               id="myPaletteDiv"
