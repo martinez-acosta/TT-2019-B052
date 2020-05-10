@@ -224,9 +224,8 @@ export default {
             font: 'bold 11pt Lato, Helvetica, Arial, sans-serif',
             margin: 4,
             maxSize: new go.Size(160, NaN),
-            background: 'lightblue',
-            // wrap: go.TextBlock.WrapFit,
-            // isMultiline: false,
+            wrap: go.TextBlock.WrapFit,
+            isMultiline: false,
             editable: true
           },
           new go.Binding('text').makeTwoWay(),
