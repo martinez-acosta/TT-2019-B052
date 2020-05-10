@@ -222,7 +222,7 @@ export default {
           go.TextBlock,
           {
             font: 'bold 11pt Lato, Helvetica, Arial, sans-serif',
-            margin: 4,
+            margin: 10,
             maxSize: new go.Size(160, NaN),
             wrap: go.TextBlock.WrapFit,
             isMultiline: false,
@@ -275,11 +275,16 @@ export default {
       ) // use selection object's strokeWidth
     )
 
-    this.myDiagram.linkTemplate = $(
+    /* this.myDiagram.linkTemplate = $(
       go.Link, // the whole link panel
       {
-        selectable: true,
-        selectionAdornmentTemplate: linkSelectionAdornmentTemplate
+        selectionAdorned: true,
+        selectionAdornmentTemplate: linkSelectionAdornmentTemplate,
+        layerName: 'Foreground',
+        reshapable: true,
+        routing: go.Link.AvoidsNodes,
+        corner: 5,
+        curve: go.Link.JumpOver
       },
       { relinkableFrom: true, relinkableTo: true, reshapable: true },
       {
@@ -293,32 +298,85 @@ export default {
         go.Shape, // the link path shape
         { isPanelMain: true, strokeWidth: 2 }
       ),
-      $(
-        go.Shape, // the arrowhead
-        { toArrow: '', stroke: null }
-      ),
+
       $(
         go.Panel,
         'Auto',
-        new go.Binding('visible', 'isSelected').ofObject(),
+        // new go.Binding('visible', 'isSelected').ofObject(),
+        $(go.Shape, { fill: 'yellow', stroke: null }),
         $(
-          go.Shape,
-          'RoundedRectangle', // the link shape
-          { fill: '#F8F8F8', stroke: null }
+          go.TextBlock, // the "from" label
+          {
+            text: 'from',
+            textAlign: 'center',
+            font: 'bold 14px sans-serif',
+            stroke: '#1967B3',
+            editable: true,
+            segmentIndex: 0,
+            segmentOffset: new go.Point(-10, -10),
+            segmentOrientation: go.Link.OrientUpright
+          },
+          new go.Binding('text', 'fromText').makeTwoWay()
         ),
         $(
-          go.TextBlock,
+          go.TextBlock, // the "to" label
           {
+            text: 'to',
             textAlign: 'center',
-            background: 'lightblue',
-            font: '10pt helvetica, arial, sans-serif',
-            stroke: '#919191',
-            margin: 8,
-            minSize: new go.Size(10, NaN),
-            editable: true
+            font: 'bold 14px sans-serif',
+            stroke: '#1967B3',
+            editable: true,
+            segmentIndex: -1,
+            segmentOffset: new go.Point(NaN, NaN),
+            segmentOrientation: go.Link.OrientUpright
           },
-          new go.Binding('text').makeTwoWay()
+          new go.Binding('text', 'toText').makeTwoWay()
         )
+      )
+    ) */
+
+    this.myDiagram.linkTemplate = $(
+      go.Link, // the whole link panel
+      {
+        selectionAdorned: true,
+        selectionAdornmentTemplate: linkSelectionAdornmentTemplate,
+        layerName: 'Foreground',
+        reshapable: true,
+        routing: go.Link.AvoidsNodes,
+        corner: 5,
+        curve: go.Link.JumpOver
+      },
+      $(
+        go.Shape, // the link shape
+        { stroke: '#303B45', strokeWidth: 2.5 }
+      ),
+      $(
+        go.TextBlock, // the "from" label
+        {
+          text: '1',
+          textAlign: 'center',
+          font: 'bold 14px sans-serif',
+          stroke: '#1967B3',
+          editable: true,
+          segmentIndex: 0,
+          segmentOffset: new go.Point(NaN, NaN),
+          segmentOrientation: go.Link.OrientUpright
+        },
+        new go.Binding('text', 'fromText').makeTwoWay()
+      ),
+      $(
+        go.TextBlock, // the "to" label
+        {
+          text: '1',
+          textAlign: 'center',
+          font: 'bold 14px sans-serif',
+          stroke: '#1967B3',
+          editable: true,
+          segmentIndex: -1,
+          segmentOffset: new go.Point(NaN, NaN),
+          segmentOrientation: go.Link.OrientUpright
+        },
+        new go.Binding('text', 'toText').makeTwoWay()
       )
     )
 
@@ -515,18 +573,18 @@ export default {
               figure: 'Diamond',
               fill: 'white'
             }
-          ],
+          ] /*,
           [
             // the Palette also has a disconnected Link, which the user can drag-and-drop
             {
-              points: new go.List(/* go.Point */).addAll([
+              points: new go.List().addAll([
                 new go.Point(0, 0),
                 new go.Point(30, 0),
                 new go.Point(30, 40),
                 new go.Point(60, 40)
               ])
             }
-          ]
+          ] */
         )
       }
     )
