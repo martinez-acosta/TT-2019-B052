@@ -380,15 +380,15 @@ export default {
 
     go.Shape.defineFigureGenerator('FramedEllipse', function(shape, w, h) {
       const geo = new go.Geometry()
-      geo.add(
+      /* geo.add(
         new go.PathFigure(0, 0)
           .add(new go.PathSegment(go.PathSegment.Line, w, 0))
           .add(new go.PathSegment(go.PathSegment.Line, w, h))
           .add(new go.PathSegment(go.PathSegment.Line, 0, h))
           .add(new go.PathSegment(go.PathSegment.Line, 0, 0))
-      )
+      ) */
       geo.add(
-        new go.PathFigure(0, 0).add(
+        new go.PathFigure(0, h / 2).add(
           new go.PathSegment(
             go.PathSegment.Arc,
             180,
@@ -397,9 +397,24 @@ export default {
             h / 2,
             w / 2,
             h / 2
-          )
+          ).close()
         )
       )
+
+      geo.add(
+        new go.PathFigure(8, h / 2).add(
+          new go.PathSegment(
+            go.PathSegment.Arc,
+            180,
+            360,
+            w / 2,
+            h / 2,
+            w / 2 - 8,
+            h / 2 - 8
+          ).close()
+        )
+      )
+
       geo.spot1 = new go.Spot(0, 0, 25, 25)
       geo.spot2 = new go.Spot(1, 1, -25, -25)
       return geo
@@ -485,7 +500,8 @@ export default {
               type: 'atributeComposite',
               text: 'Att compuesto',
               figure: 'FramedEllipse',
-              fill: 'white'
+              fill: 'white',
+              strokeDashArray: [4, 2]
             },
             {
               type: 'weakRelation',
@@ -497,7 +513,7 @@ export default {
               type: 'relation',
               text: 'Relación',
               figure: 'Diamond',
-              fill: 'lightskyblue'
+              fill: 'white'
             }
           ],
           [
