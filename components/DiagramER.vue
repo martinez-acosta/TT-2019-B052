@@ -56,8 +56,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      thereIsDiagram: 'diagram/existDiagram',
-      diagramaObtenido: 'diagram/getDiagram'
+      thereIsDiagram: 'diagramER/existDiagram',
+      diagramaObtenido: 'diagramER/getDiagram'
     })
   },
   mounted() {
@@ -438,13 +438,6 @@ export default {
 
     go.Shape.defineFigureGenerator('FramedEllipse', function(shape, w, h) {
       const geo = new go.Geometry()
-      /* geo.add(
-        new go.PathFigure(0, 0)
-          .add(new go.PathSegment(go.PathSegment.Line, w, 0))
-          .add(new go.PathSegment(go.PathSegment.Line, w, h))
-          .add(new go.PathSegment(go.PathSegment.Line, 0, h))
-          .add(new go.PathSegment(go.PathSegment.Line, 0, 0))
-      ) */
       geo.add(
         new go.PathFigure(0, h / 2).add(
           new go.PathSegment(
@@ -640,7 +633,7 @@ export default {
       this.savedModel = this.myDiagram.model.toJson()
       this.myDiagram.isModified = false
       //  console.log('savedModel: ' + this.savedModel)
-      this.$store.dispatch('diagram/save', {
+      this.$store.dispatch('diagramER/save', {
         savedModel: this.savedModel
       })
     },

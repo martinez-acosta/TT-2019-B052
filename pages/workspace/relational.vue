@@ -1,11 +1,37 @@
-<template><div></div> </template>
+<template>
+  <v-content>
+    <DiagramRelational />
+  </v-content>
+</template>
+
 <script>
+import DiagramRelational from '@/components/DiagramRelational.vue'
+
 export default {
   middleware: 'authenticated',
   layout: 'workspace',
-  data() {
-    return {}
+  components: {
+    DiagramRelational
   },
-  methods: {}
+  data() {
+    return {
+      isStripeLoaded: false
+    }
+  },
+  methods: {},
+  head() {
+    return {
+      script: [
+        {
+          src: '/Figures.js',
+          defer: true,
+          // Changed after script load
+          callback: () => {
+            this.isStripeLoaded = true
+          }
+        }
+      ]
+    }
+  }
 }
 </script>

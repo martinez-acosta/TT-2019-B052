@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <DiagramER v-if="isStripeLoaded" />
+    <DiagramER />
   </v-content>
 </template>
 
@@ -20,18 +20,7 @@ export default {
   },
   methods: {},
   head() {
-    return {
-      script: [
-        {
-          src: '/Figures.js',
-          defer: true,
-          // Changed after script load
-          callback: () => {
-            this.isStripeLoaded = true
-          }
-        }
-      ]
-    }
+    return {}
   }
 }
 </script>

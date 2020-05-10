@@ -16,8 +16,27 @@ export default {
     Footer,
     NavBar
   },
+  data() {
+    return {
+      isStripeLoaded: false
+    }
+  },
   computed: {},
   methods: {
+    head() {
+      return {
+        script: [
+          {
+            src: '/Figures.js',
+            defer: true,
+            // Changed after script load
+            callback: () => {
+              this.isStripeLoaded = true
+            }
+          }
+        ]
+      }
+    },
     logout() {
       this.$store.dispatch('calls/logout')
     }
