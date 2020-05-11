@@ -1,7 +1,7 @@
 {
-  "name": "prueba",
+  "name": "tt-2019-b052",
   "version": "1.0.0",
-  "description": "My mathematical Nuxt.js project",
+  "description": "Entity-Relationship Diagram Editor Tool for TT-2019-B052 Project",
   "author": "",
   "private": true,
   "scripts": {

@@ -14,24 +14,11 @@ export default {
     DiagramRelational
   },
   data() {
-    return {
-      isStripeLoaded: false
-    }
+    return {}
   },
   methods: {},
   head() {
-    return {
-      script: [
-        {
-          src: '/Figures.js',
-          defer: true,
-          // Changed after script load
-          callback: () => {
-            this.isStripeLoaded = true
-          }
-        }
-      ]
-    }
+    return {}
   }
 }
 </script>

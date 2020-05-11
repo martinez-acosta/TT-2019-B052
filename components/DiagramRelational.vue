@@ -41,6 +41,7 @@
 
 <script>
 import go from 'gojs'
+import 'gojs/extensionsJSM/Figures'
 import { mapGetters } from 'vuex'
 
 export default {

@@ -48,6 +48,7 @@
 
 <script type="module">
 import { go } from 'gojs/release/go-module'
+import 'gojs/extensionsJSM/Figures'
 import { mapGetters } from 'vuex'
 import { Inspector } from 'gojs/extensionsJSM/DataInspector'
 
