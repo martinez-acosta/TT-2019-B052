@@ -52,7 +52,8 @@ export default {
   data() {
     return {
       myDiagram: '',
-      myPalette: ''
+      myPalette: '',
+      myInspector: ''
     }
   },
   computed: {
@@ -423,7 +424,7 @@ export default {
 
     // support editing the properties of the selected person in HTML
     if (window.Inspector)
-      myInspector = new Inspector('myInspector', myDiagram, {
+      this.myInspector = new Inspector('myInspector', this.myDiagram, {
         properties: {
           key: { readOnly: true },
           comments: {}
