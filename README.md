@@ -1,6 +1,6 @@
 # TT 2019-B052
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ee76620c-2359-49f2-bcdf-ef7697dfefe0/deploy-status)](https://app.netlify.com/sites/serene-haibt-2239b4/deploys)
-[![Last Commit](https://img.shields.io/github/last-commit/martinez-acosta/TT-2019-B052)]
+![Last Commit](https://img.shields.io/github/last-commit/martinez-acosta/TT-2019-B052)
 > TT 2019-B052 project
 
 ## Project Goals
