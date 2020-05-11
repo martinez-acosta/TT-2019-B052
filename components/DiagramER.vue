@@ -31,6 +31,7 @@
               id="myPaletteDiv"
               style="width: 300px; background-color: whitesmoke; border: solid 1px black"
             ></div>
+            <div id="myInspector"></div>
           </div>
         </v-col>
       </v-row>
@@ -73,7 +74,7 @@ export default {
         'draggingTool.isGridSnapEnabled': true,
         'linkingTool.isUnconnectedLinkValid': true,
         'linkingTool.portGravity': 20,
-        'relinkingTool.isUnconnectedLinkValid': true,
+        'relinkingTool.isUnconnectedLinkValid': false,
         'relinkingTool.portGravity': 20,
         'relinkingTool.fromHandleArchetype': $(go.Shape, 'Diamond', {
           segmentIndex: 0,
@@ -94,10 +95,6 @@ export default {
           fill: 'lightblue',
           stroke: 'deepskyblue'
         }),
-        /* 'rotatingTool.handleAngle': 270,
-        'rotatingTool.handleDistance': 30,
-        'rotatingTool.snapAngleMultiple': 15,
-        'rotatingTool.snapAngleEpsilon': 15, */
         'undoManager.isEnabled': true
       }
     )
@@ -275,66 +272,6 @@ export default {
       ) // use selection object's strokeWidth
     )
 
-    /* this.myDiagram.linkTemplate = $(
-      go.Link, // the whole link panel
-      {
-        selectionAdorned: true,
-        selectionAdornmentTemplate: linkSelectionAdornmentTemplate,
-        layerName: 'Foreground',
-        reshapable: true,
-        routing: go.Link.AvoidsNodes,
-        corner: 5,
-        curve: go.Link.JumpOver
-      },
-      { relinkableFrom: true, relinkableTo: true, reshapable: true },
-      {
-        routing: go.Link.AvoidsNodes,
-        curve: go.Link.JumpOver,
-        corner: 5,
-        toShortLength: 0
-      },
-      new go.Binding('points').makeTwoWay(),
-      $(
-        go.Shape, // the link path shape
-        { isPanelMain: true, strokeWidth: 2 }
-      ),
-
-      $(
-        go.Panel,
-        'Auto',
-        // new go.Binding('visible', 'isSelected').ofObject(),
-        $(go.Shape, { fill: 'yellow', stroke: null }),
-        $(
-          go.TextBlock, // the "from" label
-          {
-            text: 'from',
-            textAlign: 'center',
-            font: 'bold 14px sans-serif',
-            stroke: '#1967B3',
-            editable: true,
-            segmentIndex: 0,
-            segmentOffset: new go.Point(-10, -10),
-            segmentOrientation: go.Link.OrientUpright
-          },
-          new go.Binding('text', 'fromText').makeTwoWay()
-        ),
-        $(
-          go.TextBlock, // the "to" label
-          {
-            text: 'to',
-            textAlign: 'center',
-            font: 'bold 14px sans-serif',
-            stroke: '#1967B3',
-            editable: true,
-            segmentIndex: -1,
-            segmentOffset: new go.Point(NaN, NaN),
-            segmentOrientation: go.Link.OrientUpright
-          },
-          new go.Binding('text', 'toText').makeTwoWay()
-        )
-      )
-    ) */
-
     this.myDiagram.linkTemplate = $(
       go.Link, // the whole link panel
       {
@@ -483,6 +420,16 @@ export default {
     } else {
       this.myDiagram.model = new go.GraphLinksModel()
     }
+
+    // support editing the properties of the selected person in HTML
+    if (window.Inspector)
+      myInspector = new Inspector('myInspector', myDiagram, {
+        properties: {
+          key: { readOnly: true },
+          comments: {}
+        }
+      })
+
     /** *****************Paleta***********************/
     // initialize the Palette that is on the right side of the page
     this.myPalette = $(
@@ -511,74 +458,61 @@ export default {
             { isPanelMain: true, strokeWidth: 2 }
           )
         ),
-        model: new go.GraphLinksModel(
-          [
-            // specify the contents of the Palette
-            {
-              type: 'entity',
-              text: 'Entidad',
-              figure: 'Rectangle',
-              fill: 'white'
-            },
-            {
-              type: 'weakEntity',
-              text: 'Entidad débil',
-              figure: 'FramedRectangle',
-              fill: 'white'
-            },
-            {
-              type: 'atribute',
-              text: 'Atributo',
-              figure: 'Ellipse',
-              fill: 'white'
-            },
-            {
-              type: 'keyAttribute',
-              text: 'Atributo clave',
-              figure: 'Ellipse',
-              isUnderline: true,
-              fill: 'white'
-            },
-            {
-              type: 'derivedAttribute',
-              text: 'att derivado',
-              figure: 'Ellipse',
-              fill: 'white',
-              strokeDashArray: [4, 2]
-            },
+        model: new go.GraphLinksModel([
+          // specify the contents of the Palette
+          {
+            type: 'entity',
+            text: 'Entidad',
+            figure: 'Rectangle',
+            fill: 'white'
+          },
+          {
+            type: 'weakEntity',
+            text: 'Entidad débil',
+            figure: 'FramedRectangle',
+            fill: 'white'
+          },
+          {
+            type: 'atribute',
+            text: 'Atributo',
+            figure: 'Ellipse',
+            fill: 'white'
+          },
+          {
+            type: 'keyAttribute',
+            text: 'Atributo clave',
+            figure: 'Ellipse',
+            isUnderline: true,
+            fill: 'white'
+          },
+          {
+            type: 'derivedAttribute',
+            text: 'att derivado',
+            figure: 'Ellipse',
+            fill: 'white',
+            strokeDashArray: [4, 2]
+          },
 
-            {
-              type: 'atributeComposite',
-              text: 'Att compuesto',
-              figure: 'FramedEllipse',
-              fill: 'white',
-              strokeDashArray: [4, 2]
-            },
-            {
-              type: 'weakRelation',
-              text: 'Relación débil',
-              figure: 'weakDiamond',
-              fill: 'white'
-            },
-            {
-              type: 'relation',
-              text: 'Relación',
-              figure: 'Diamond',
-              fill: 'white'
-            }
-          ] /*,
-          [
-            // the Palette also has a disconnected Link, which the user can drag-and-drop
-            {
-              points: new go.List().addAll([
-                new go.Point(0, 0),
-                new go.Point(30, 0),
-                new go.Point(30, 40),
-                new go.Point(60, 40)
-              ])
-            }
-          ] */
-        )
+          {
+            type: 'atributeComposite',
+            text: 'Att compuesto',
+            figure: 'FramedEllipse',
+            fill: 'white',
+            strokeDashArray: [4, 2]
+          },
+          {
+            type: 'weakRelation',
+            text: 'Relación débil',
+            figure: 'weakDiamond',
+            fill: 'white'
+          },
+          {
+            type: 'relation',
+            text: 'Relación',
+            figure: 'Diamond',
+            fill: 'white'
+          }
+        ])
       }
     )
   },

@@ -371,6 +371,11 @@ export default {
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
   methods: {
+    saveDiagramProperties() {
+      this.myDiagram.model.modelData.position = go.Point.stringify(
+        this.myDiagram.position
+      )
+    },
     saveModel() {
       this.saveDiagramProperties()
       this.savedModel = this.myDiagram.model.toJson()
