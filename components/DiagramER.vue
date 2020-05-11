@@ -31,7 +31,6 @@
               id="myPaletteDiv"
               style="width: 300px; background-color: whitesmoke; border: solid 1px black"
             ></div>
-            <div id="myInspector"></div>
           </div>
         </v-col>
       </v-row>
@@ -39,16 +38,21 @@
         <v-col>
           <v-textarea v-model="diagramaObtenido" auto-grow></v-textarea>
         </v-col>
+        <v-col>
+          <div id="myInspectorDiv"></div>
+        </v-col>
       </v-row>
     </v-container>
   </div>
 </template>
 
-<script>
-import go from 'gojs'
+<script type="module">
+import { go } from 'gojs/release/go-module'
 import { mapGetters } from 'vuex'
+import { Inspector } from 'gojs/extensionsJSM/DataInspector'
 
 export default {
+  // css: ['gojs/extensionsJSM/DataInspector.css'],
   data() {
     return {
       myDiagram: '',
@@ -291,7 +295,7 @@ export default {
       $(
         go.TextBlock, // the "from" label
         {
-          text: '1',
+          text: '',
           textAlign: 'center',
           font: 'bold 14px sans-serif',
           stroke: '#1967B3',
@@ -305,7 +309,7 @@ export default {
       $(
         go.TextBlock, // the "to" label
         {
-          text: '1',
+          text: '',
           textAlign: 'center',
           font: 'bold 14px sans-serif',
           stroke: '#1967B3',
@@ -423,13 +427,48 @@ export default {
     }
 
     // support editing the properties of the selected person in HTML
-    if (window.Inspector)
-      this.myInspector = new Inspector('myInspector', this.myDiagram, {
-        properties: {
-          key: { readOnly: true },
-          comments: {}
-        }
-      })
+
+    // select a Node, so that the first Inspector shows something
+    this.myDiagram.select(this.myDiagram.nodes.first())
+
+    this.myInspector = new Inspector('myInspectorDiv', this.myDiagram, {
+      // allows for multiple nodes to be inspected at once
+      multipleSelection: false,
+      // max number of node properties will be shown when multiple selection is true
+      showSize: 4,
+      // when multipleSelection is true, when showAllProperties is true it takes the union of properties
+      // otherwise it takes the intersection of properties
+      showAllProperties: true,
+      // uncomment this line to only inspect the named properties below instead of all properties on each object:
+      // includesOwnProperties: false,
+      properties: {
+        text: { show: Inspector.showIfPresent },
+        // key would be automatically added for nodes, but we want to declare it read-only also:
+        // key: { readOnly: true, show: Inspector.showIfPresent },
+        // color would be automatically added for nodes, but we want to declare it a color also:
+        color: { show: Inspector.showIfPresent, type: 'color' },
+        // Comments and LinkComments are not in any node or link data (yet), so we add them here:
+        Comments: { show: Inspector.showIfNode },
+        // LinkComments: { show: Inspector.showIfLink },
+        toText: { show: Inspector.showIfLink },
+        fromText: { show: Inspector.showIfLink },
+        isGroup: { readOnly: true, show: Inspector.showIfPresent },
+        // flag: { show: Inspector.showIfNode, type: 'checkbox' },
+        /* state: {
+          show: Inspector.showIfNode,
+          type: 'select',
+          choices(node, propName) {
+            if (Array.isArray(node.data.choices)) return node.data.choices
+            return ['one', 'two', 'three', 'four', 'five']
+          }
+        } */
+        choices: { show: false }, // must not be shown at all
+        to: { readOnly: true },
+        from: { readOnly: true },
+        // an example of specifying the <input> type
+        password: { show: Inspector.showIfPresent, type: 'password' }
+      }
+    })
 
     /** *****************Paleta***********************/
     // initialize the Palette that is on the right side of the page
@@ -618,4 +657,8 @@ export default {
 #myDiagramDiv {
   height: 1000px;
 }
+</style>
+
+<style>
+@import 'gojs/extensionsJSM/DataInspector.css';
 </style>
