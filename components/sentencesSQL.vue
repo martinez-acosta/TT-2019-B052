@@ -24,7 +24,12 @@
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
+            <v-btn
+              icon
+              v-bind="attrs"
+              v-on="on"
+              @click.stop="helpDialog = true"
+            >
               <v-icon>mdi-help</v-icon>
             </v-btn>
           </template>
@@ -32,9 +37,33 @@
         </v-tooltip>
       </v-toolbar>
     </div>
+
     <div class="comtaier overflow-auto">
       <ssh-pre language="sql" label="SQL">{{ sentences }}</ssh-pre>
     </div>
+
+    <!-- Dialog/modals -->
+    <v-dialog v-model="helpDialog" max-width="360">
+      <v-card>
+        <v-card-title class="headline"
+          >Sentencias SQL equivalentes al diagrama ER</v-card-title
+        >
+
+        <v-card-text>
+          En este apartado puede observar las sentencias SQL equivalentes al
+          diagrama entidad-relación generado en el paso 1. <br />
+          Puede copiar o descargar estas sencentencias para comprobar su
+          correcto funcionamiento en el gestor de base de datos MySQL.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="helpDialog = false"
+            >De acuerdo</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -46,6 +75,7 @@ export default {
   components: { SshPre },
   data() {
     return {
+      helpDialog: false,
       sentences: `/*
 *********************************************************************
 Name: MySQL Sample Database classicmodels
