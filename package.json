@@ -16,6 +16,7 @@
     "@nuxtjs/axios": "^5.12.2",
     "gojs": "^2.1.23",
     "nuxt": "^2.14.4",
+    "simple-syntax-highlighter": "^1.4.2",
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {
