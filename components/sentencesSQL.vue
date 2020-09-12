@@ -2,16 +2,34 @@
   <div class="container">
     <div class="row col">
       <v-toolbar dense>
-        <v-btn icon>
-          <v-icon>mdi-download</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-content-paste</v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-download</v-icon>
+            </v-btn>
+          </template>
+          <span>Descargar</span>
+        </v-tooltip>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-content-paste</v-icon>
+            </v-btn>
+          </template>
+          <span>Copiar al portapapeles</span>
+        </v-tooltip>
+
         <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon>mdi-help</v-icon>
-        </v-btn>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-help</v-icon>
+            </v-btn>
+          </template>
+          <span>Ayuda</span>
+        </v-tooltip>
       </v-toolbar>
     </div>
     <div class="comtaier overflow-auto">
