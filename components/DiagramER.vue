@@ -1,56 +1,46 @@
 <template>
-  <div>
-    <v-navigation-drawer app clipped permanent>
-      <v-list nav dense>
-        <v-list-item link @click="saveModel()">
-          <v-list-item-icon>
-            <v-icon>mdi-content-save</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Save</v-list-item-title>
-        </v-list-item>
-
-        <v-list-item link @click="loadModel()">
-          <v-list-item-icon>
-            <v-icon>mdi-file-download</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Load</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-container fluid fill-height>
-      <v-row>
-        <v-col>
-          <div
-            style="width: 100%; display: flex; justify-content: space-between"
-          >
-            <div
-              id="myDiagramDiv"
-              style="width: 100%; display: flex;border: solid 1px black; "
-            ></div>
-            <div
-              id="myPaletteDiv"
-              style="width: 300px; background-color: whitesmoke; border: solid 1px black"
-            ></div>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-textarea v-model="diagramaObtenido" auto-grow></v-textarea>
-        </v-col>
-        <v-col>
-          <div id="myInspectorDiv"></div>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+  <v-container fill-height fluid ma-0 pa-0>
+    <v-row
+      no-gutters
+      align="center"
+      justify="center"
+      style="height:100vh"
+      dense
+    >
+      <v-col
+        cols="3"
+        class="grey lighten-2 fill-height d-flex flex-column justify-center align-center"
+      >
+        <div
+          id="myPaletteDiv"
+          style="width: 100%; display: flex; border: solid 1px black; height: 100vh;"
+        ></div>
+      </v-col>
+      <v-col
+        class="pink fill-height d-flex flex-column justify-center align-center"
+      >
+        <div
+          id="myDiagramDiv"
+          style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
+        ></div>
+      </v-col>
+    </v-row>
+    <!--<v-row>
+      <v-col>
+        <v-textarea v-model="diagramaObtenido" auto-grow></v-textarea>
+      </v-col>
+      <v-col>
+        <div id="myInspectorDiv"></div>
+      </v-col>
+    </v-row>-->
+  </v-container>
 </template>
 
 <script type="module">
 import { go } from 'gojs/release/go-module'
 import 'gojs/extensionsJSM/Figures'
 import { mapGetters } from 'vuex'
-import { Inspector } from 'gojs/extensionsJSM/DataInspector'
+// import { Inspector } from 'gojs/extensionsJSM/DataInspector'
 
 export default {
   // css: ['gojs/extensionsJSM/DataInspector.css'],
@@ -104,6 +94,12 @@ export default {
         'undoManager.isEnabled': true
       }
     )
+
+    this.myDiagram.addDiagramListener('InitialLayoutCompleted', function(e) {
+      // const dia = e.diagram
+      // add height for horizontal scrollbar
+      // dia.div.style.height = dia.documentBounds.height + 24 + 'px'
+    })
 
     const nodeSelectionAdornmentTemplate = $(
       go.Adornment,
@@ -420,7 +416,7 @@ export default {
 
     if (this.thereIsDiagram) {
       this.myDiagram.model = new go.GraphLinksModel()
-      this.myDiagram.model = go.Model.fromJson(this.diagramaObtenido)
+      // this.myDiagram.model = go.Model.fromJson(this.diagramaObtenido)
       const pos = this.myDiagram.model.modelData.position
       if (pos) this.myDiagram.initialPosition = go.Point.parse(pos)
     } else {
@@ -432,44 +428,44 @@ export default {
     // select a Node, so that the first Inspector shows something
     this.myDiagram.select(this.myDiagram.nodes.first())
 
-    this.myInspector = new Inspector('myInspectorDiv', this.myDiagram, {
-      // allows for multiple nodes to be inspected at once
-      multipleSelection: false,
-      // max number of node properties will be shown when multiple selection is true
-      showSize: 4,
-      // when multipleSelection is true, when showAllProperties is true it takes the union of properties
-      // otherwise it takes the intersection of properties
-      showAllProperties: true,
-      // uncomment this line to only inspect the named properties below instead of all properties on each object:
-      // includesOwnProperties: false,
-      properties: {
-        text: { show: Inspector.showIfPresent },
-        // key would be automatically added for nodes, but we want to declare it read-only also:
-        // key: { readOnly: true, show: Inspector.showIfPresent },
-        // color would be automatically added for nodes, but we want to declare it a color also:
-        color: { show: Inspector.showIfPresent, type: 'color' },
-        // Comments and LinkComments are not in any node or link data (yet), so we add them here:
-        Comments: { show: Inspector.showIfNode },
-        // LinkComments: { show: Inspector.showIfLink },
-        toText: { show: Inspector.showIfLink },
-        fromText: { show: Inspector.showIfLink },
-        isGroup: { readOnly: true, show: Inspector.showIfPresent },
-        // flag: { show: Inspector.showIfNode, type: 'checkbox' },
-        /* state: {
-          show: Inspector.showIfNode,
-          type: 'select',
-          choices(node, propName) {
-            if (Array.isArray(node.data.choices)) return node.data.choices
-            return ['one', 'two', 'three', 'four', 'five']
-          }
-        } */
-        choices: { show: false }, // must not be shown at all
-        to: { readOnly: true },
-        from: { readOnly: true },
-        // an example of specifying the <input> type
-        password: { show: Inspector.showIfPresent, type: 'password' }
-      }
-    })
+    // this.myInspector = new Inspector('myInspectorDiv', this.myDiagram, {
+    //   // allows for multiple nodes to be inspected at once
+    //   multipleSelection: false,
+    //   // max number of node properties will be shown when multiple selection is true
+    //   showSize: 4,
+    //   // when multipleSelection is true, when showAllProperties is true it takes the union of properties
+    //   // otherwise it takes the intersection of properties
+    //   showAllProperties: true,
+    //   // uncomment this line to only inspect the named properties below instead of all properties on each object:
+    //   // includesOwnProperties: false,
+    //   properties: {
+    //     text: { show: Inspector.showIfPresent },
+    //     // key would be automatically added for nodes, but we want to declare it read-only also:
+    //     // key: { readOnly: true, show: Inspector.showIfPresent },
+    //     // color would be automatically added for nodes, but we want to declare it a color also:
+    //     color: { show: Inspector.showIfPresent, type: 'color' },
+    //     // Comments and LinkComments are not in any node or link data (yet), so we add them here:
+    //     Comments: { show: Inspector.showIfNode },
+    //     // LinkComments: { show: Inspector.showIfLink },
+    //     toText: { show: Inspector.showIfLink },
+    //     fromText: { show: Inspector.showIfLink },
+    //     isGroup: { readOnly: true, show: Inspector.showIfPresent },
+    //     // flag: { show: Inspector.showIfNode, type: 'checkbox' },
+    //     /* state: {
+    //       show: Inspector.showIfNode,
+    //       type: 'select',
+    //       choices(node, propName) {
+    //         if (Array.isArray(node.data.choices)) return node.data.choices
+    //         return ['one', 'two', 'three', 'four', 'five']
+    //       }
+    //     } */
+    //     choices: { show: false }, // must not be shown at all
+    //     to: { readOnly: true },
+    //     from: { readOnly: true },
+    //     // an example of specifying the <input> type
+    //     password: { show: Inspector.showIfPresent, type: 'password' }
+    //   }
+    // })
 
     /** *****************Paleta***********************/
     // initialize the Palette that is on the right side of the page
@@ -654,11 +650,7 @@ export default {
 }
 </script>
 
-<style>
-#myDiagramDiv {
-  height: 1000px;
-}
-</style>
+<style></style>
 
 <style>
 @import 'gojs/extensionsJSM/DataInspector.css';
