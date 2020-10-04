@@ -1,3 +1,5 @@
+import Service from '@/services/Service.js'
+
 export const state = () => ({
   diagram: null
 })
@@ -12,7 +14,9 @@ export const mutations = {
 }
 export const actions = {
   save({ commit }, dataModel) {
-    commit('SET_DATA_MODEL', dataModel)
+    return Service.saveDiagram(dataModel.savedModel).then((response) => {
+      commit('SET_DATA_MODEL', dataModel)
+    })
   },
   clear({ commit }) {
     commit('CLEAR_DATA_MODEL')

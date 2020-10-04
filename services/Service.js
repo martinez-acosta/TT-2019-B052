@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  // baseURL: `//localhost:3000`,
-  baseURL: `https://api-tt-2019-b052.herokuapp.com`,
+  baseURL: `//localhost:5000`,
+  // baseURL: `https://api-tt-2019-b052.herokuapp.com`,
   withCredentials: false,
   progress: true,
   headers: {
@@ -19,6 +19,9 @@ export default {
   async login(credentials) {
     const ip = await apiClient.post('/login', credentials)
     return ip
+  },
+  async saveDiagram(dataModel) {
+    return await apiClient.post('/diagram', { diagram: dataModel })
   },
   setToken(userData) {
     axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
