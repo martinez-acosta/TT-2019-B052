@@ -20,6 +20,11 @@ export const actions = {
   },
   clear({ commit }) {
     commit('CLEAR_DATA_MODEL')
+  },
+  getLastDiagram({ commit }) {
+    return Service.getLastDiagram().then((response) => {
+      commit('SET_DATA_MODEL', response.diagram)
+    })
   }
 }
 export const getters = {

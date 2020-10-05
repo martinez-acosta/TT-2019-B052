@@ -23,6 +23,9 @@ export default {
   async saveDiagram(dataModel) {
     return await apiClient.post('/diagram', { diagram: dataModel })
   },
+  async getLastDiagram() {
+    return await apiClient.get('/diagram')
+  },
   setToken(userData) {
     axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
   }

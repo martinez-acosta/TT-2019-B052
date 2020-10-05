@@ -16,7 +16,7 @@
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
+            <v-btn icon v-bind="attrs" v-on="on" @click="loadModel()">
               <v-icon>mdi-folder-open</v-icon>
             </v-btn>
           </template>
@@ -670,7 +670,18 @@ export default {
           )
         })
     },
-    loadModel() {},
+    loadModel() {
+      this.$store
+        .dispatch('diagramER/getLastDiagram')
+        .then(() => {
+          this.$snotify.success('Diagrama cargado correctamente!')
+        })
+        .catch(() => {
+          this.$snotify.error(
+            'Algo ocurrio! No hemos sido capaces de encontrar un diagrama asociado a este perfil.'
+          )
+        })
+    },
     // Define a function for creating a "port" that is normally transparent.
     // The "name" is used as the GraphObject.portId, the "spot" is used to control how links connect
     // and where the port is positioned on the node, and the boolean "output" and "input" arguments
