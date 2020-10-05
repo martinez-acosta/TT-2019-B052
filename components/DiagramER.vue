@@ -1,5 +1,8 @@
 <template>
   <v-container fill-height fluid ma-0 pa-0>
+    <client-only>
+      <vue-snotify></vue-snotify>
+    </client-only>
     <v-row>
       <v-toolbar dense>
         <v-tooltip bottom>
@@ -654,9 +657,18 @@ export default {
       this.savedModel = this.myDiagram.model.toJson()
       this.myDiagram.isModified = false
       // console.log('savedModel: ' + this.savedModel)
-      this.$store.dispatch('diagramER/save', {
-        savedModel: this.savedModel
-      })
+      this.$store
+        .dispatch('diagramER/save', {
+          savedModel: this.savedModel
+        })
+        .then(() => {
+          this.$snotify.success('Guardado correctamente!')
+        })
+        .catch(() => {
+          this.$snotify.error(
+            'Algo ocurrio! El diagrama no ha sido guardado, intente mas tarde.'
+          )
+        })
     },
     loadModel() {},
     // Define a function for creating a "port" that is normally transparent.
