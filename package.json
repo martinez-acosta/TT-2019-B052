@@ -17,6 +17,7 @@
     "gojs": "^2.1.23",
     "nuxt": "^2.14.4",
     "simple-syntax-highlighter": "^1.4.2",
+    "vue-snotify": "^3.2.1",
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {
