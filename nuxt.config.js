@@ -37,6 +37,10 @@ export default {
     {
       src: '@/plugins/vuex-client-init',
       mode: 'client'
+    },{
+    src: './plugins/snotify',
+    // mode: 'client'
+    ssr: false
     }
   ],
   /*
