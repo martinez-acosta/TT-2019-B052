@@ -25,7 +25,7 @@
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
+            <v-btn icon v-bind="attrs" v-on="on" @click="cleanDiagram()">
               <v-icon>mdi-file</v-icon>
             </v-btn>
           </template>
@@ -685,6 +685,9 @@ export default {
             'Algo ocurrio! No hemos sido capaces de encontrar un diagrama asociado a este perfil.'
           )
         })
+    },
+    cleanDiagram() {
+      this.myDiagram.model = go.Model.fromJson({})
     },
     // Define a function for creating a "port" that is normally transparent.
     // The "name" is used as the GraphObject.portId, the "spot" is used to control how links connect
