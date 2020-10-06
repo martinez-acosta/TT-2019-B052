@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: `//localhost:5000`,
-  // baseURL: `https://api-tt-2019-b052.herokuapp.com`,
+  // baseURL: `//localhost:5000`,
+  baseURL: `https://api-tt-2019-b052.herokuapp.com`,
   withCredentials: false,
   progress: true,
   headers: {
@@ -13,7 +13,7 @@ const apiClient = axios.create({
 
 export default {
   async register(signupInfo) {
-    const ip = await apiClient.post('/register', signupInfo)
+    const ip = await apiClient.post('/user', signupInfo)
     return ip
   },
   async login(credentials) {
