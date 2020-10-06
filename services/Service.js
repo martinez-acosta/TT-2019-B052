@@ -21,10 +21,24 @@ export default {
     return ip
   },
   async saveDiagram(dataModel) {
-    return await apiClient.post('/diagram', { diagram: dataModel })
+    const token = axios.defaults.headers.common.Authorization
+    return await apiClient.post(
+      '/diagram',
+      { diagram: dataModel },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
   },
   async getLastDiagram() {
-    return await apiClient.get('/diagram')
+    const token = axios.defaults.headers.common.Authorization
+    return await apiClient.get('/diagram', {
+      headers: {
+        Authorization: token
+      }
+    })
   },
   setToken(userData) {
     axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
