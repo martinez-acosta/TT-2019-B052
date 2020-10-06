@@ -108,6 +108,9 @@ export default {
       diagramaObtenido: 'diagramER/getDiagram'
     })
   },
+  created() {
+    this.loadModel()
+  },
   mounted() {
     /* Siempre el objeto será creado cuando el componente entre en el hook mounted(). Es decir, 
     debemos recuperar el estado anterior del diagrama mediante un estado compartido entre componentes en Vuex 
@@ -656,7 +659,6 @@ export default {
       this.saveDiagramProperties()
       this.savedModel = this.myDiagram.model.toJson()
       this.myDiagram.isModified = false
-      // console.log('savedModel: ' + this.savedModel)
       this.$store
         .dispatch('diagramER/save', {
           savedModel: this.savedModel
@@ -673,10 +675,12 @@ export default {
     loadModel() {
       this.$store
         .dispatch('diagramER/getLastDiagram')
-        .then(() => {
+        .then((response) => {
+          this.myDiagram.model = go.Model.fromJson(response.data.diagram)
           this.$snotify.success('Diagrama cargado correctamente!')
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err)
           this.$snotify.error(
             'Algo ocurrio! No hemos sido capaces de encontrar un diagrama asociado a este perfil.'
           )
