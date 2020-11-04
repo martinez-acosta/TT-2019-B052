@@ -59,8 +59,8 @@
       dense
     >
       <v-col
-        cols="3"
-        class="grey lighten-2 fill-height d-flex flex-column justify-center align-center"
+        cols="1"
+        class="white lighten-2 fill-height d-flex flex-column justify-center align-center"
       >
         <div
           id="myPaletteDiv"
@@ -68,7 +68,7 @@
         ></div>
       </v-col>
       <v-col
-        class="pink fill-height d-flex flex-column justify-center align-center"
+        class="white fill-height d-flex flex-column justify-center align-center"
       >
         <div
           id="myDiagramDiv"
@@ -76,14 +76,7 @@
         ></div>
       </v-col>
     </v-row>
-    <!--<v-row>
-      <v-col>
-        <v-textarea v-model="diagramaObtenido" auto-grow></v-textarea>
-      </v-col>
-      <v-col>
-        <div id="myInspectorDiv"></div>
-      </v-col>
-    </v-row>-->
+    <v-row> </v-row>
   </v-container>
 </template>
 
@@ -91,10 +84,9 @@
 import { go } from 'gojs/release/go-module'
 import 'gojs/extensionsJSM/Figures'
 import { mapGetters } from 'vuex'
-// import { Inspector } from 'gojs/extensionsJSM/DataInspector'
 
 export default {
-  // css: ['gojs/extensionsJSM/DataInspector.css'],
+  css: ['gojs/extensionsJSM/DataInspector.css'],
   data() {
     return {
       myDiagram: '',
@@ -117,6 +109,7 @@ export default {
     o por otro medio. Está implementado en Vuex. */
     const $ = go.GraphObject.make // for conciseness in defining templates
 
+    // Definimos el diagrama
     this.myDiagram = $(
       go.Diagram,
       'myDiagramDiv', // must name or refer to the DIV HTML element
@@ -151,12 +144,7 @@ export default {
       }
     )
 
-    this.myDiagram.addDiagramListener('InitialLayoutCompleted', function(e) {
-      // const dia = e.diagram
-      // add height for horizontal scrollbar
-      // dia.div.style.height = dia.documentBounds.height + 24 + 'px'
-    })
-
+    // Decoraciones de la selección y escalado
     const nodeSelectionAdornmentTemplate = $(
       go.Adornment,
       'Auto',
@@ -234,6 +222,22 @@ export default {
       })
     )
 
+    const linkSelectionAdornmentTemplate = $(
+      go.Adornment,
+      'Link',
+      $(
+        go.Shape,
+        // isPanelMain declares that this Shape shares the Link.geometry
+        {
+          isPanelMain: true,
+          fill: null,
+          stroke: 'deepskyblue',
+          strokeWidth: 0
+        }
+      ) // use selection object's strokeWidth
+    )
+
+    /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
     this.myDiagram.nodeTemplate = $(
       go.Node,
       'Spot',
@@ -315,21 +319,6 @@ export default {
       }
     )
 
-    const linkSelectionAdornmentTemplate = $(
-      go.Adornment,
-      'Link',
-      $(
-        go.Shape,
-        // isPanelMain declares that this Shape shares the Link.geometry
-        {
-          isPanelMain: true,
-          fill: null,
-          stroke: 'deepskyblue',
-          strokeWidth: 0
-        }
-      ) // use selection object's strokeWidth
-    )
-
     this.myDiagram.linkTemplate = $(
       go.Link, // the whole link panel
       {
@@ -375,6 +364,7 @@ export default {
       )
     )
 
+    // Figuras generadas
     go.Shape.defineFigureGenerator('EllipseInRectangle', function(shape, w, h) {
       const geo = new go.Geometry()
       geo.add(
@@ -468,63 +458,20 @@ export default {
 
     // Para cargar el diagrama por si hay uno ya existente
 
-    /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
-
     if (this.thereIsDiagram) {
       this.myDiagram.model = new go.GraphLinksModel()
-      // this.myDiagram.model = go.Model.fromJson(this.diagramaObtenido)
+      this.myDiagram.model = go.Model.fromJson(this.diagramaObtenido)
       const pos = this.myDiagram.model.modelData.position
       if (pos) this.myDiagram.initialPosition = go.Point.parse(pos)
     } else {
       this.myDiagram.model = new go.GraphLinksModel()
     }
 
-    // support editing the properties of the selected person in HTML
-
     // select a Node, so that the first Inspector shows something
     this.myDiagram.select(this.myDiagram.nodes.first())
 
-    // this.myInspector = new Inspector('myInspectorDiv', this.myDiagram, {
-    //   // allows for multiple nodes to be inspected at once
-    //   multipleSelection: false,
-    //   // max number of node properties will be shown when multiple selection is true
-    //   showSize: 4,
-    //   // when multipleSelection is true, when showAllProperties is true it takes the union of properties
-    //   // otherwise it takes the intersection of properties
-    //   showAllProperties: true,
-    //   // uncomment this line to only inspect the named properties below instead of all properties on each object:
-    //   // includesOwnProperties: false,
-    //   properties: {
-    //     text: { show: Inspector.showIfPresent },
-    //     // key would be automatically added for nodes, but we want to declare it read-only also:
-    //     // key: { readOnly: true, show: Inspector.showIfPresent },
-    //     // color would be automatically added for nodes, but we want to declare it a color also:
-    //     color: { show: Inspector.showIfPresent, type: 'color' },
-    //     // Comments and LinkComments are not in any node or link data (yet), so we add them here:
-    //     Comments: { show: Inspector.showIfNode },
-    //     // LinkComments: { show: Inspector.showIfLink },
-    //     toText: { show: Inspector.showIfLink },
-    //     fromText: { show: Inspector.showIfLink },
-    //     isGroup: { readOnly: true, show: Inspector.showIfPresent },
-    //     // flag: { show: Inspector.showIfNode, type: 'checkbox' },
-    //     /* state: {
-    //       show: Inspector.showIfNode,
-    //       type: 'select',
-    //       choices(node, propName) {
-    //         if (Array.isArray(node.data.choices)) return node.data.choices
-    //         return ['one', 'two', 'three', 'four', 'five']
-    //       }
-    //     } */
-    //     choices: { show: false }, // must not be shown at all
-    //     to: { readOnly: true },
-    //     from: { readOnly: true },
-    //     // an example of specifying the <input> type
-    //     password: { show: Inspector.showIfPresent, type: 'password' }
-    //   }
-    // })
-
     /** *****************Paleta***********************/
-    // initialize the Palette that is on the right side of the page
+    // initialize the Palette that is on the left side of the page
     this.myPalette = $(
       go.Palette,
       'myPaletteDiv', // must name or refer to the DIV HTML element
@@ -560,15 +507,21 @@ export default {
             fill: 'white'
           },
           {
-            type: 'weakEntity',
-            text: 'Entidad débil',
-            figure: 'FramedRectangle',
-            fill: 'white'
-          },
-          {
             type: 'atribute',
             text: 'Atributo',
             figure: 'Ellipse',
+            fill: 'white'
+          },
+          {
+            type: 'relation',
+            text: 'Relación',
+            figure: 'Diamond',
+            fill: 'white'
+          },
+          {
+            type: 'weakEntity',
+            text: 'Entidad débil',
+            figure: 'FramedRectangle',
             fill: 'white'
           },
           {
@@ -597,12 +550,6 @@ export default {
             type: 'weakRelation',
             text: 'Relación débil',
             figure: 'weakDiamond',
-            fill: 'white'
-          },
-          {
-            type: 'relation',
-            text: 'Relación',
-            figure: 'Diamond',
             fill: 'white'
           }
         ])
@@ -637,24 +584,6 @@ export default {
       const pos = this.myDiagram.model.modelData.position
       if (pos) this.myDiagram.initialPosition = go.Point.parse(pos)
     },
-
-    // Here we modify VUE's view model directly, and
-    // then ask the GoJS Diagram to update everything from the data.
-    // This is less efficient than calling the appropriate GoJS Model methods.
-    // NOTE: Undo will not be able to restore all of the state properly!!
-    modifyStuff() {
-      /* const data = this.diagramData
-      data.nodeDataArray[0].color = 'red'
-      // Note here that because we do not have the GoJS Model,
-      // we cannot find out what values would be unique keys, for reference by the link data.
-      data.nodeDataArray.push({
-        key: ++this.counter2,
-        text: this.counter2.toString(),
-        color: 'orange'
-      })
-      data.linkDataArray.push({ from: 2, to: this.counter2 })
-      this.updateDiagramFromData() */
-    },
     saveModel() {
       this.saveDiagramProperties()
       this.savedModel = this.myDiagram.model.toJson()
@@ -664,11 +593,11 @@ export default {
           savedModel: this.savedModel
         })
         .then(() => {
-          this.$snotify.success('Guardado correctamente!')
+          this.$snotify.success('Guardado correctamente.')
         })
         .catch(() => {
           this.$snotify.error(
-            'Algo ocurrio! El diagrama no ha sido guardado, intente mas tarde.'
+            '¡Algo ocurrio! El diagrama no ha sido guardado, intente más tarde.'
           )
         })
     },
@@ -677,12 +606,12 @@ export default {
         .dispatch('diagramER/getLastDiagram')
         .then((response) => {
           this.myDiagram.model = go.Model.fromJson(response.data.diagram)
-          this.$snotify.success('Diagrama cargado correctamente!')
+          this.$snotify.success('Diagrama cargado correctamente.')
         })
         .catch((err) => {
           console.log(err)
           this.$snotify.error(
-            'Algo ocurrio! No hemos sido capaces de encontrar un diagrama asociado a este perfil.'
+            '¡Algo ocurrio! No hemos sido capaces de encontrar un diagrama asociado a este perfil.'
           )
         })
     },
@@ -732,6 +661,4 @@ export default {
 
 <style></style>
 
-<style>
-@import 'gojs/extensionsJSM/DataInspector.css';
-</style>
+<style></style>

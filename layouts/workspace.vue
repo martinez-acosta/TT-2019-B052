@@ -4,17 +4,17 @@
     <transition name="fade" mode="out-in">
       <nuxt />
     </transition>
-    <Footer />
+    <!--  <Footer />-->
   </v-app>
 </template>
 
 <script>
-import Footer from '@/components/Footer.vue'
+// import Footer from '@/components/Footer.vue'
 import NavBar from '@/components/workspace/NavBar.vue'
 
 export default {
   components: {
-    Footer,
+    //    Footer,
     NavBar
   },
   data() {
