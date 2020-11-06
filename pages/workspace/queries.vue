@@ -1,8 +1,10 @@
 <template>
   <v-content>
     <v-container>
-      <v-row>
-        <ER />
+      <v-row no-gutters align-self="start">
+        <v-col>
+          <ER :showpallete="false" :readonly="false" />
+        </v-col>
       </v-row>
     </v-container>
   </v-content>

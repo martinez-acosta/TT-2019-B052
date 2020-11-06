@@ -1,17 +1,17 @@
 <template>
-  <v-row no-gutters align="center" justify="center" style="height:80vh" dense>
+  <v-row no-gutters style="height:80vh" dense>
     <v-col
+      v-show="mostrarPaleta"
       cols="2"
-      class="white lighten-2 fill-height d-flex flex-column justify-center align-center"
+      class="white lighten-2 fill-height d-flex flex-column"
     >
       <div
+        v-show="mostrarPaleta"
         id="myPaletteDiv"
         style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
       ></div>
     </v-col>
-    <v-col
-      class="white fill-height d-flex flex-column justify-center align-center"
-    >
+    <v-col class="white fill-height d-flex flex-column ">
       <div
         id="myDiagramDiv"
         style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
@@ -25,12 +25,18 @@ import 'gojs/extensionsJSM/Figures'
 import { mapGetters } from 'vuex'
 
 export default {
+  props: {
+    showpallete: { type: String, default: 'true' },
+    readonly: { type: String, default: 'false' }
+  },
   css: ['gojs/extensionsJSM/DataInspector.css'],
   data() {
     return {
       myDiagram: '',
       myPalette: '',
-      myInspector: ''
+      myInspector: '',
+      mostrarPaleta: this.showpallete,
+      soloLectura: this.readonly
     }
   },
   computed: {
@@ -502,6 +508,7 @@ export default {
     this.$nuxt.$on('cleanCanvas', () => {
       this.cleanCanvas()
     })
+    if (!this.soloLectura) this.myDiagram.isReadOnly = true
   },
   created() {},
   updated() {},

@@ -5,7 +5,7 @@
         <SubNavBar />
       </v-row>
       <v-row>
-        <ER />
+        <ER :showpallete="true" />
       </v-row>
     </v-container>
   </v-content>
