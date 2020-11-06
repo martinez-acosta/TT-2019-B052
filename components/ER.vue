@@ -6,7 +6,7 @@
     >
       <div
         id="myPaletteDiv"
-        style="width: 100%; display: flex; border: solid 1px black; height: 100%;*-+"
+        style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
       ></div>
     </v-col>
     <v-col
@@ -39,22 +39,7 @@ export default {
       diagramaObtenido: 'diagramER/getDiagram'
     })
   },
-  created() {
-    this.loadModel()
-  },
   mounted() {
-    // Listeners de SubNavBar.vue
-    this.$nuxt.$on('saveModel', () => {
-      this.saveModel()
-    })
-
-    this.$nuxt.$on('loadModel', () => {
-      this.loadModel()
-    })
-
-    this.$nuxt.$on('cleanCanvas', () => {
-      this.cleanCanvas()
-    })
     /* Siempre el objeto será creado cuando el componente entre en el hook mounted(). Es decir, 
     debemos recuperar el estado anterior del diagrama mediante un estado compartido entre componentes en Vuex 
     o por otro medio. Está implementado en Vuex. */
@@ -489,7 +474,6 @@ export default {
             fill: 'white',
             strokeDashArray: [4, 2]
           },
-
           {
             type: 'atributeComposite',
             text: 'Att compuesto',
@@ -506,9 +490,28 @@ export default {
         ])
       }
     )
+    // Listeners de SubNavBar.vue
+    this.$nuxt.$on('saveModel', () => {
+      this.saveModel()
+    })
+
+    this.$nuxt.$on('loadModel', () => {
+      this.loadModel()
+    })
+
+    this.$nuxt.$on('cleanCanvas', () => {
+      this.cleanCanvas()
+    })
   },
+  created() {},
+  updated() {},
   beforeDestroy() {
     this.saveModel()
+    // Eliminamos los listeners de SubNavBar.vue
+    this.$nuxt.$off('saveModel')
+    this.$nuxt.$off('loadModel')
+
+    this.$nuxt.$off('cleanCanvas')
   },
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
