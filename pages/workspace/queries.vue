@@ -1,9 +1,12 @@
 <template>
   <v-content>
-    <v-container>
+    <v-container class="ma-0 pa-0">
       <v-row no-gutters align-self="start">
-        <v-col>
+        <v-col cols="8">
           <ER :showpallete="false" :readonly="false" />
+        </v-col>
+        <v-col>
+          <div>Hola</div>
         </v-col>
       </v-row>
     </v-container>

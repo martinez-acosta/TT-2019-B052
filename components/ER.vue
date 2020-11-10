@@ -1,28 +1,32 @@
 <template>
-  <v-row no-gutters style="height:80vh" dense>
-    <v-col
-      v-show="mostrarPaleta"
-      cols="2"
-      class="white lighten-2 fill-height d-flex flex-column"
-    >
-      <div
+  <v-container>
+    <v-row no-gutters style="height:80vh" dense>
+      <v-col
         v-show="mostrarPaleta"
-        id="myPaletteDiv"
-        style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
-      ></div>
-    </v-col>
-    <v-col class="white fill-height d-flex flex-column ">
-      <div
-        id="myDiagramDiv"
-        style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
-      ></div>
-    </v-col>
-  </v-row>
+        cols="4"
+        class="white lighten-2 fill-height d-flex flex-column"
+      >
+        <div
+          v-show="mostrarPaleta"
+          id="myPaletteDiv"
+          style="width: 100%; display: flex; border: solid 0px black; height: 80%;"
+        ></div>
+        <div id="myInspectorDiv"></div>
+      </v-col>
+      <v-col class="white fill-height d-flex flex-column ">
+        <div
+          id="myDiagramDiv"
+          style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
+        ></div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script type="module">
 import { go } from 'gojs/release/go-module'
 import 'gojs/extensionsJSM/Figures'
 import { mapGetters } from 'vuex'
+import { Inspector } from 'gojs/extensionsJSM/DataInspector'
 
 export default {
   props: {
@@ -411,6 +415,44 @@ export default {
 
     // select a Node, so that the first Inspector shows something
     this.myDiagram.select(this.myDiagram.nodes.first())
+    this.myInspector = new Inspector('myInspectorDiv', this.myDiagram, {
+      // allows for multiple nodes to be inspected at once
+      multipleSelection: false,
+      // max number of node properties will be shown when multiple selection is true
+      showSize: 4,
+      // when multipleSelection is true, when showAllProperties is true it takes the union of properties
+      // otherwise it takes the intersection of properties
+      showAllProperties: true,
+      // uncomment this line to only inspect the named properties below instead of all properties on each object:
+      // includesOwnProperties: false,
+      properties: {
+        text: { show: Inspector.showIfPresent },
+        // key would be automatically added for nodes, but we want to declare it read-only also:
+        // key: { readOnly: true, show: Inspector.showIfPresent },
+        // color would be automatically added for nodes, but we want to declare it a color also:
+        color: { show: Inspector.showIfPresent, type: 'color' },
+        // Comments and LinkComments are not in any node or link data (yet), so we add them here:
+        Comments: { show: Inspector.showIfNode },
+        // LinkComments: { show: Inspector.showIfLink },
+        toText: { show: Inspector.showIfLink },
+        fromText: { show: Inspector.showIfLink },
+        isGroup: { readOnly: true, show: Inspector.showIfPresent },
+        // flag: { show: Inspector.showIfNode, type: 'checkbox' },
+        /* state: {
+          show: Inspector.showIfNode,
+          type: 'select',
+          choices(node, propName) {
+            if (Array.isArray(node.data.choices)) return node.data.choices
+            return ['one', 'two', 'three', 'four', 'five']
+          }
+        } */
+        choices: { show: false }, // must not be shown at all
+        to: { readOnly: true },
+        from: { readOnly: true },
+        // an example of specifying the <input> type
+        password: { show: Inspector.showIfPresent, type: 'password' }
+      }
+    })
 
     /** *****************Paleta***********************/
     // initialize the Palette that is on the left side of the page
@@ -496,6 +538,8 @@ export default {
         ])
       }
     )
+
+    if (!this.soloLectura) this.myDiagram.isReadOnly = true
     // Listeners de SubNavBar.vue
     this.$nuxt.$on('saveModel', () => {
       this.saveModel()
@@ -508,7 +552,6 @@ export default {
     this.$nuxt.$on('cleanCanvas', () => {
       this.cleanCanvas()
     })
-    if (!this.soloLectura) this.myDiagram.isReadOnly = true
   },
   created() {},
   updated() {},
@@ -517,7 +560,6 @@ export default {
     // Eliminamos los listeners de SubNavBar.vue
     this.$nuxt.$off('saveModel')
     this.$nuxt.$off('loadModel')
-
     this.$nuxt.$off('cleanCanvas')
   },
   middleware: 'authenticated',
@@ -620,4 +662,6 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+@import 'gojs/extensionsJSM/DataInspector.css';
+</style>
