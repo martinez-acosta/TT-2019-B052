@@ -1,6 +1,9 @@
 <template>
   <v-container>
-    <v-row no-gutters style="height:80vh" dense>
+    <client-only>
+      <vue-snotify></vue-snotify>
+    </client-only>
+    <v-row no-gutters style="height:80vh" dense class="ma-0 pa-0">
       <v-col
         v-show="mostrarPaleta"
         cols="4"
@@ -11,7 +14,7 @@
           id="myPaletteDiv"
           style="width: 100%; display: flex; border: solid 0px black; height: 80%;"
         ></div>
-        <div id="myInspectorDiv"></div>
+        <div v-show="mostrarPaleta" id="myInspectorDiv"></div>
       </v-col>
       <v-col class="white fill-height d-flex flex-column ">
         <div
@@ -30,8 +33,8 @@ import { Inspector } from 'gojs/extensionsJSM/DataInspector'
 
 export default {
   props: {
-    showpallete: { type: String, default: 'true' },
-    readonly: { type: String, default: 'false' }
+    showpallete: { type: Boolean, default: true },
+    readonly: { type: Boolean, default: false }
   },
   css: ['gojs/extensionsJSM/DataInspector.css'],
   data() {
@@ -539,7 +542,13 @@ export default {
       }
     )
 
-    if (!this.soloLectura) this.myDiagram.isReadOnly = true
+    if (this.soloLectura) {
+      this.myDiagram.isReadOnly = true
+      // quitamos los listeners del diagrama solo lectura
+      this.$nuxt.$off('saveModel')
+      this.$nuxt.$off('loadModel')
+      this.$nuxt.$off('cleanCanvas')
+    }
     // Listeners de SubNavBar.vue
     this.$nuxt.$on('saveModel', () => {
       this.saveModel()
@@ -562,6 +571,7 @@ export default {
     this.$nuxt.$off('loadModel')
     this.$nuxt.$off('cleanCanvas')
   },
+  destroy() {},
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
   methods: {
@@ -569,23 +579,10 @@ export default {
     updateDiagramFromData() {
       this.$refs.diag.updateDiagramFromData()
     },
-
-    // this event listener is declared on the <diagram>
-    modelChanged(e) {
-      if (e.isTransactionFinished) {
-        // show the model data in the page's TextArea
-        this.savedModelText = e.model.toJson()
-      }
-    },
     saveDiagramProperties() {
       this.myDiagram.model.modelData.position = go.Point.stringify(
         this.myDiagram.position
       )
-    },
-    loadDiagramProperties(e) {
-      // set Diagram.initialPosition, not Diagram.position, to handle initialization side-effects
-      const pos = this.myDiagram.model.modelData.position
-      if (pos) this.myDiagram.initialPosition = go.Point.parse(pos)
     },
     saveModel() {
       this.saveDiagramProperties()

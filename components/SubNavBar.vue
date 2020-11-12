@@ -1,8 +1,5 @@
 <template>
   <v-container fill-height fluid ma-0 pa-0>
-    <client-only>
-      <vue-snotify></vue-snotify>
-    </client-only>
     <v-row>
       <v-toolbar dense>
         <v-tooltip bottom>
