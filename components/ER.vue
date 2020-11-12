@@ -584,11 +584,11 @@ export default {
         this.myDiagram.position
       )
     },
-    saveModel() {
+    async saveModel() {
       this.saveDiagramProperties()
       this.savedModel = this.myDiagram.model.toJson()
       this.myDiagram.isModified = false
-      this.$store
+      await this.$store
         .dispatch('diagramER/save', {
           savedModel: this.savedModel
         })
