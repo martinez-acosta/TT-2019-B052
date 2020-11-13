@@ -432,7 +432,17 @@ export default {
         // key would be automatically added for nodes, but we want to declare it read-only also:
         // key: { readOnly: true, show: Inspector.showIfPresent },
         // color would be automatically added for nodes, but we want to declare it a color also:
-        color: { show: Inspector.showIfPresent, type: 'color' },
+        // color: { show: Inspector.showIfPresent, type: 'color' },
+        type: { readOnly: true, show: Inspector.showIfPresent, type: 'type' },
+        figure: {
+          readOnly: true,
+          show: Inspector.showIfPresent,
+          type: 'figure'
+        },
+        fill: { readOnly: true, show: Inspector.showIfPresent, type: 'fill' },
+        key: { readOnly: true, show: Inspector.showIfPresent, type: 'key' },
+        loc: { readOnly: true, show: false, type: 'loc' },
+        size: { readOnly: true, show: false, type: 'size' },
         // Comments and LinkComments are not in any node or link data (yet), so we add them here:
         Comments: { show: Inspector.showIfNode },
         // LinkComments: { show: Inspector.showIfLink },
