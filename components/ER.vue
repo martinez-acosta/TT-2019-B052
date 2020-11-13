@@ -48,8 +48,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      thereIsDiagram: 'diagramER/existDiagram',
-      diagramaObtenido: 'diagramER/getDiagram'
+      thereIsDiagram: 'vuexER/existDiagram',
+      diagramaObtenido: 'vuexER/getDiagram'
     })
   },
   mounted() {
@@ -405,8 +405,7 @@ export default {
       return geo
     })
 
-    // Para cargar el diagrama por si hay uno ya existente
-
+    // Para cargar el diagrama por si hay uno existente
     if (this.thereIsDiagram) {
       this.myDiagram.model = new go.GraphLinksModel()
       this.myDiagram.model = go.Model.fromJson(this.diagramaObtenido)
@@ -545,33 +544,31 @@ export default {
     if (this.soloLectura) {
       this.myDiagram.isReadOnly = true
       // quitamos los listeners del diagrama solo lectura
-      this.$nuxt.$off('saveModel')
-      this.$nuxt.$off('loadModel')
+      this.$nuxt.$off('axiosSaveModel')
+      this.$nuxt.$off('axiosLoadModel')
       this.$nuxt.$off('cleanCanvas')
+    } else {
+      // Listeners de SubNavBar.vue
+      this.$nuxt.$on('axiosSaveModel', () => {
+        this.axiosSaveModel()
+      })
+
+      this.$nuxt.$on('axiosLoadModel', () => {
+        this.axiosLoadModel()
+      })
+
+      this.$nuxt.$on('cleanCanvas', () => {
+        this.cleanCanvas()
+      })
     }
-    // Listeners de SubNavBar.vue
-    this.$nuxt.$on('saveModel', () => {
-      this.saveModel()
-    })
-
-    this.$nuxt.$on('loadModel', () => {
-      this.loadModel()
-    })
-
-    this.$nuxt.$on('cleanCanvas', () => {
-      this.cleanCanvas()
-    })
   },
-  created() {},
-  updated() {},
   beforeDestroy() {
-    this.saveModel()
+    this.vuexSaveModel()
     // Eliminamos los listeners de SubNavBar.vue
-    this.$nuxt.$off('saveModel')
-    this.$nuxt.$off('loadModel')
+    this.$nuxt.$off('axiosSaveModel')
+    this.$nuxt.$off('axiosLoadModel')
     this.$nuxt.$off('cleanCanvas')
   },
-  destroy() {},
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
   methods: {
@@ -584,12 +581,23 @@ export default {
         this.myDiagram.position
       )
     },
-    async saveModel() {
+    vuexSaveModel() {
       this.saveDiagramProperties()
       this.savedModel = this.myDiagram.model.toJson()
       this.myDiagram.isModified = false
-      await this.$store
-        .dispatch('diagramER/save', {
+      this.$store.dispatch('vuexER/save', {
+        savedModel: this.savedModel
+      })
+    },
+    vuexLoadModel() {
+      this.$store.dispatch('vuexER/getLastDiagram')
+    },
+    axiosSaveModel() {
+      this.saveDiagramProperties()
+      this.savedModel = this.myDiagram.model.toJson()
+      this.myDiagram.isModified = false
+      this.$store
+        .dispatch('axiosER/save', {
           savedModel: this.savedModel
         })
         .then(() => {
@@ -601,15 +609,14 @@ export default {
           )
         })
     },
-    loadModel() {
+    axiosLoadModel() {
       this.$store
-        .dispatch('diagramER/getLastDiagram')
+        .dispatch('axiosER/getLastDiagram')
         .then((response) => {
           this.myDiagram.model = go.Model.fromJson(response.data.diagram)
           this.$snotify.success('Diagrama cargado correctamente.')
         })
-        .catch((err) => {
-          console.log(err)
+        .catch(() => {
           this.$snotify.error(
             '¡Algo ocurrió! No se ha encontrado un diagrama asociado a este perfil.'
           )

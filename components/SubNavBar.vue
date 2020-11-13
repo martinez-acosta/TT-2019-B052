@@ -55,10 +55,10 @@ export default {
   components: {},
   methods: {
     saveModel() {
-      this.$nuxt.$emit('saveModel')
+      this.$nuxt.$emit('axiosSaveModel')
     },
     loadModel() {
-      this.$nuxt.$emit('loadModel')
+      this.$nuxt.$emit('axiosLoadModel')
     },
     cleanCanvas() {
       this.$nuxt.$emit('cleanCanvas')
