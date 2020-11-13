@@ -6,7 +6,7 @@
           <ER :showpallete="false" :readonly="false" />
         </v-col>
         <v-col>
-          <div>hola</div>
+          <div style="background-color:#FF0000;">hola</div>
         </v-col>
       </v-row>
     </v-container>

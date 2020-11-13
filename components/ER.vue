@@ -5,7 +5,7 @@
     </client-only>
     <v-row no-gutters style="height:80vh" dense class="ma-0 pa-0">
       <v-col
-        v-show="mostrarPaleta"
+        v-if="mostrarPaleta"
         cols="4"
         class="white lighten-2 fill-height d-flex flex-column"
       >
@@ -417,40 +417,41 @@ export default {
 
     // select a Node, so that the first Inspector shows something
     this.myDiagram.select(this.myDiagram.nodes.first())
-    this.myInspector = new Inspector('myInspectorDiv', this.myDiagram, {
-      // allows for multiple nodes to be inspected at once
-      multipleSelection: false,
-      // max number of node properties will be shown when multiple selection is true
-      showSize: 4,
-      // when multipleSelection is true, when showAllProperties is true it takes the union of properties
-      // otherwise it takes the intersection of properties
-      showAllProperties: true,
-      // uncomment this line to only inspect the named properties below instead of all properties on each object:
-      // includesOwnProperties: false,
-      properties: {
-        text: { show: Inspector.showIfPresent },
-        // key would be automatically added for nodes, but we want to declare it read-only also:
-        // key: { readOnly: true, show: Inspector.showIfPresent },
-        // color would be automatically added for nodes, but we want to declare it a color also:
-        // color: { show: Inspector.showIfPresent, type: 'color' },
-        type: { readOnly: true, show: Inspector.showIfPresent, type: 'type' },
-        figure: {
-          readOnly: true,
-          show: Inspector.showIfPresent,
-          type: 'figure'
-        },
-        fill: { readOnly: true, show: Inspector.showIfPresent, type: 'fill' },
-        key: { readOnly: true, show: Inspector.showIfPresent, type: 'key' },
-        loc: { readOnly: true, show: false, type: 'loc' },
-        size: { readOnly: true, show: false, type: 'size' },
-        // Comments and LinkComments are not in any node or link data (yet), so we add them here:
-        Comments: { show: Inspector.showIfNode },
-        // LinkComments: { show: Inspector.showIfLink },
-        toText: { show: Inspector.showIfLink },
-        fromText: { show: Inspector.showIfLink },
-        isGroup: { readOnly: true, show: Inspector.showIfPresent },
-        // flag: { show: Inspector.showIfNode, type: 'checkbox' },
-        /* state: {
+    if (this.mostrarPaleta)
+      this.myInspector = new Inspector('myInspectorDiv', this.myDiagram, {
+        // allows for multiple nodes to be inspected at once
+        multipleSelection: false,
+        // max number of node properties will be shown when multiple selection is true
+        showSize: 4,
+        // when multipleSelection is true, when showAllProperties is true it takes the union of properties
+        // otherwise it takes the intersection of properties
+        showAllProperties: true,
+        // uncomment this line to only inspect the named properties below instead of all properties on each object:
+        // includesOwnProperties: false,
+        properties: {
+          text: { show: Inspector.showIfPresent },
+          // key would be automatically added for nodes, but we want to declare it read-only also:
+          // key: { readOnly: true, show: Inspector.showIfPresent },
+          // color would be automatically added for nodes, but we want to declare it a color also:
+          // color: { show: Inspector.showIfPresent, type: 'color' },
+          type: { readOnly: true, show: Inspector.showIfPresent, type: 'type' },
+          figure: {
+            readOnly: true,
+            show: Inspector.showIfPresent,
+            type: 'figure'
+          },
+          fill: { readOnly: true, show: Inspector.showIfPresent, type: 'fill' },
+          key: { readOnly: true, show: Inspector.showIfPresent, type: 'key' },
+          loc: { readOnly: true, show: false, type: 'loc' },
+          size: { readOnly: true, show: false, type: 'size' },
+          // Comments and LinkComments are not in any node or link data (yet), so we add them here:
+          Comments: { show: Inspector.showIfNode },
+          // LinkComments: { show: Inspector.showIfLink },
+          toText: { show: Inspector.showIfLink },
+          fromText: { show: Inspector.showIfLink },
+          isGroup: { readOnly: true, show: Inspector.showIfPresent },
+          // flag: { show: Inspector.showIfNode, type: 'checkbox' },
+          /* state: {
           show: Inspector.showIfNode,
           type: 'select',
           choices(node, propName) {
@@ -458,98 +459,99 @@ export default {
             return ['one', 'two', 'three', 'four', 'five']
           }
         } */
-        choices: { show: false }, // must not be shown at all
-        to: { readOnly: true },
-        from: { readOnly: true },
-        // an example of specifying the <input> type
-        password: { show: Inspector.showIfPresent, type: 'password' }
-      }
-    })
+          choices: { show: false }, // must not be shown at all
+          to: { readOnly: true },
+          from: { readOnly: true },
+          // an example of specifying the <input> type
+          password: { show: Inspector.showIfPresent, type: 'password' }
+        }
+      })
 
     /** *****************Paleta***********************/
     // initialize the Palette that is on the left side of the page
-    this.myPalette = $(
-      go.Palette,
-      'myPaletteDiv', // must name or refer to the DIV HTML element
-      {
-        maxSelectionCount: 1,
-        nodeTemplateMap: this.myDiagram.nodeTemplateMap, // share the templates used by myDiagram
-        // simplify the link template, just in this Palette
-        linkTemplate: $(
-          go.Link,
-          {
-            // because the GridLayout.alignment is Location and the nodes have locationSpot == Spot.Center,
-            // to line up the Link in the same manner we have to pretend the Link has the same location spot
-            locationSpot: go.Spot.Center
-          },
-          {
-            routing: go.Link.AvoidsNodes,
-            curve: go.Link.JumpOver,
-            corner: 5,
-            toShortLength: 4
-          },
-          new go.Binding('points'),
-          $(
-            go.Shape, // the link path shape
-            { isPanelMain: true, strokeWidth: 2 }
-          )
-        ),
-        model: new go.GraphLinksModel([
-          // specify the contents of the Palette
-          {
-            type: 'entity',
-            text: 'Entidad',
-            figure: 'Rectangle',
-            fill: 'white'
-          },
-          {
-            type: 'atribute',
-            text: 'Atributo',
-            figure: 'Ellipse',
-            fill: 'white'
-          },
-          {
-            type: 'relation',
-            text: 'Relación',
-            figure: 'Diamond',
-            fill: 'white'
-          },
-          {
-            type: 'weakEntity',
-            text: 'Entidad débil',
-            figure: 'FramedRectangle',
-            fill: 'white'
-          },
-          {
-            type: 'keyAttribute',
-            text: 'Atributo clave',
-            figure: 'Ellipse',
-            isUnderline: true,
-            fill: 'white'
-          },
-          {
-            type: 'derivedAttribute',
-            text: 'att derivado',
-            figure: 'Ellipse',
-            fill: 'white',
-            strokeDashArray: [4, 2]
-          },
-          {
-            type: 'atributeComposite',
-            text: 'Att compuesto',
-            figure: 'FramedEllipse',
-            fill: 'white',
-            strokeDashArray: [4, 2]
-          },
-          {
-            type: 'weakRelation',
-            text: 'Relación débil',
-            figure: 'weakDiamond',
-            fill: 'white'
-          }
-        ])
-      }
-    )
+    if (this.mostrarPaleta)
+      this.myPalette = $(
+        go.Palette,
+        'myPaletteDiv', // must name or refer to the DIV HTML element
+        {
+          maxSelectionCount: 1,
+          nodeTemplateMap: this.myDiagram.nodeTemplateMap, // share the templates used by myDiagram
+          // simplify the link template, just in this Palette
+          linkTemplate: $(
+            go.Link,
+            {
+              // because the GridLayout.alignment is Location and the nodes have locationSpot == Spot.Center,
+              // to line up the Link in the same manner we have to pretend the Link has the same location spot
+              locationSpot: go.Spot.Center
+            },
+            {
+              routing: go.Link.AvoidsNodes,
+              curve: go.Link.JumpOver,
+              corner: 5,
+              toShortLength: 4
+            },
+            new go.Binding('points'),
+            $(
+              go.Shape, // the link path shape
+              { isPanelMain: true, strokeWidth: 2 }
+            )
+          ),
+          model: new go.GraphLinksModel([
+            // specify the contents of the Palette
+            {
+              type: 'entity',
+              text: 'Entidad',
+              figure: 'Rectangle',
+              fill: 'white'
+            },
+            {
+              type: 'atribute',
+              text: 'Atributo',
+              figure: 'Ellipse',
+              fill: 'white'
+            },
+            {
+              type: 'relation',
+              text: 'Relación',
+              figure: 'Diamond',
+              fill: 'white'
+            },
+            {
+              type: 'weakEntity',
+              text: 'Entidad débil',
+              figure: 'FramedRectangle',
+              fill: 'white'
+            },
+            {
+              type: 'keyAttribute',
+              text: 'Atributo clave',
+              figure: 'Ellipse',
+              isUnderline: true,
+              fill: 'white'
+            },
+            {
+              type: 'derivedAttribute',
+              text: 'att derivado',
+              figure: 'Ellipse',
+              fill: 'white',
+              strokeDashArray: [4, 2]
+            },
+            {
+              type: 'atributeComposite',
+              text: 'Att compuesto',
+              figure: 'FramedEllipse',
+              fill: 'white',
+              strokeDashArray: [4, 2]
+            },
+            {
+              type: 'weakRelation',
+              text: 'Relación débil',
+              figure: 'weakDiamond',
+              fill: 'white'
+            }
+          ])
+        }
+      )
 
     if (this.soloLectura) {
       this.myDiagram.isReadOnly = true
