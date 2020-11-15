@@ -1,7 +1,7 @@
 <template>
   <v-content>
     <v-container class="ma-0 pa-0" fluid>
-      <v-row dense align-self="start">
+      <v-row dense>
         <v-col>
           <ER :showpallete="false" :readonly="false" />
         </v-col>
