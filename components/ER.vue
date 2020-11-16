@@ -6,7 +6,7 @@
     <v-row no-gutters style="height:80vh" dense class="ma-0 pa-0">
       <v-col
         v-if="mostrarPaleta"
-        cols="4"
+        cols="3"
         class="white lighten-2 fill-height d-flex flex-column"
       >
         <div
@@ -246,10 +246,11 @@ export default {
 
     // Since we have only one main element, we don't have to declare a hide method,
     // we can set mainElement and GoJS will hide it automatically
-    this.myContextMenu = $(go.HTMLInfo, {
-      show: this.showContextMenu,
-      hide: this.hideContextMenu
-    })
+    if (this.mostrarPaleta)
+      this.myContextMenu = $(go.HTMLInfo, {
+        show: this.showContextMenu,
+        hide: this.hideContextMenu
+      })
 
     /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
     this.myDiagram.nodeTemplate = $(
@@ -629,7 +630,7 @@ export default {
           ])
         }
       )
-
+    console.log(this.soloLectura)
     if (this.soloLectura) {
       this.myDiagram.isReadOnly = true
       // quitamos los listeners del diagrama solo lectura

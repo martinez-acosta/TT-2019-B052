@@ -3,7 +3,7 @@
     <v-container class="ma-0 pa-0" fluid>
       <v-row dense>
         <v-col>
-          <ER :showpallete="false" :readonly="false" />
+          <ER :showpallete="false" :readonly="true" />
         </v-col>
         <v-col>
           <div style="background-color:#FF0000;">hola</div>
