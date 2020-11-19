@@ -41,7 +41,7 @@
             <li id="givenSet" class="menu-item" @click="cxcommand">
               Given set
             </li>
-            <li id="find value" class="menu-item" @click="cxcommand">
+            <li id="findValue" class="menu-item" @click="cxcommand">
               Delete
             </li>
           </ul>
@@ -505,14 +505,14 @@ export default {
           fromText: { show: Inspector.showIfLink },
           isGroup: { readOnly: true, show: Inspector.showIfPresent },
           // flag: { show: Inspector.showIfNode, type: 'checkbox' },
-          /* state: {
-          show: Inspector.showIfNode,
-          type: 'select',
-          choices(node, propName) {
-            if (Array.isArray(node.data.choices)) return node.data.choices
-            return ['one', 'two', 'three', 'four', 'five']
-          }
-        } */
+          dataType: {
+            show: Inspector.showIfNode,
+            type: 'select',
+            choices(node, propName) {
+              if (Array.isArray(node.data.choices)) return node.data.choices
+              return ['varchar', 'int', 'byte', 'four', 'five']
+            }
+          },
           choices: { show: false }, // must not be shown at all
           to: { readOnly: true },
           from: { readOnly: true },
@@ -556,30 +556,35 @@ export default {
               type: 'entity',
               text: 'Entidad',
               figure: 'Rectangle',
+              dataType: 'varchar',
               fill: 'white'
             },
             {
               type: 'atribute',
               text: 'Atributo',
               figure: 'Ellipse',
+              dataType: 'varchar',
               fill: 'white'
             },
             {
               type: 'relation',
               text: 'Relación',
               figure: 'Diamond',
+              dataType: 'varchar',
               fill: 'white'
             },
             {
               type: 'weakEntity',
               text: 'Entidad débil',
               figure: 'FramedRectangle',
+              dataType: 'varchar',
               fill: 'white'
             },
             {
               type: 'keyAttribute',
               text: 'Atributo clave',
               figure: 'Ellipse',
+              dataType: 'varchar',
               isUnderline: true,
               fill: 'white'
             },
@@ -587,6 +592,7 @@ export default {
               type: 'derivedAttribute',
               text: 'att derivado',
               figure: 'Ellipse',
+              dataType: 'varchar',
               fill: 'white',
               strokeDashArray: [4, 2]
             },
@@ -594,6 +600,7 @@ export default {
               type: 'atributeComposite',
               text: 'Att compuesto',
               figure: 'FramedEllipse',
+              dataType: 'varchar',
               fill: 'white',
               strokeDashArray: [4, 2]
             },
@@ -601,6 +608,7 @@ export default {
               type: 'weakRelation',
               text: 'Relación débil',
               figure: 'weakDiamond',
+              dataType: 'varchar',
               fill: 'white'
             }
           ])

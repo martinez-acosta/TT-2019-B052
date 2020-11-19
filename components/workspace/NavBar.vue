@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="primary" dark clipped-right clipped-left dense>
+  <v-app-bar app color="primary" dark clipped-right clipped-left dense flat>
     <v-toolbar-title>{{ user.name }}</v-toolbar-title>
 
     <v-divider class="mx-4" inset vertical></v-divider>

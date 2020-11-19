@@ -1,12 +1,12 @@
 <template>
   <v-content>
     <v-container class="ma-0 pa-0" fluid>
-      <v-row dense>
-        <v-col>
+      <v-row no-gutters>
+        <v-col cols="6">
           <ER :showpallete="false" :readonly="true" />
         </v-col>
-        <v-col>
-          <div style="background-color:#FF0000;">hola</div>
+        <v-col cols="6">
+          <Queries />
         </v-col>
       </v-row>
     </v-container>
@@ -15,12 +15,13 @@
 
 <script>
 import ER from '@/components/ER.vue'
-
+import Queries from '@/components/Queries.vue'
 export default {
   middleware: 'authenticated',
   layout: 'workspace',
   components: {
-    ER
+    ER,
+    Queries
   },
   data() {
     return {
