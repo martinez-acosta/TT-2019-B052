@@ -26,25 +26,25 @@
          so that absolute positioning works easily.
          This DIV containing both MUST have a non-static CSS position (we use position: relative)
          so that our context menu's absolute coordinates work correctly. -->
-        <div style="position: relative; height: 100%;">
+        <div style="position: relative;   height: 100%;">
           <div
             id="myDiagramDiv"
-            style="border: solid 1px black; display: flex; width:100%; height:100%"
+            style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
           ></div>
-          <div id="contextMenu1" class="contextMenu">
-            <ul>
-              <li id="cut" @click="cxcommand">Cut</li>
-              <li id="copy" @click="cxcommand">Copy</li>
-              <li id="paste1" @click="cxcommand">Paste</li>
-              <li id="delete" @click="cxcommand">Delete</li>
-            </ul>
-          </div>
-          <div id="contextMenu2" class="contextMenu">
-            <ul>
-              <li id="paste2" @click="cxcommand">Paste</li>
-              <li id="color" @click="cxcommand('Color')">Color</li>
-            </ul>
-          </div>
+          <ul id="contextMenu" class="menu">
+            <li id="givenValue" class="menu-item" @click="cxcommand">
+              Given value (=)
+            </li>
+            <li id="givenRange" class="menu-item" @click="cxcommand">
+              Given range (&gt;, &lt;, &gt;=, &lt;= )
+            </li>
+            <li id="givenSet" class="menu-item" @click="cxcommand">
+              Given set
+            </li>
+            <li id="find value" class="menu-item" @click="cxcommand">
+              Delete
+            </li>
+          </ul>
         </div>
       </v-col>
     </v-row>
@@ -68,10 +68,8 @@ export default {
       myPalette: '',
       myInspector: '',
       myContextMenu: '',
-      cxElement1: '',
-      cxElement2: '',
+      cxElement: '',
       cxTool: '',
-      currentContextMenu: '',
       mostrarPaleta: this.showpallete,
       soloLectura: this.readonly
     }
@@ -216,11 +214,26 @@ export default {
       ) // use selection object's strokeWidth
     )
 
+    /** ******************* Menú contextual *******************************/
+    // This is the actual HTML context menu:
+    this.cxElement = document.getElementById('contextMenu')
+
+    // Since we have only one main element, we don't have to declare a hide method,
+    // we can set mainElement and GoJS will hide it automatically
+    if (this.soloLectura)
+      this.myContextMenu = $(go.HTMLInfo, {
+        show: this.showContextMenu,
+        hide: this.hideContextMenu
+      })
+
     /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
     this.myDiagram.nodeTemplate = $(
       go.Node,
       'Spot',
-      { contextMenu: $(go.Adornment), locationSpot: go.Spot.Center },
+      {
+        contextMenu: this.mostrarMenuContextual(),
+        locationSpot: go.Spot.Center
+      },
       new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(
         go.Point.stringify
       ),
@@ -296,6 +309,17 @@ export default {
           })
         }
       }
+    )
+
+    this.myDiagram.contextMenu = this.myContextMenu
+    // We don't want the div acting as a context menu to have a (browser) context menu!
+    this.cxElement.addEventListener(
+      'contextmenu',
+      function(e) {
+        e.preventDefault()
+        return false
+      },
+      false
     )
 
     this.myDiagram.linkTemplate = $(
@@ -583,7 +607,7 @@ export default {
         }
       )
     if (this.soloLectura) {
-      this.myDiagram.isReadOnly = true
+      // this.myDiagram.isReadOnly = true
       // quitamos los listeners del diagrama solo lectura
       this.$nuxt.$off('axiosSaveModel')
       this.$nuxt.$off('axiosLoadModel')
@@ -602,124 +626,6 @@ export default {
         this.cleanCanvas()
       })
     }
-
-    /** ******************* Menú contextual *******************************/
-
-    // This is a dummy context menu for the whole Diagram:
-    this.myDiagram.contextMenu = $(go.Adornment)
-
-    // Override the ContextMenuTool.showContextMenu and hideContextMenu methods
-    // in order to modify the HTML appropriately.
-    this.cxTool = this.myDiagram.toolManager.contextMenuTool
-
-    // This is the actual HTML context menu:
-    this.cxElement1 = document.getElementById('contextMenu1')
-    // This is the actual HTML context menu:
-    this.cxElement2 = document.getElementById('contextMenu2')
-
-    // This is the override of ContextMenuTool.showContextMenu:
-    // This does not not need to call the base method.
-    this.cxTool.showContextMenu = (contextmenu, obj) => {
-      const diagram = this.myDiagram
-      if (diagram === null) return
-      // Hide any other existing context menu
-      if (contextmenu !== this.currentContextMenu) {
-        this.cxTool.hideContextMenu()
-      }
-
-      // Show only the relevant buttons given the current state.
-      const cmd = diagram.commandHandler
-      const objExists = obj !== null
-
-      document.getElementById('cut').style.display =
-        objExists && cmd.canCutSelection() ? 'block' : 'none'
-      document.getElementById('copy').style.display =
-        objExists && cmd.canCopySelection() ? 'block' : 'none'
-      document.getElementById('paste1').style.display = cmd.canPasteSelection()
-        ? 'block'
-        : 'none'
-      document.getElementById('paste2').style.display = cmd.canPasteSelection()
-        ? 'block'
-        : 'none'
-      document.getElementById('delete').style.display =
-        objExists && cmd.canDeleteSelection() ? 'block' : 'none'
-      document.getElementById('color').style.display = objExists
-        ? 'block'
-        : 'none'
-      if (objExists && obj.part.data.fill === 'white') {
-        // Now show the whole context menu element
-        this.cxElement1.style.display = 'block'
-        // we don't bother overriding positionContextMenu, we just do it here:
-        const mousePt = diagram.lastInput.viewPoint
-        this.cxElement1.style.left = mousePt.x + 'px'
-        this.cxElement1.style.top = mousePt.y + 'px'
-      } else {
-        // Now show the whole context menu element
-        this.cxElement2.style.display = 'block'
-        // we don't bother overriding positionContextMenu, we just do it here:
-        const mousePt = diagram.lastInput.viewPoint
-        this.cxElement2.style.left = mousePt.x + 'px'
-        this.cxElement2.style.top = mousePt.y + 'px'
-      }
-
-      // Remember that there is now a context menu showing
-      this.currentContextMenu = contextmenu
-    }
-
-    // This is the corresponding override of ContextMenuTool.hideContextMenu:
-    // This does not not need to call the base method.
-    this.cxTool.hideContextMenu = () => {
-      if (this.currentContextMenu === null) return
-      this.cxElement1.style.display = 'none'
-      this.cxElement2.style.display = 'none'
-      this.currentContextMenu = null
-    }
-    // We don't want the div acting as a context menu to have a (browser) context menu!
-    this.cxElement1.addEventListener(
-      'contextmenu',
-      (e) => {
-        e.focus()
-        e.preventDefault()
-        return false
-      },
-      false
-    )
-    this.cxElement1.addEventListener(
-      'blur',
-      (e) => {
-        this.cxTool.stopTool()
-        // maybe start another context menu
-        if (this.cxTool.canStart()) {
-          this.myDiagram.currentTool = this.cxTool
-          this.cxTool.doMouseUp()
-        }
-      },
-      false
-    )
-    this.cxElement1.tabIndex = '1'
-    // We don't want the div acting as a context menu to have a (browser) context menu!
-    this.cxElement2.addEventListener(
-      'contextmenu',
-      (e) => {
-        e.focus()
-        e.preventDefault()
-        return false
-      },
-      false
-    )
-    this.cxElement2.addEventListener(
-      'blur',
-      (e) => {
-        this.cxTool.stopTool()
-        // maybe start another context menu
-        if (this.cxTool.canStart()) {
-          this.myDiagram.currentTool = this.cxTool
-          this.cxTool.doMouseUp()
-        }
-      },
-      false
-    )
-    this.cxElement2.tabIndex = '1'
   },
   beforeDestroy() {
     this.vuexSaveModel()
@@ -731,6 +637,9 @@ export default {
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
   methods: {
+    mostrarMenuContextual() {
+      if (this.soloLectura) return this.myContextMenu
+    },
     // tell the GoJS Diagram to update based on the arbitrarily modified model data
     updateDiagramFromData() {
       this.$refs.diag.updateDiagramFromData()
@@ -822,36 +731,85 @@ export default {
       })
     },
     /** ************Menú contextual*******************/
-
+    hideCX() {
+      if (this.myDiagram.currentTool instanceof go.ContextMenuTool) {
+        this.myDiagram.currentTool.doCancel()
+      }
+    },
+    showContextMenu(obj, diagram, tool) {
+      // Show only the relevant buttons given the current state.
+      const cmd = diagram.commandHandler
+      let hasMenuItem = false
+      function maybeShowItem(elt, pred) {
+        if (pred) {
+          elt.style.display = 'block'
+          hasMenuItem = true
+        } else {
+          elt.style.display = 'none'
+        }
+      }
+      maybeShowItem(
+        document.getElementById('givenValue'),
+        cmd.canCutSelection()
+      )
+      // maybeShowItem(document.getElementById('copy'), cmd.canCopySelection())
+      // maybeShowItem(
+      //   document.getElementById('paste'),
+      //   cmd.canPasteSelection(
+      //     diagram.toolManager.contextMenuTool.mouseDownPoint
+      //   )
+      // )
+      // maybeShowItem(document.getElementById('delete'), cmd.canDeleteSelection())
+      // maybeShowItem(document.getElementById('color'), obj !== null)
+      // Now show the whole context menu element
+      if (hasMenuItem) {
+        this.cxElement.classList.add('show-menu')
+        // we don't bother overriding positionContextMenu, we just do it here:
+        const mousePt = diagram.lastInput.viewPoint
+        this.cxElement.style.left = mousePt.x + 5 + 'px'
+        this.cxElement.style.top = mousePt.y + 'px'
+      }
+      // Optional: Use a `window` click listener with event capture to
+      //           remove the context menu if the user clicks elsewhere on the page
+      window.addEventListener('click', this.hideCX, true)
+    },
+    hideContextMenu() {
+      this.cxElement.classList.remove('show-menu')
+      // Optional: Use a `window` click listener with event capture to
+      //           remove the context menu if the user clicks elsewhere on the page
+      window.removeEventListener('click', this.hideCX, true)
+    },
     // This is the general menu command handler, parameterized by the name of the command.
-    cxcommand(val) {
+    cxcommand(event, val) {
+      if (val === undefined) val = event.currentTarget.id
       const diagram = this.myDiagram
-      if (!(diagram.currentTool instanceof go.ContextMenuTool)) return
       switch (val) {
-        case 'Cut':
+        case 'cut':
           diagram.commandHandler.cutSelection()
           break
-        case 'Copy':
+        case 'copy':
           diagram.commandHandler.copySelection()
           break
-        case 'Paste':
-          diagram.commandHandler.pasteSelection(diagram.lastInput.documentPoint)
+        case 'paste':
+          diagram.commandHandler.pasteSelection(
+            diagram.toolManager.contextMenuTool.mouseDownPoint
+          )
           break
-        case 'Delete':
+        case 'delete':
           diagram.commandHandler.deleteSelection()
           break
-        case 'Color':
-          this.changeColor(diagram)
+        case 'color': {
+          const color = window.getComputedStyle(event.target)[
+            'background-color'
+          ]
+          this.changeColor(diagram, color)
           break
+        }
       }
       diagram.currentTool.stopTool()
     },
     // A custom command, for changing the color of the selected node(s).
-    changeColor(diagram) {
-      // the object with the context menu, in this case a Node, is accessible as:
-      // const cmObj = diagram.toolManager.contextMenuTool.currentObject
-      // but this function operates on all selected Nodes, not just the one at the mouse pointer.
-
+    changeColor(diagram, color) {
       // Always make changes in a transaction, except when initializing the diagram.
       diagram.startTransaction('change color')
       diagram.selection.each(function(node) {
@@ -859,13 +817,9 @@ export default {
           // ignore any selected Links and simple Parts
           // Examine and modify the data, not the Node directly.
           const data = node.data
-          if (data.color === 'red') {
-            // Call setDataProperty to support undo/redo as well as
-            // automatically evaluating any relevant bindings.
-            diagram.model.setDataProperty(data, 'color', go.Brush.randomColor())
-          } else {
-            diagram.model.setDataProperty(data, 'color', 'red')
-          }
+          // Call setDataProperty to support undo/redo as well as
+          // automatically evaluating any relevant bindings.
+          diagram.model.setDataProperty(data, 'fill', color)
         }
       })
       diagram.commitTransaction('change color')
@@ -877,42 +831,50 @@ export default {
 <style>
 @import 'gojs/extensionsJSM/DataInspector.css';
 /* CSS for the traditional context menu */
-.contextMenu {
-  z-index: 300;
-  position: absolute;
-  left: 5px;
-  border: 1px solid #444;
-  background-color: #f5f5f5;
+.menu {
   display: none;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  font-size: 12px;
-  font-family: sans-serif;
-  font-weight: bold;
-}
-
-.contextMenu ul {
-  list-style: none;
-  top: 0;
-  left: 0;
+  position: absolute;
+  opacity: 0;
   margin: 0;
-  padding: 0;
+  padding: 8px 0;
+  z-index: 999;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  list-style: none;
+  background-color: #ffffff;
+  border-radius: 4px;
 }
-
-.contextMenu li {
+.menu-item {
+  display: block;
   position: relative;
   min-width: 60px;
-  color: #444;
-  display: inline-block;
-  padding: 6px;
-  text-decoration: none;
-  cursor: default;
+  margin: 0;
+  padding: 6px 16px;
+  font: bold 12px sans-serif;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: pointer;
 }
-
-.contextMenu li:hover {
-  background: #444;
+.menu-item::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
 }
-
-.contextMenu li:hover {
-  color: #eee;
+.menu-item:hover::before {
+  opacity: 0.04;
+}
+.menu .menu {
+  top: -8px;
+  left: 100%;
+}
+.show-menu,
+.menu-item:hover > .menu {
+  display: block;
+  opacity: 1;
 }
 </style>
