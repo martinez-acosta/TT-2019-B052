@@ -500,7 +500,7 @@ export default {
           loc: { readOnly: true, show: false, type: 'loc' },
           size: { readOnly: true, show: false, type: 'size' },
           // Comments and LinkComments are not in any node or link data (yet), so we add them here:
-          Texto: { show: true },
+          Comments: { show: false },
           LinkComments: { show: false },
           toText: { show: Inspector.showIfLink },
           fromText: { show: Inspector.showIfLink },
