@@ -89,7 +89,7 @@ export default {
           value: 'name'
         }
       ],
-      findnEntries: [
+      findEntries: [
         {
           name: 'atributo'
         }
