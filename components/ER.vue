@@ -483,27 +483,27 @@ export default {
         // uncomment this line to only inspect the named properties below instead of all properties on each object:
         // includesOwnProperties: false,
         properties: {
-          text: { show: Inspector.showIfPresent },
+          text: { show: false },
           // key would be automatically added for nodes, but we want to declare it read-only also:
           // key: { readOnly: true, show: Inspector.showIfPresent },
           // color would be automatically added for nodes, but we want to declare it a color also:
           // color: { show: Inspector.showIfPresent, type: 'color' },
-          type: { readOnly: true, show: Inspector.showIfPresent, type: 'type' },
+          type: { readOnly: true, show: false, type: 'type' },
           figure: {
             readOnly: true,
-            show: Inspector.showIfPresent,
+            show: false,
             type: 'figure'
           },
-          fill: { readOnly: true, show: Inspector.showIfPresent, type: 'fill' },
-          key: { readOnly: true, show: Inspector.showIfPresent, type: 'key' },
+          fill: { readOnly: true, show: false, type: 'fill' },
+          key: { readOnly: true, show: false, type: 'key' },
           loc: { readOnly: true, show: false, type: 'loc' },
           size: { readOnly: true, show: false, type: 'size' },
           // Comments and LinkComments are not in any node or link data (yet), so we add them here:
-          Comments: { show: Inspector.showIfNode },
-          // LinkComments: { show: Inspector.showIfLink },
+          Comments: { show: false },
+          LinkComments: { show: false },
           toText: { show: Inspector.showIfLink },
           fromText: { show: Inspector.showIfLink },
-          isGroup: { readOnly: true, show: Inspector.showIfPresent },
+          // isGroup: { readOnly: true, show: Inspector.showIfPresent },
           // flag: { show: Inspector.showIfNode, type: 'checkbox' },
           dataType: {
             show: Inspector.showIfNode,
@@ -514,8 +514,8 @@ export default {
             }
           },
           choices: { show: false }, // must not be shown at all
-          to: { readOnly: true },
-          from: { readOnly: true },
+          to: { readOnly: true, show: false },
+          from: { readOnly: true, show: false },
           // an example of specifying the <input> type
           password: { show: Inspector.showIfPresent, type: 'password' }
         }
