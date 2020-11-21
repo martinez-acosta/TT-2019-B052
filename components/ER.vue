@@ -32,7 +32,7 @@
             style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
           ></div>
           <ul id="contextMenu" class="menu">
-            <li id="givenValue" class="menu-item" @click="cxcommand">
+            <li id="givenValue" class="menu-item" @click="givenValue">
               Given value (=)
             </li>
             <li id="givenRange" class="menu-item" @click="cxcommand">
@@ -54,6 +54,7 @@
 import { go } from 'gojs/release/go-module'
 import 'gojs/extensionsJSM/Figures'
 import { mapGetters } from 'vuex'
+
 import { Inspector } from 'gojs/extensionsJSM/DataInspector'
 
 export default {
@@ -71,6 +72,7 @@ export default {
       cxElement: '',
       cxTool: '',
       rango: [],
+      node: '',
       mostrarPaleta: this.showpallete,
       soloLectura: this.readonly
     }
@@ -856,6 +858,33 @@ export default {
         }
       })
       diagram.commitTransaction('change color')
+    },
+    givenValue() {
+      const diagram = this.myDiagram
+      // Always make changes in a transaction, except when initializing the diagram.
+      diagram.startTransaction('given value')
+      diagram.selection.each((node) => {
+        if (node instanceof go.Node) {
+          // ignore any selected Links and simple Parts
+          // Examine and modify the data, not the Node directly.
+          const data = node.data
+
+          // Call setDataProperty to support undo/redo as well as
+          // Guardamos los datos del nodo solo si es un atributo
+          if (
+            data.type === 'keyAttribute' ||
+            data.type === 'derivedAttribute' ||
+            data.type === 'atributeComposite' ||
+            data.type === 'atribute'
+          ) {
+            // console.log('enviado: ', data)
+            this.$store.dispatch('vuexQueries/pushNode', data).then(() => {
+              this.$nuxt.$emit('emitGivenValue')
+            })
+          }
+        }
+      })
+      diagram.commitTransaction('value obtained')
     }
   }
 }

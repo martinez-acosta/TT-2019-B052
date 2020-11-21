@@ -36,7 +36,6 @@
                 </v-col>
               </v-row>
             </v-container>
-
             <!------Fin consultas---------->
           </v-tab-item>
         </v-tabs-items>
@@ -58,6 +57,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -69,18 +70,13 @@ export default {
           value: 'name'
         },
         {
-          text: 'Type (value/range/set)',
+          text: '(value/range/set)',
           align: 'start',
           sortable: false,
           value: 'type'
         }
       ],
-      givenEntries: [
-        {
-          name: 'atributo',
-          type: 'range'
-        }
-      ],
+      givenEntries: [],
       findHeaders: [
         {
           text: 'Attribute',
@@ -89,20 +85,29 @@ export default {
           value: 'name'
         }
       ],
-      findEntries: [
-        {
-          name: 'atributo'
-        }
-      ],
+      findEntries: [],
       length: 1,
-      tab: null
+      tab: 0
     }
+  },
+  computed: {
+    ...mapGetters({
+      nodoObtenido: 'vuexQueries/getNode'
+    })
   },
   watch: {
     length(val) {
       this.tab = val - 1
     }
   },
+  mounted() {
+    this.$nuxt.$on('emitGivenValue', () => {
+      const nodo = this.nodoObtenido
+
+      this.givenEntries.push({ name: nodo.text, type: 'value' })
+    })
+  },
+
   methods: {}
 }
 </script>
