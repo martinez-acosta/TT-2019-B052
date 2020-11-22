@@ -35,6 +35,15 @@
                   </v-card>
                 </v-col>
               </v-row>
+              <v-row>
+                <v-col>
+                  <textarea
+                    style="width:100%;height:300px"
+                    :value="diagramaObtenido"
+                  >
+                  </textarea>
+                </v-col>
+              </v-row>
             </v-container>
             <!------Fin consultas---------->
           </v-tab-item>
@@ -92,7 +101,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      nodoObtenido: 'vuexQueries/getNode'
+      nodoObtenido: 'vuexQueries/getNode',
+      diagramaObtenido: 'vuexER/getDiagram'
     })
   },
   watch: {
@@ -103,9 +113,11 @@ export default {
   mounted() {
     this.$nuxt.$on('emitGivenValue', () => {
       const nodo = this.nodoObtenido
-
+      console.log(nodo)
       this.givenEntries.push({ name: nodo.text, type: 'value' })
     })
+    const obj = JSON.parse(this.diagramaObtenido)
+    console.log(obj)
   },
 
   methods: {}

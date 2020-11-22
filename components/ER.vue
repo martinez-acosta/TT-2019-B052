@@ -775,7 +775,6 @@ export default {
       // Show only the relevant buttons given the current state.
       const cmd = diagram.commandHandler
       let hasMenuItem = false
-      console.log('obj: ', obj)
       function maybeShowItem(elt, pred) {
         if (
           pred &&
