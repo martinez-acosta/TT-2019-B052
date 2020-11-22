@@ -587,7 +587,7 @@ export default {
               fill: 'white'
             },
             {
-              type: 'atribute',
+              type: 'attribute',
               text: 'Atributo',
               figure: 'Ellipse',
               dataType: 'varchar',
@@ -624,7 +624,7 @@ export default {
               strokeDashArray: [4, 2]
             },
             {
-              type: 'atributeComposite',
+              type: 'compositeAttribute',
               text: 'Att compuesto',
               figure: 'FramedEllipse',
               dataType: 'varchar',
@@ -775,8 +775,15 @@ export default {
       // Show only the relevant buttons given the current state.
       const cmd = diagram.commandHandler
       let hasMenuItem = false
+      console.log('obj: ', obj)
       function maybeShowItem(elt, pred) {
-        if (pred) {
+        if (
+          pred &&
+          (obj.data.type === 'attribute' ||
+            obj.data.type === 'keyAttribute' ||
+            obj.data.type === 'derivedAttribute' ||
+            obj.data.type === 'compositeAttribute')
+        ) {
           elt.style.display = 'block'
           hasMenuItem = true
         } else {
@@ -874,8 +881,8 @@ export default {
           if (
             data.type === 'keyAttribute' ||
             data.type === 'derivedAttribute' ||
-            data.type === 'atributeComposite' ||
-            data.type === 'atribute'
+            data.type === 'compositeAttribute' ||
+            data.type === 'attribute'
           ) {
             // console.log('enviado: ', data)
             this.$store.dispatch('vuexQueries/pushNode', data).then(() => {
