@@ -121,11 +121,40 @@ export default {
         name: nodoConectado.text + '.' + nodo.text,
         type: 'value'
       })
-
-      // const obj = JSON.parse(this.diagramaObtenido)
-      // console.log('nodo key: ', nodo.key)
-      // console.log('obj: ', obj.linkDataArray)
     })
+    this.$nuxt.$on('emitGivenRange', () => {
+      const nodo = this.nodoObtenido
+      const nodoConectado = this.nodoConectado
+
+      this.givenEntries.push({
+        name: nodoConectado.text + '.' + nodo.text,
+        type: 'range'
+      })
+    })
+    this.$nuxt.$on('emitGivenSet', () => {
+      const nodo = this.nodoObtenido
+      const nodoConectado = this.nodoConectado
+
+      this.givenEntries.push({
+        name: nodoConectado.text + '.' + nodo.text,
+        type: 'set'
+      })
+    })
+    this.$nuxt.$on('emitFindValue', () => {
+      const nodo = this.nodoObtenido
+      const nodoConectado = this.nodoConectado
+
+      this.findEntries.push({
+        name: nodoConectado.text + '.' + nodo.text,
+        type: 'value'
+      })
+    })
+  },
+  beforeDestroy() {
+    this.$nuxt.$off('emitGivenValue')
+    this.$nuxt.$off('emitGivenRange')
+    this.$nuxt.$off('emitGivenSet')
+    this.$nuxt.$off('emitFindValue')
   },
 
   methods: {}

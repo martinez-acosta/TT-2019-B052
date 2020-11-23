@@ -32,17 +32,30 @@
             style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
           ></div>
           <ul id="contextMenu" class="menu">
-            <li id="givenValue" class="menu-item" @click="givenValue">
+            <li
+              id="givenValue"
+              class="menu-item"
+              @click="givenValue('givenValue')"
+            >
               Given value (=)
             </li>
-            <li id="givenRange" class="menu-item" @click="cxcommand">
+            <li
+              id="givenRange"
+              class="menu-item"
+              @click="givenValue('givenRange')"
+            >
               Given range (&gt;, &lt;, &gt;=, &lt;= )
             </li>
-            <li id="givenSet" class="menu-item" @click="cxcommand">
+            <li id="givenSet" class="menu-item" @click="givenValue('givenSet')">
               Given set
             </li>
-            <li id="findValue" class="menu-item" @click="cxcommand">
-              Delete
+            <li><hr /></li>
+            <li
+              id="findValue"
+              class="menu-item"
+              @click="findValue('findValue')"
+            >
+              Find value
             </li>
           </ul>
         </div>
@@ -862,7 +875,7 @@ export default {
       })
       diagram.commitTransaction('change color')
     },
-    givenValue() {
+    givenValue(type) {
       const diagram = this.myDiagram
       // Always make changes in a transaction, except when initializing the diagram.
       diagram.startTransaction('given value')
@@ -888,12 +901,60 @@ export default {
               ),
               this.$store.dispatch('vuexQueries/pushNode', data)
             ]).finally(() => {
-              this.$nuxt.$emit('emitGivenValue')
+              switch (type) {
+                case 'givenValue':
+                  this.$nuxt.$emit('emitGivenValue')
+                  break
+                case 'givenRange':
+                  this.$nuxt.$emit('emitGivenRange')
+                  break
+                case 'givenSet':
+                  this.$nuxt.$emit('emitGivenSet')
+                  break
+              }
             })
           }
         }
       })
       diagram.commitTransaction('value obtained')
+      diagram.currentTool.stopTool()
+    },
+    findValue(type) {
+      const diagram = this.myDiagram
+      // Always make changes in a transaction, except when initializing the diagram.
+      diagram.startTransaction('find value')
+      diagram.selection.each((node) => {
+        if (node instanceof go.Node) {
+          // ignore any selected Links and simple Parts
+          // Examine and modify the data, not the Node directly.
+          const data = { ...node.data }
+
+          // Call setDataProperty to support undo/redo as well as
+          // Guardamos los datos del nodo solo si es un atributo
+          if (
+            data.type === 'keyAttribute' ||
+            data.type === 'derivedAttribute' ||
+            data.type === 'compositeAttribute' ||
+            data.type === 'attribute'
+          ) {
+            const nodoConectado = { ...this.getConnectedNode(node) }
+            Promise.all([
+              this.$store.dispatch(
+                'vuexQueries/pushConnectedNode',
+                nodoConectado
+              ),
+              this.$store.dispatch('vuexQueries/pushNode', data)
+            ]).finally(() => {
+              switch (type) {
+                case 'findValue':
+                  this.$nuxt.$emit('emitFindValue')
+                  break
+              }
+            })
+          }
+        }
+      })
+      diagram.commitTransaction('end find value')
       diagram.currentTool.stopTool()
     },
     getConnectedNode(node) {
