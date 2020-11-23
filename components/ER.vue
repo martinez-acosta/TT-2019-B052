@@ -80,6 +80,7 @@ export default {
       myDiagram: '',
       myPalette: '',
       myInspector: '',
+      PathPatterns: '',
       myContextMenu: '',
       cxElement: '',
       node: '',
@@ -335,6 +336,19 @@ export default {
       false
     )
 
+    this.PathPatterns = new go.Map()
+
+    this.PathPatterns.set(
+      'Double',
+      $(go.Shape, {
+        geometryString: 'M0 0 L1 0 M0 3 L1 3',
+        fill: 'transparent',
+        stroke: 'black',
+        strokeWidth: '1',
+        strokeCap: 'square'
+      })
+    )
+
     this.myDiagram.linkTemplate = $(
       go.Link, // the whole link panel
       {
@@ -358,25 +372,10 @@ export default {
           font: 'bold 14px sans-serif',
           stroke: '#1967B3',
           editable: true,
-          segmentIndex: 0,
-          segmentOffset: new go.Point(NaN, NaN),
+          segmentOffset: new go.Point(0, -10),
           segmentOrientation: go.Link.OrientUpright
         },
-        new go.Binding('text', 'fromText').makeTwoWay()
-      ),
-      $(
-        go.TextBlock, // the "to" label
-        {
-          text: '',
-          textAlign: 'center',
-          font: 'bold 14px sans-serif',
-          stroke: '#1967B3',
-          editable: true,
-          segmentIndex: -1,
-          segmentOffset: new go.Point(NaN, NaN),
-          segmentOrientation: go.Link.OrientUpright
-        },
-        new go.Binding('text', 'toText').makeTwoWay()
+        new go.Binding('text', 'cardinality').makeTwoWay()
       )
     )
 
@@ -514,8 +513,7 @@ export default {
           // Comments and LinkComments are not in any node or link data (yet), so we add them here:
           Comments: { show: false },
           LinkComments: { show: false },
-          toText: { show: Inspector.showIfLink },
-          fromText: { show: Inspector.showIfLink },
+          cardinality: { show: Inspector.showIfLink },
           // isGroup: { readOnly: true, show: Inspector.showIfPresent },
           // flag: { show: Inspector.showIfNode, type: 'checkbox' },
           dataType: {
