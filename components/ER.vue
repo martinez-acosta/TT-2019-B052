@@ -54,7 +54,6 @@
 import { go } from 'gojs/release/go-module'
 import 'gojs/extensionsJSM/Figures'
 import { mapGetters } from 'vuex'
-
 import { Inspector } from 'gojs/extensionsJSM/DataInspector'
 
 export default {
@@ -70,8 +69,6 @@ export default {
       myInspector: '',
       myContextMenu: '',
       cxElement: '',
-      cxTool: '',
-      rango: [],
       node: '',
       mostrarPaleta: this.showpallete,
       soloLectura: this.readonly
@@ -873,7 +870,7 @@ export default {
         if (node instanceof go.Node) {
           // ignore any selected Links and simple Parts
           // Examine and modify the data, not the Node directly.
-          const data = node.data
+          const data = { ...node.data }
 
           // Call setDataProperty to support undo/redo as well as
           // Guardamos los datos del nodo solo si es un atributo
@@ -883,14 +880,25 @@ export default {
             data.type === 'compositeAttribute' ||
             data.type === 'attribute'
           ) {
-            // console.log('enviado: ', data)
-            this.$store.dispatch('vuexQueries/pushNode', data).then(() => {
+            const nodoConectado = { ...this.getConnectedNode(node) }
+            Promise.all([
+              this.$store.dispatch(
+                'vuexQueries/pushConnectedNode',
+                nodoConectado
+              ),
+              this.$store.dispatch('vuexQueries/pushNode', data)
+            ]).finally(() => {
               this.$nuxt.$emit('emitGivenValue')
             })
           }
         }
       })
       diagram.commitTransaction('value obtained')
+      diagram.currentTool.stopTool()
+    },
+    getConnectedNode(node) {
+      const key = node.findNodesConnected().first().key
+      return this.myDiagram.findNodeForKey(key).data
     }
   }
 }

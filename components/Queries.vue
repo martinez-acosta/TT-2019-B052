@@ -96,12 +96,14 @@ export default {
       ],
       findEntries: [],
       length: 1,
-      tab: 0
+      tab: 0,
+      myDiagram: ''
     }
   },
   computed: {
     ...mapGetters({
       nodoObtenido: 'vuexQueries/getNode',
+      nodoConectado: 'vuexQueries/getConnectedNode',
       diagramaObtenido: 'vuexER/getDiagram'
     })
   },
@@ -113,11 +115,17 @@ export default {
   mounted() {
     this.$nuxt.$on('emitGivenValue', () => {
       const nodo = this.nodoObtenido
-      console.log(nodo)
-      this.givenEntries.push({ name: nodo.text, type: 'value' })
+      const nodoConectado = this.nodoConectado
+
+      this.givenEntries.push({
+        name: nodoConectado.text + '.' + nodo.text,
+        type: 'value'
+      })
+
+      // const obj = JSON.parse(this.diagramaObtenido)
+      // console.log('nodo key: ', nodo.key)
+      // console.log('obj: ', obj.linkDataArray)
     })
-    const obj = JSON.parse(this.diagramaObtenido)
-    console.log(obj)
   },
 
   methods: {}
