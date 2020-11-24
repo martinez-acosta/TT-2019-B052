@@ -51,12 +51,20 @@
       </v-col>
       <!-------Botones------->
       <v-col cols="2">
-        <v-tabs>
+        <!-- <v-tabs>
           <v-btn v-show="length - 1" icon>
             <v-icon @click="length--">mdi-minus</v-icon>
           </v-btn>
           <v-btn icon>
             <v-icon @click="length++">mdi-plus</v-icon>
+          </v-btn>
+        </v-tabs> -->
+        <v-tabs>
+          <v-btn icon>
+            <v-icon @click="setLength(1)">mdi-plus</v-icon>
+          </v-btn>
+          <v-btn v-show="length - 1" icon>
+            <v-icon @click="setLength(-1)">mdi-minus</v-icon>
           </v-btn>
         </v-tabs>
       </v-col>
@@ -95,7 +103,7 @@ export default {
         }
       ],
       findEntries: [],
-      length: 1,
+      // length: 1,
       tab: 0,
       myDiagram: ''
     }
@@ -104,7 +112,8 @@ export default {
     ...mapGetters({
       nodoObtenido: 'vuexQueries/getNode',
       nodoConectado: 'vuexQueries/getConnectedNode',
-      diagramaObtenido: 'vuexER/getDiagram'
+      diagramaObtenido: 'vuexER/getDiagram',
+      length: 'vuexQueries/getLength'
     })
   },
   watch: {
@@ -113,6 +122,7 @@ export default {
     }
   },
   mounted() {
+    // Ibtener
     this.$nuxt.$on('emitGivenValue', () => {
       const nodo = this.nodoObtenido
       const nodoConectado = this.nodoConectado
@@ -157,6 +167,10 @@ export default {
     this.$nuxt.$off('emitFindValue')
   },
 
-  methods: {}
+  methods: {
+    setLength(k) {
+      this.$store.dispatch('vuexQueries/setLength', k)
+    }
+  }
 }
 </script>

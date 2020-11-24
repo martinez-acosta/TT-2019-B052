@@ -234,11 +234,12 @@ export default {
 
     // Since we have only one main element, we don't have to declare a hide method,
     // we can set mainElement and GoJS will hide it automatically
-    if (this.soloLectura)
+    if (this.soloLectura) {
       this.myContextMenu = $(go.HTMLInfo, {
         show: this.showContextMenu,
         hide: this.hideContextMenu
       })
+    }
 
     /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
     this.myDiagram.nodeTemplate = $(
@@ -476,6 +477,15 @@ export default {
       this.myDiagram.model = new go.GraphLinksModel()
       this.myDiagram.model = go.Model.fromJson(this.diagramaObtenido)
       const pos = this.myDiagram.model.modelData.position
+      if (this.soloLectura) {
+        // this.myDiagram.allowCopy = false
+        // this.myDiagram.allowDelete = false
+        // this.myDiagram.allowClipboard = false
+        this.myDiagram.allowTextEdit = false
+        this.myDiagram.allowLink = false
+        this.myDiagram.allowReLink = false
+        this.myDiagram.allowUndo = false
+      }
       if (pos) this.myDiagram.initialPosition = go.Point.parse(pos)
     } else {
       this.myDiagram.model = new go.GraphLinksModel()

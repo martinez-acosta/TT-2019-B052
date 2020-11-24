@@ -1,5 +1,6 @@
 export const state = () => ({
   queries: [],
+  length: 1,
   node: null,
   connectedNode: null
 })
@@ -14,6 +15,9 @@ export const mutations = {
   },
   PUSH_QUERY(state, query) {
     state.queries.push(query)
+  },
+  SET_LENGTH(state, k) {
+    state.length += k
   }
 }
 
@@ -26,6 +30,9 @@ export const actions = {
   },
   pushQuery({ commit }, query) {
     commit('PUSH_QUERY', query)
+  },
+  setLength({ commit }, k) {
+    commit('SET_LENGTH', k)
   }
 }
 
@@ -38,5 +45,8 @@ export const getters = {
   },
   getQueries(state) {
     return state.queries
+  },
+  getLength(state) {
+    return state.length
   }
 }
