@@ -2,7 +2,13 @@
   <v-container>
     <v-row>
       <v-col cols="10">
-        <v-tabs v-model="tab" background-color="white" show-arrows flat>
+        <v-tabs
+          v-model="tab"
+          background-color="white"
+          show-arrows
+          flat
+          @change="onTabChange"
+        >
           <v-tab v-for="n in length" :key="n"> Q{{ n }} </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
@@ -18,7 +24,7 @@
                     <v-data-table
                       :headers="givenHeaders"
                       hide-default-footer
-                      :items="givenEntries"
+                      :items="givenEntries[n]"
                     ></v-data-table>
                   </v-card>
                 </v-col>
@@ -30,7 +36,7 @@
                     <v-data-table
                       :headers="findHeaders"
                       hide-default-footer
-                      :items="findEntries"
+                      :items="findEntries[n]"
                     ></v-data-table>
                   </v-card>
                 </v-col>
@@ -51,14 +57,6 @@
       </v-col>
       <!-------Botones------->
       <v-col cols="2">
-        <!-- <v-tabs>
-          <v-btn v-show="length - 1" icon>
-            <v-icon @click="length--">mdi-minus</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon @click="length++">mdi-plus</v-icon>
-          </v-btn>
-        </v-tabs> -->
         <v-tabs>
           <v-btn icon>
             <v-icon @click="setLength(1)">mdi-plus</v-icon>
@@ -93,7 +91,6 @@ export default {
           value: 'type'
         }
       ],
-      givenEntries: [],
       findHeaders: [
         {
           text: 'Attribute',
@@ -102,10 +99,10 @@ export default {
           value: 'name'
         }
       ],
-      findEntries: [],
-      // length: 1,
-      tab: 0,
-      myDiagram: ''
+      // givenEntries: [],
+      // findEntries: [],
+      currentKey: 0,
+      tab: 0
     }
   },
   computed: {
@@ -113,7 +110,10 @@ export default {
       nodoObtenido: 'vuexQueries/getNode',
       nodoConectado: 'vuexQueries/getConnectedNode',
       diagramaObtenido: 'vuexER/getDiagram',
-      length: 'vuexQueries/getLength'
+      length: 'vuexQueries/getLength',
+      queries: 'vuexQueries/getQueries',
+      givenEntries: 'vuexQueries/getGivenEntries',
+      findEntries: 'vuexQueries/getFindEntries'
     })
   },
   watch: {
@@ -122,43 +122,48 @@ export default {
     }
   },
   mounted() {
-    // Ibtener
+    // Si hay queries en vuex, restaurar estado
+    if (this.queries) {
+      for (let i = 1; i <= this.queries; i++) {}
+    }
+    // listeners
     this.$nuxt.$on('emitGivenValue', () => {
       const nodo = this.nodoObtenido
       const nodoConectado = this.nodoConectado
 
-      this.givenEntries.push({
-        name: nodoConectado.text + '.' + nodo.text,
-        type: 'value'
-      })
+      // this.givenEntries.push({
+      //  name: nodoConectado.text + '.' + nodo.text,
+      //  type: 'value'
+      // })
+      addEntry(nodo, nodoConectado)
     })
-    this.$nuxt.$on('emitGivenRange', () => {
-      const nodo = this.nodoObtenido
-      const nodoConectado = this.nodoConectado
+    // this.$nuxt.$on('emitGivenRange', () => {
+    //   const nodo = this.nodoObtenido
+    //   const nodoConectado = this.nodoConectado
 
-      this.givenEntries.push({
-        name: nodoConectado.text + '.' + nodo.text,
-        type: 'range'
-      })
-    })
-    this.$nuxt.$on('emitGivenSet', () => {
-      const nodo = this.nodoObtenido
-      const nodoConectado = this.nodoConectado
+    //   this.givenEntries.push({
+    //     name: nodoConectado.text + '.' + nodo.text,
+    //     type: 'range'
+    //   })
+    // })
+    // this.$nuxt.$on('emitGivenSet', () => {
+    //   const nodo = this.nodoObtenido
+    //   const nodoConectado = this.nodoConectado
 
-      this.givenEntries.push({
-        name: nodoConectado.text + '.' + nodo.text,
-        type: 'set'
-      })
-    })
-    this.$nuxt.$on('emitFindValue', () => {
-      const nodo = this.nodoObtenido
-      const nodoConectado = this.nodoConectado
+    //   this.givenEntries.push({
+    //     name: nodoConectado.text + '.' + nodo.text,
+    //     type: 'set'
+    //   })
+    // })
+    // this.$nuxt.$on('emitFindValue', () => {
+    //   const nodo = this.nodoObtenido
+    //   const nodoConectado = this.nodoConectado
 
-      this.findEntries.push({
-        name: nodoConectado.text + '.' + nodo.text,
-        type: 'value'
-      })
-    })
+    //   this.findEntries.push({
+    //     name: nodoConectado.text + '.' + nodo.text,
+    //     type: 'value'
+    //   })
+    // })
   },
   beforeDestroy() {
     this.$nuxt.$off('emitGivenValue')

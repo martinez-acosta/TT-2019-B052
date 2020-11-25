@@ -1,5 +1,7 @@
 export const state = () => ({
-  queries: [],
+  queries: 0,
+  givenEntries: [],
+  findEntries: [],
   length: 1,
   node: null,
   connectedNode: null
@@ -13,8 +15,8 @@ export const mutations = {
   PUSH_CONNECTED_NODE(state, connectedNode) {
     state.connectedNode = connectedNode
   },
-  PUSH_QUERY(state, query) {
-    state.queries.push(query)
+  ADD_QUERY(state) {
+    state.queries++
   },
   SET_LENGTH(state, k) {
     state.length += k
@@ -28,8 +30,8 @@ export const actions = {
   pushConnectedNode({ commit }, connectedNode) {
     commit('PUSH_CONNECTED_NODE', connectedNode)
   },
-  pushQuery({ commit }, query) {
-    commit('PUSH_QUERY', query)
+  addQuery({ commit }) {
+    commit('ADD_QUERY')
   },
   setLength({ commit }, k) {
     commit('SET_LENGTH', k)
@@ -48,5 +50,11 @@ export const getters = {
   },
   getLength(state) {
     return state.length
+  },
+  getGivenEntries(state) {
+    return state.givenEntries
+  },
+  getFindEntries(state) {
+    return state.findEntries
   }
 }
