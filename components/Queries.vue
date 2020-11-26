@@ -18,7 +18,7 @@
                     <v-data-table
                       :headers="givenHeaders"
                       hide-default-footer
-                      :items="givenEntries[n]"
+                      :items="givenEntries[n - 1]"
                     ></v-data-table>
                   </v-card>
                 </v-col>
@@ -30,7 +30,7 @@
                     <v-data-table
                       :headers="findHeaders"
                       hide-default-footer
-                      :items="findEntries[n]"
+                      :items="findEntries[n - 1]"
                     ></v-data-table>
                   </v-card>
                 </v-col>
@@ -95,7 +95,8 @@ export default {
       ],
       // givenEntries: [],
       // findEntries: [],
-      currentTab: null
+      currentTab: null,
+      tab: null
     }
   },
   computed: {
@@ -115,18 +116,17 @@ export default {
     }
   },
   mounted() {
-    // Si hay queries en vuex, restaurar estado
-    if (this.queries) {
-      for (let i = 1; i <= this.queries; i++) {}
-    }
     // listeners
     this.$nuxt.$on('emitGivenValue', () => {
       const nodo = this.nodoObtenido
       const nodoConectado = this.nodoConectado
 
-      this.givenEntries.push({
+      this.$store.dispatch('vuexQueries/pushGivenEntry', {
         name: nodoConectado.text + '.' + nodo.text,
-        type: 'value'
+        type: 'value',
+        tab: this.currentTab,
+        nodo: this.nodoObtenido,
+        nodoConectado: this.nodoConectado
       })
     })
     // this.$nuxt.$on('emitGivenRange', () => {
@@ -166,7 +166,9 @@ export default {
 
   methods: {
     setLength(k) {
-      this.$store.dispatch('vuexQueries/setLength', k)
+      this.$store
+        .dispatch('vuexQueries/setLength', k)
+        .then(this.$store.dispatch('vuexQueries/setArraySize'))
     }
   }
 }
