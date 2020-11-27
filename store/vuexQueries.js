@@ -1,7 +1,7 @@
 export const state = () => ({
   queries: 0,
-  givenEntries: [],
-  findEntries: [],
+  givenEntries: [[]],
+  findEntries: [[]],
   length: 1,
   node: null,
   connectedNode: null
@@ -19,26 +19,39 @@ export const mutations = {
     state.queries++
   },
   PUSH_GIVEN_ENTRY(state, givenEntry) {
-    console.log(givenEntry)
     state.givenEntries[givenEntry.tab].push({
+      id: state.givenEntries[givenEntry.tab].length + 1,
       name: givenEntry.name,
-      type: givenEntry.type
+      type: givenEntry.type,
+      nodo: givenEntry.nodo,
+      nodoConectado: givenEntry.nodoConectado
+    })
+  },
+  PUSH_FIND_ENTRY(state, findEntry) {
+    state.findEntries[findEntry.tab].push({
+      id: state.findEntries[findEntry.tab].length + 1,
+      name: findEntry.name,
+      type: findEntry.type,
+      nodo: findEntry.nodo,
+      nodoConectado: findEntry.nodoConectado
     })
   },
   SET_LENGTH(state, k) {
     state.length += k
   },
   SET_ARRAY_SIZE(state) {
-    // Si el tam del array es menor al número de preguntas, creamos las entradas faltantes
-    // if (state.givenEntries.length < state.length) {
-    //   for (let i=state.givenEntries.length; i < state.length; i++){
-    //     state.givenEntries.push([])
-    //   }
-    // }
     state.givenEntries.length = state.length
+    state.findEntries.length = state.length
+
     for (let i = 0; i < state.givenEntries.length; i++) {
       if (typeof state.givenEntries[i] === 'undefined') {
         state.givenEntries[i] = []
+      }
+    }
+
+    for (let i = 0; i < state.findEntries.length; i++) {
+      if (typeof state.findEntries[i] === 'undefined') {
+        state.findEntries[i] = []
       }
     }
   }
@@ -56,6 +69,9 @@ export const actions = {
   },
   pushGivenEntry({ commit }, givenEntry) {
     commit('PUSH_GIVEN_ENTRY', givenEntry)
+  },
+  pushFindEntry({ commit }, findEntry) {
+    commit('PUSH_FIND_ENTRY', findEntry)
   },
   setLength({ commit }, k) {
     commit('SET_LENGTH', k)

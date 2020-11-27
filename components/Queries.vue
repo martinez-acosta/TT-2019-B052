@@ -5,7 +5,7 @@
         <v-tabs v-model="currentTab" background-color="white" show-arrows flat>
           <v-tab v-for="n in length" :key="n"> Q{{ n }} </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="currentTab">
+        <v-tabs-items :key="componentKey" v-model="currentTab">
           <v-tab-item v-for="n in length" :key="n">
             <!------Consultas---------->
             <v-container>
@@ -71,6 +71,7 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
+      componentKey: 0,
       givenHeaders: [
         {
           text: 'Attribute',
@@ -110,52 +111,68 @@ export default {
       findEntries: 'vuexQueries/getFindEntries'
     })
   },
-  watch: {
-    length(val) {
-      this.tab = val - 1
-    }
-  },
+  watch: {},
   mounted() {
     // listeners
     this.$nuxt.$on('emitGivenValue', () => {
       const nodo = this.nodoObtenido
       const nodoConectado = this.nodoConectado
 
-      this.$store.dispatch('vuexQueries/pushGivenEntry', {
-        name: nodoConectado.text + '.' + nodo.text,
-        type: 'value',
-        tab: this.currentTab,
-        nodo: this.nodoObtenido,
-        nodoConectado: this.nodoConectado
-      })
+      this.$store
+        .dispatch('vuexQueries/pushGivenEntry', {
+          name: nodoConectado.text + '.' + nodo.text,
+          type: 'value',
+          tab: this.currentTab,
+          nodo: this.nodoObtenido,
+          nodoConectado: this.nodoConectado
+        })
+        .then(this.forceRerender())
     })
-    // this.$nuxt.$on('emitGivenRange', () => {
-    //   const nodo = this.nodoObtenido
-    //   const nodoConectado = this.nodoConectado
 
-    //   this.givenEntries.push({
-    //     name: nodoConectado.text + '.' + nodo.text,
-    //     type: 'range'
-    //   })
-    // })
-    // this.$nuxt.$on('emitGivenSet', () => {
-    //   const nodo = this.nodoObtenido
-    //   const nodoConectado = this.nodoConectado
+    this.$nuxt.$on('emitGivenRange', () => {
+      const nodo = this.nodoObtenido
+      const nodoConectado = this.nodoConectado
 
-    //   this.givenEntries.push({
-    //     name: nodoConectado.text + '.' + nodo.text,
-    //     type: 'set'
-    //   })
-    // })
-    // this.$nuxt.$on('emitFindValue', () => {
-    //   const nodo = this.nodoObtenido
-    //   const nodoConectado = this.nodoConectado
+      this.$store
+        .dispatch('vuexQueries/pushGivenEntry', {
+          name: nodoConectado.text + '.' + nodo.text,
+          type: 'range',
+          tab: this.currentTab,
+          nodo: this.nodoObtenido,
+          nodoConectado: this.nodoConectado
+        })
+        .then(this.forceRerender())
+    })
 
-    //   this.findEntries.push({
-    //     name: nodoConectado.text + '.' + nodo.text,
-    //     type: 'value'
-    //   })
-    // })
+    this.$nuxt.$on('emitGivenSet', () => {
+      const nodo = this.nodoObtenido
+      const nodoConectado = this.nodoConectado
+
+      this.$store
+        .dispatch('vuexQueries/pushGivenEntry', {
+          name: nodoConectado.text + '.' + nodo.text,
+          type: 'set',
+          tab: this.currentTab,
+          nodo: this.nodoObtenido,
+          nodoConectado: this.nodoConectado
+        })
+        .then(this.forceRerender())
+    })
+
+    this.$nuxt.$on('emitFindValue', () => {
+      const nodo = this.nodoObtenido
+      const nodoConectado = this.nodoConectado
+
+      this.$store
+        .dispatch('vuexQueries/pushFindEntry', {
+          name: nodoConectado.text + '.' + nodo.text,
+          type: 'value',
+          tab: this.currentTab,
+          nodo: this.nodoObtenido,
+          nodoConectado: this.nodoConectado
+        })
+        .then(this.forceRerender())
+    })
   },
   beforeDestroy() {
     this.$nuxt.$off('emitGivenValue')
@@ -169,6 +186,9 @@ export default {
       this.$store
         .dispatch('vuexQueries/setLength', k)
         .then(this.$store.dispatch('vuexQueries/setArraySize'))
+    },
+    forceRerender() {
+      this.componentKey += 1
     }
   }
 }
