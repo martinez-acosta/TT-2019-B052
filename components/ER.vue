@@ -339,16 +339,8 @@ export default {
 
     this.PathPatterns = new go.Map()
 
-    this.PathPatterns.set(
-      'Double',
-      $(go.Shape, {
-        geometryString: 'M0 0 L1 0 M0 3 L1 3',
-        fill: 'transparent',
-        stroke: 'black',
-        strokeWidth: '1',
-        strokeCap: 'square'
-      })
-    )
+    this.definePathPattern('simple', 'M0 0 L1 0')
+    this.definePathPattern('total', 'M0 0 L1 0 M0 3 L1 3')
 
     this.myDiagram.linkTemplate = $(
       go.Link, // the whole link panel
@@ -361,12 +353,22 @@ export default {
         corner: 5,
         curve: go.Link.JumpOver
       },
+      // $(
+      //  go.Shape, // the link shape
+      //  { stroke: '#303B45', strokeWidth: 2.5 }
+      // ),
       $(
-        go.Shape, // the link shape
-        { stroke: '#303B45', strokeWidth: 2.5 }
+        go.Shape, // the link's path shape
+        { isPanelMain: true, stroke: 'simple' },
+        new go.Binding('stroke', 'participacion'),
+        new go.Binding(
+          'pathPattern',
+          'participacion',
+          this.convertPathPatternToShape
+        )
       ),
       $(
-        go.TextBlock, // the "from" label
+        go.TextBlock, // the "cardinality" label
         {
           text: '',
           textAlign: 'center',
@@ -524,6 +526,14 @@ export default {
           Comments: { show: false },
           LinkComments: { show: false },
           cardinality: { show: Inspector.showIfLink },
+          participacion: {
+            show: Inspector.showIfLink,
+            type: 'select',
+            choices(node, propName) {
+              if (Array.isArray(node.data.choices)) return node.data.choices
+              return ['total']
+            }
+          },
           // isGroup: { readOnly: true, show: Inspector.showIfPresent },
           // flag: { show: Inspector.showIfNode, type: 'checkbox' },
           dataType: {
@@ -811,15 +821,6 @@ export default {
         document.getElementById('givenValue'),
         cmd.canCutSelection()
       )
-      // maybeShowItem(document.getElementById('copy'), cmd.canCopySelection())
-      // maybeShowItem(
-      //   document.getElementById('paste'),
-      //   cmd.canPasteSelection(
-      //     diagram.toolManager.contextMenuTool.mouseDownPoint
-      //   )
-      // )
-      // maybeShowItem(document.getElementById('delete'), cmd.canDeleteSelection())
-      // maybeShowItem(document.getElementById('color'), obj !== null)
       // Now show the whole context menu element
       if (hasMenuItem) {
         this.cxElement.classList.add('show-menu')
@@ -837,35 +838,6 @@ export default {
       // Optional: Use a `window` click listener with event capture to
       //           remove the context menu if the user clicks elsewhere on the page
       window.removeEventListener('click', this.hideCX, true)
-    },
-    // This is the general menu command handler, parameterized by the name of the command.
-    cxcommand(event, val) {
-      if (val === undefined) val = event.currentTarget.id
-      const diagram = this.myDiagram
-      switch (val) {
-        case 'cut':
-          diagram.commandHandler.cutSelection()
-          break
-        case 'copy':
-          diagram.commandHandler.copySelection()
-          break
-        case 'paste':
-          diagram.commandHandler.pasteSelection(
-            diagram.toolManager.contextMenuTool.mouseDownPoint
-          )
-          break
-        case 'delete':
-          diagram.commandHandler.deleteSelection()
-          break
-        case 'color': {
-          const color = window.getComputedStyle(event.target)[
-            'background-color'
-          ]
-          this.changeColor(diagram, color)
-          break
-        }
-      }
-      diagram.currentTool.stopTool()
     },
     // A custom command, for changing the color of the selected node(s).
     changeColor(diagram, color) {
@@ -968,6 +940,30 @@ export default {
     getConnectedNode(node) {
       const key = node.findNodesConnected().first().key
       return this.myDiagram.findNodeForKey(key).data
+    },
+    definePathPattern(name, geostr, color, width, cap) {
+      const $ = go.GraphObject.make
+      if (typeof name !== 'string' || typeof geostr !== 'string')
+        throw new Error(
+          'invalid name or geometry string argument: ' + name + ' ' + geostr
+        )
+      if (color === undefined) color = 'black'
+      if (width === undefined) width = 1
+      if (cap === undefined) cap = 'square'
+      this.PathPatterns.set(
+        name,
+        $(go.Shape, {
+          geometryString: geostr,
+          fill: 'transparent',
+          stroke: color,
+          strokeWidth: width,
+          strokeCap: cap
+        })
+      )
+    },
+    convertPathPatternToShape(name) {
+      if (!name) return null
+      return this.PathPatterns.get(name)
     }
   }
 }
