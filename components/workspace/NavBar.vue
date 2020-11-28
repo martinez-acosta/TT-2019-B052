@@ -16,7 +16,7 @@
         <v-tab nuxt to="/workspace/er">1: Diagrama ER</v-tab>
         <v-tab nuxt to="/workspace/queries">2: Consultas de accesso</v-tab>
         <v-tab nuxt to="/workspace/sentencesSQL">3: Sentencias SQL</v-tab>
-        <v-tab nuxt to="/workspace/er">4: Modelo noSQL</v-tab>
+        <v-tab nuxt to="/workspace/nosql">4: Modelo noSQL</v-tab>
       </v-tabs>
     </template>
   </v-app-bar>
