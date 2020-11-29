@@ -23,6 +23,9 @@ export const actions = {
   },
   getLastDiagram({ commit }) {
     return Service.getLastDiagram()
+  },
+  validateDiagram({ commit }, diagram) {
+    return Service.validateDiagram(diagram)
   }
 }
 export const getters = {

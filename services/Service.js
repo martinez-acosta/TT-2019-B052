@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  // baseURL: `//localhost:5000`,
-  baseURL: `https://api-tt-2019-b052.herokuapp.com`,
+  baseURL: `//localhost:5000`,
+  // baseURL: `https://api-tt-2019-b052.herokuapp.com`,
   withCredentials: false,
   progress: true,
   headers: {
@@ -42,5 +42,17 @@ export default {
   },
   setToken(userData) {
     axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
+  },
+  async validateDiagram(diagram) {
+    const token = axios.defaults.headers.common.Authorization
+    return await apiClient.post(
+      '/relational/validate',
+      { diagram },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
   }
 }
