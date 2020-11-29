@@ -675,6 +675,7 @@ export default {
       this.$nuxt.$off('axiosSaveModel')
       this.$nuxt.$off('axiosLoadModel')
       this.$nuxt.$off('cleanCanvas')
+      this.$nuxt.$off('validateDiagram')
     } else {
       // Listeners de SubNavBar.vue
       this.$nuxt.$on('axiosSaveModel', () => {
@@ -688,6 +689,10 @@ export default {
       this.$nuxt.$on('cleanCanvas', () => {
         this.cleanCanvas()
       })
+
+      this.$nuxt.$on('validateDiagram', () => {
+        this.validateDiagram()
+      })
     }
   },
   beforeDestroy() {
@@ -696,6 +701,7 @@ export default {
     this.$nuxt.$off('axiosSaveModel')
     this.$nuxt.$off('axiosLoadModel')
     this.$nuxt.$off('cleanCanvas')
+    this.$nuxt.$off('validateDiagram')
   },
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
@@ -756,6 +762,19 @@ export default {
     cleanCanvas() {
       this.myDiagram.model = go.Model.fromJson({})
     },
+    validateDiagram() {
+      this.saveDiagramProperties()
+      const diagram = this.myDiagram.model.toJson()
+      this.$store
+        .dispatch('axiosER/validateDiagram', diagram)
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    convertToSQL() {},
     // Define a function for creating a "port" that is normally transparent.
     // The "name" is used as the GraphObject.portId, the "spot" is used to control how links connect
     // and where the port is positioned on the node, and the boolean "output" and "input" arguments
