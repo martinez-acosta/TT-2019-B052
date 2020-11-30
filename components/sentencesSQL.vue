@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <client-only>
+      <vue-snotify></vue-snotify>
+    </client-only>
     <div class="row col">
       <v-toolbar dense>
         <v-tooltip bottom>
@@ -20,6 +23,12 @@
           <span>Copiar al portapapeles</span>
         </v-tooltip>
 
+        <v-divider class="m-0 p-0" vertical></v-divider>
+        <v-btn text large color="primary" v-on="on" @click="getSentencesSQL()">
+          Obtener Sentencias SQL
+        </v-btn>
+        <v-divider class="mx-4" vertical></v-divider>
+
         <v-spacer></v-spacer>
 
         <v-tooltip bottom>
@@ -38,8 +47,16 @@
       </v-toolbar>
     </div>
 
-    <div class="comtaier overflow-auto">
-      <ssh-pre language="sql" label="SQL">{{ sentences }}</ssh-pre>
+    <div class="container overflow-auto">
+      <ssh-pre
+        language="sql"
+        label="SQL"
+        reactive="true"
+        copy-button="true"
+        dark="true"
+      >
+        {{ sentences }}
+      </ssh-pre>
     </div>
 
     <!-- Dialog/modals -->
@@ -70,57 +87,50 @@
 <script type="module">
 import SshPre from 'simple-syntax-highlighter'
 import 'simple-syntax-highlighter/dist/sshpre.css'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { SshPre },
   data() {
     return {
       helpDialog: false,
-      sentences: `/*
-*********************************************************************
-Name: MySQL Sample Database classicmodels
-Version 3.1
-+ changed data type from DOUBLE to DECIMAL for amount columns
-Version 3.0
-+ changed DATETIME to DATE for some colunmns
-Version 2.0
-+ changed table type from MyISAM to InnoDB
-+ added foreign keys for all tables 
-*********************************************************************
-*/
+      sentences: `
+CREATE DATABASE IF NOT EXISTS 'example';
 
-/*!40101 SET NAMES utf8 */;
-
-/*!40101 SET SQL_MODE=''*/;
-
-CREATE DATABASE IF NOT EXISTS 'classicmodels';
-
-USE 'classicmodels';
+USE 'example';
 
 /*Table structure for table 'customers' */
 
-DROP TABLE IF EXISTS 'customers';
+DROP TABLE IF EXISTS 'table_name';
 
 CREATE TABLE 'customers' (
-  'customerNumber' int(11) NOT NULL,
-  'customerName' varchar(50) NOT NULL,
-  'contactLastName' varchar(50) NOT NULL,
-  'contactFirstName' varchar(50) NOT NULL,
-  'phone' varchar(50) NOT NULL,
-  'addressLine1' varchar(50) NOT NULL,
-  'addressLine2' varchar(50) DEFAULT NULL,
-  'city' varchar(50) NOT NULL,
-  'state' varchar(50) DEFAULT NULL,
-  'postalCode' varchar(15) DEFAULT NULL,
-  'country' varchar(50) NOT NULL,
-  'salesRepEmployeeNumber' int(11) DEFAULT NULL,
-  'creditLimit' decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY ('customerNumber'),
-  KEY 'salesRepEmployeeNumber' ('salesRepEmployeeNumber'),
-  CONSTRAINT 'customers_ibfk_1' FOREIGN KEY ('salesRepEmployeeNumber') REFERENCES 'employees' ('employeeNumber')
+  'attribute' int(11) NOT NULL,
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 `
     }
+  },
+  methods: {
+    getSentencesSQL() {
+      const diagram = this.currentDiagram
+      this.$store
+        .dispatch('axiosER/convertToSQL', diagram)
+        .then((response) => {
+          this.sentences = response.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$snotify.success(
+              '¡Algo ocurrió! No fue posible obtener las sentencias SQ del diagrama, intente más tarde.'
+            )
+          }
+        })
+    }
+  },
+  computed: {
+    ...mapGetters({
+      currentDiagram: 'vuexER/getDiagram'
+    })
   }
 }
 </script>

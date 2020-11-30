@@ -851,7 +851,6 @@ export default {
             this.$snotify.error('¡Algo salió mal!.')
           } else {
             this.diagramErrors = true
-            console.log(error.response.status)
             this.msgDiagramErrors = error.response.data
           }
         })
