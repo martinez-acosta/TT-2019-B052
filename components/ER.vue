@@ -26,10 +26,15 @@
          so that absolute positioning works easily.
          This DIV containing both MUST have a non-static CSS position (we use position: relative)
          so that our context menu's absolute coordinates work correctly. -->
-        <div style="position: relative;   height: 100%;">
+        <div style="position: relative; height: 100%">
           <div
             id="myDiagramDiv"
-            style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
+            style="
+              width: 100%;
+              display: flex;
+              border: solid 1px black;
+              height: 100%;
+            "
           ></div>
           <ul id="contextMenu" class="menu">
             <li
@@ -61,6 +66,40 @@
         </div>
       </v-col>
     </v-row>
+    <!-- Dialog/modals -->
+    <v-dialog
+      v-model="diagramErrors"
+      scrollable
+      min-width="450"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          Errores en el diagrama entidad-relación
+        </v-card-title>
+        <v-card-text>
+          <v-list v-for="(item, key, index) in msgDiagramErrors" :key="index">
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ mapErrors[key] }}
+                </v-list-item-title>
+                <v-list-item-subtitle v-for="(msgError, i) in item" :key="i">
+                  {{ msgError }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="diagramErrors = false"
+            >De acuerdo</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script type="module">
@@ -85,7 +124,15 @@ export default {
       cxElement: '',
       node: '',
       mostrarPaleta: this.showpallete,
-      soloLectura: this.readonly
+      soloLectura: this.readonly,
+      diagramErrors: false,
+      mapErrors: {
+        entities_errors: 'Errores en entidades.',
+        general_errors: 'Errores generales.',
+        attrs_errors: 'Errores en atributos.',
+        relations_errors: 'Errores en relaciones.'
+      },
+      msgDiagramErrors: ''
     }
   },
   computed: {
@@ -768,10 +815,11 @@ export default {
       this.$store
         .dispatch('axiosER/validateDiagram', diagram)
         .then((response) => {
-          console.log(response)
+          this.msgDiagramErrors = 'El diagrama es valido estructuralmente.'
         })
         .catch((error) => {
-          console.log(error)
+          this.diagramErrors = true
+          this.msgDiagramErrors = error.response.data
         })
     },
     convertToSQL() {},
