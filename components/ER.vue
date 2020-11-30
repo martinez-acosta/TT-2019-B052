@@ -100,6 +100,33 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- Dialog/modals -->
+    <v-dialog v-model="validDiagram" scrollable min-width="450" max-width="600">
+      <v-card>
+        <v-card-title class="headline">
+          Diagrama entidad-relación
+        </v-card-title>
+        <v-card-text font-size="24px">
+          {{ msgDiagramErrors }}
+          <br />
+          Puede proceder a crear las consultas de acceso para el modelo
+          noSQL(paso 2) o si lo prefiere obtener las sentencias SQL(paso 3).
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn left outlined color="indigo darken-1" to="/workspace/queries">
+            Paso 2
+          </v-btn>
+          <v-btn left outlined color="indigo" to="/workspace/sentencesSQL">
+            Paso 3
+          </v-btn>
+          <v-btn color="success" @click="validDiagram = false">
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script type="module">
@@ -132,7 +159,8 @@ export default {
         attrs_errors: 'Errores en atributos.',
         relations_errors: 'Errores en relaciones.'
       },
-      msgDiagramErrors: ''
+      msgDiagramErrors: '',
+      validDiagram: false
     }
   },
   computed: {
@@ -815,11 +843,17 @@ export default {
       this.$store
         .dispatch('axiosER/validateDiagram', diagram)
         .then((response) => {
+          this.validDiagram = true
           this.msgDiagramErrors = 'El diagrama es valido estructuralmente.'
         })
         .catch((error) => {
-          this.diagramErrors = true
-          this.msgDiagramErrors = error.response.data
+          if (error.response.status === 500) {
+            this.$snotify.error('¡Algo salió mal!.')
+          } else {
+            this.diagramErrors = true
+            console.log(error.response.status)
+            this.msgDiagramErrors = error.response.data
+          }
         })
     },
     convertToSQL() {},
