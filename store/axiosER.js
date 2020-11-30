@@ -26,6 +26,9 @@ export const actions = {
   },
   validateDiagram({ commit }, diagram) {
     return Service.validateDiagram(diagram)
+  },
+  convertToSQL({ commit }, diagram) {
+    return Service.convertToSQL(diagram)
   }
 }
 export const getters = {

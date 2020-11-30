@@ -54,5 +54,17 @@ export default {
         }
       }
     )
+  },
+  async convertToSQL(diagram) {
+    const token = axios.defaults.headers.common.Authorization
+    return await apiClient.post(
+      '/relational',
+      { diagram },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
   }
 }
