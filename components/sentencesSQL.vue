@@ -7,7 +7,14 @@
       <v-toolbar dense>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
+            <v-btn
+              icon
+              v-bind="attrs"
+              :download="scriptName"
+              :href="urlFile"
+              v-on="on"
+              @click="downloadScript()"
+            >
               <v-icon>mdi-download</v-icon>
             </v-btn>
           </template>
@@ -93,6 +100,8 @@ export default {
   components: { SshPre },
   data() {
     return {
+      scriptName: '',
+      urlFile: '#',
       helpDialog: false,
       sentences: `
 CREATE DATABASE IF NOT EXISTS 'example';
@@ -125,6 +134,11 @@ CREATE TABLE 'customers' (
             )
           }
         })
+    },
+    downloadScript() {
+      const scriptData = encodeURIComponent(this.sentences)
+      this.urlFile = `data:text/plain;charset=utf-8,${scriptData}` // application/sql
+      this.scriptName = 'example.sql'
     }
   },
   computed: {
