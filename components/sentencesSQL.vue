@@ -21,17 +21,8 @@
           <span>Descargar</span>
         </v-tooltip>
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-content-paste</v-icon>
-            </v-btn>
-          </template>
-          <span>Copiar al portapapeles</span>
-        </v-tooltip>
-
         <v-divider class="m-0 p-0" vertical></v-divider>
-        <v-btn text large color="primary" v-on="on" @click="getSentencesSQL()">
+        <v-btn text large color="primary" @click="convertToSQLDialog = true">
           Obtener Sentencias SQL
         </v-btn>
         <v-divider class="mx-4" vertical></v-divider>
@@ -58,9 +49,9 @@
       <ssh-pre
         language="sql"
         label="SQL"
-        reactive="true"
-        copy-button="true"
-        dark="true"
+        :reactive="true"
+        :copy-button="true"
+        :dark="true"
       >
         {{ sentences }}
       </ssh-pre>
@@ -88,6 +79,27 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="convertToSQLDialog" max-width="360">
+      <v-card>
+        <v-card-title class="headline">Obtener las Sentencias SQL</v-card-title>
+
+        <v-card-text>
+          <v-text-field
+            v-model="db_name"
+            label="nombre de la base de datos"
+            required
+          ></v-text-field>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="getSentencesSQL()"
+            >enviar</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -102,7 +114,9 @@ export default {
     return {
       scriptName: '',
       urlFile: '#',
+      db_name: '',
       helpDialog: false,
+      convertToSQLDialog: false,
       sentences: `
 CREATE DATABASE IF NOT EXISTS 'example';
 
@@ -119,32 +133,37 @@ CREATE TABLE 'customers' (
 `
     }
   },
+  computed: {
+    ...mapGetters({
+      currentDiagram: 'vuexER/getDiagram'
+    })
+  },
   methods: {
     getSentencesSQL() {
       const diagram = this.currentDiagram
       this.$store
-        .dispatch('axiosER/convertToSQL', diagram)
+        .dispatch('axiosER/convertToSQL', {
+          diagram,
+          dbName: this.db_name
+        })
         .then((response) => {
           this.sentences = response.data
         })
         .catch((error) => {
           if (error.response.status === 500) {
-            this.$snotify.success(
+            this.$snotify.warning(
               '¡Algo ocurrió! No fue posible obtener las sentencias SQ del diagrama, intente más tarde.'
             )
           }
         })
+      this.convertToSQLDialog = false
     },
     downloadScript() {
       const scriptData = encodeURIComponent(this.sentences)
       this.urlFile = `data:text/plain;charset=utf-8,${scriptData}` // application/sql
-      this.scriptName = 'example.sql'
+      this.scriptName = this.db_name + '.sql'
+      this.$snotify.success('Archivo descargado. ')
     }
-  },
-  computed: {
-    ...mapGetters({
-      currentDiagram: 'vuexER/getDiagram'
-    })
   }
 }
 </script>

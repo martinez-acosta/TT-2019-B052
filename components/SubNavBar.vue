@@ -28,7 +28,7 @@
           <span>Nuevo</span>
         </v-tooltip>
         <v-divider class="m-0 p-0" vertical></v-divider>
-        <v-btn text large color="primary" v-on="on" @click="validateDiagram()">
+        <v-btn text large color="primary" @click="validateDiagram()">
           Validar diagrama
         </v-btn>
         <v-divider class="mx-4" vertical></v-divider>

@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: `//localhost:5000`,
-  // baseURL: `https://api-tt-2019-b052.herokuapp.com`,
+  // baseURL: `//localhost:5000`,
+  baseURL: `https://api-tt-2019-b052.herokuapp.com`,
   withCredentials: false,
   progress: true,
   headers: {
@@ -55,16 +55,12 @@ export default {
       }
     )
   },
-  async convertToSQL(diagram) {
+  async convertToSQL(payload) {
     const token = axios.defaults.headers.common.Authorization
-    return await apiClient.post(
-      '/relational',
-      { diagram },
-      {
-        headers: {
-          Authorization: token
-        }
+    return await apiClient.post('/relational', payload, {
+      headers: {
+        Authorization: token
       }
-    )
+    })
   }
 }
