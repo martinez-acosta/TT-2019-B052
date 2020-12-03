@@ -161,7 +161,8 @@ CREATE TABLE 'customers' (
     downloadScript() {
       const scriptData = encodeURIComponent(this.sentences)
       this.urlFile = `data:text/plain;charset=utf-8,${scriptData}` // application/sql
-      this.scriptName = this.db_name + '.sql'
+      const dbname = this.db_name ? this.db_name : 'tt2019-B052'
+      this.scriptName = dbname + '.sql'
       this.$snotify.success('Archivo descargado. ')
     }
   }
