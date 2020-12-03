@@ -23,6 +23,12 @@ export const actions = {
   },
   getLastDiagram({ commit }) {
     return Service.getLastDiagram()
+  },
+  validateDiagram({ commit }, diagram) {
+    return Service.validateDiagram(diagram)
+  },
+  convertToSQL({ commit }, payload) {
+    return Service.convertToSQL(payload)
   }
 }
 export const getters = {

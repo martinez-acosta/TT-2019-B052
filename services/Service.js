@@ -42,5 +42,25 @@ export default {
   },
   setToken(userData) {
     axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
+  },
+  async validateDiagram(diagram) {
+    const token = axios.defaults.headers.common.Authorization
+    return await apiClient.post(
+      '/relational/validate',
+      { diagram },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+  },
+  async convertToSQL(payload) {
+    const token = axios.defaults.headers.common.Authorization
+    return await apiClient.post('/relational', payload, {
+      headers: {
+        Authorization: token
+      }
+    })
   }
 }

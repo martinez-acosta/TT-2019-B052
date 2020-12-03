@@ -1,24 +1,31 @@
 <template>
   <div class="container">
+    <client-only>
+      <vue-snotify></vue-snotify>
+    </client-only>
     <div class="row col">
       <v-toolbar dense>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
+            <v-btn
+              icon
+              v-bind="attrs"
+              :download="scriptName"
+              :href="urlFile"
+              v-on="on"
+              @click="downloadScript()"
+            >
               <v-icon>mdi-download</v-icon>
             </v-btn>
           </template>
           <span>Descargar</span>
         </v-tooltip>
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-content-paste</v-icon>
-            </v-btn>
-          </template>
-          <span>Copiar al portapapeles</span>
-        </v-tooltip>
+        <v-divider class="m-0 p-0" vertical></v-divider>
+        <v-btn text large color="primary" @click="convertToSQLDialog = true">
+          Obtener Sentencias SQL
+        </v-btn>
+        <v-divider class="mx-4" vertical></v-divider>
 
         <v-spacer></v-spacer>
 
@@ -38,8 +45,16 @@
       </v-toolbar>
     </div>
 
-    <div class="comtaier overflow-auto">
-      <ssh-pre language="sql" label="SQL">{{ sentences }}</ssh-pre>
+    <div class="container overflow-auto">
+      <ssh-pre
+        language="sql"
+        label="SQL"
+        :reactive="true"
+        :copy-button="true"
+        :dark="true"
+      >
+        {{ sentences }}
+      </ssh-pre>
     </div>
 
     <!-- Dialog/modals -->
@@ -64,62 +79,90 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="convertToSQLDialog" max-width="360">
+      <v-card>
+        <v-card-title class="headline">Obtener las Sentencias SQL</v-card-title>
+
+        <v-card-text>
+          <v-text-field
+            v-model="db_name"
+            label="nombre de la base de datos"
+            required
+          ></v-text-field>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="getSentencesSQL()"
+            >enviar</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script type="module">
 import SshPre from 'simple-syntax-highlighter'
 import 'simple-syntax-highlighter/dist/sshpre.css'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { SshPre },
   data() {
     return {
+      scriptName: '',
+      urlFile: '#',
+      db_name: '',
       helpDialog: false,
-      sentences: `/*
-*********************************************************************
-Name: MySQL Sample Database classicmodels
-Version 3.1
-+ changed data type from DOUBLE to DECIMAL for amount columns
-Version 3.0
-+ changed DATETIME to DATE for some colunmns
-Version 2.0
-+ changed table type from MyISAM to InnoDB
-+ added foreign keys for all tables 
-*********************************************************************
-*/
+      convertToSQLDialog: false,
+      sentences: `
+CREATE DATABASE IF NOT EXISTS 'example';
 
-/*!40101 SET NAMES utf8 */;
-
-/*!40101 SET SQL_MODE=''*/;
-
-CREATE DATABASE IF NOT EXISTS 'classicmodels';
-
-USE 'classicmodels';
+USE 'example';
 
 /*Table structure for table 'customers' */
 
-DROP TABLE IF EXISTS 'customers';
+DROP TABLE IF EXISTS 'table_name';
 
 CREATE TABLE 'customers' (
-  'customerNumber' int(11) NOT NULL,
-  'customerName' varchar(50) NOT NULL,
-  'contactLastName' varchar(50) NOT NULL,
-  'contactFirstName' varchar(50) NOT NULL,
-  'phone' varchar(50) NOT NULL,
-  'addressLine1' varchar(50) NOT NULL,
-  'addressLine2' varchar(50) DEFAULT NULL,
-  'city' varchar(50) NOT NULL,
-  'state' varchar(50) DEFAULT NULL,
-  'postalCode' varchar(15) DEFAULT NULL,
-  'country' varchar(50) NOT NULL,
-  'salesRepEmployeeNumber' int(11) DEFAULT NULL,
-  'creditLimit' decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY ('customerNumber'),
-  KEY 'salesRepEmployeeNumber' ('salesRepEmployeeNumber'),
-  CONSTRAINT 'customers_ibfk_1' FOREIGN KEY ('salesRepEmployeeNumber') REFERENCES 'employees' ('employeeNumber')
+  'attribute' int(11) NOT NULL,
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 `
+    }
+  },
+  computed: {
+    ...mapGetters({
+      currentDiagram: 'vuexER/getDiagram'
+    })
+  },
+  methods: {
+    getSentencesSQL() {
+      const diagram = this.currentDiagram
+      this.$store
+        .dispatch('axiosER/convertToSQL', {
+          diagram,
+          dbName: this.db_name
+        })
+        .then((response) => {
+          this.sentences = response.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$snotify.warning(
+              '¡Algo ocurrió! No fue posible obtener las sentencias SQ del diagrama, intente más tarde.'
+            )
+          }
+        })
+      this.convertToSQLDialog = false
+    },
+    downloadScript() {
+      const scriptData = encodeURIComponent(this.sentences)
+      this.urlFile = `data:text/plain;charset=utf-8,${scriptData}` // application/sql
+      this.scriptName = this.db_name + '.sql'
+      this.$snotify.success('Archivo descargado. ')
     }
   }
 }
