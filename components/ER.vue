@@ -847,11 +847,17 @@ export default {
           this.msgDiagramErrors = 'El diagrama es valido estructuralmente.'
         })
         .catch((error) => {
-          if (error.response.status === 500) {
-            this.$snotify.error('¡Algo salió mal!.')
-          } else {
-            this.diagramErrors = true
-            this.msgDiagramErrors = error.response.data
+          switch (error.response.status) {
+            case 400:
+              this.$snotify.warning(error.response.data.message)
+              break
+            case 406:
+              this.diagramErrors = true
+              this.msgDiagramErrors = error.response.data
+              break
+            case 500:
+              this.$snotify.error('¡Algo salió mal!.')
+              break
           }
         })
     },
