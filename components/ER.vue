@@ -44,7 +44,7 @@
             >
               Given value (=)
             </li>
-            <li
+            <!--<li
               id="givenRange"
               class="menu-item"
               @click="givenValue('givenRange')"
@@ -53,7 +53,7 @@
             </li>
             <li id="givenSet" class="menu-item" @click="givenValue('givenSet')">
               Given set
-            </li>
+            </li>-->
             <li><hr /></li>
             <li
               id="findValue"
@@ -181,12 +181,12 @@ export default {
       'myDiagramDiv', // must name or refer to the DIV HTML element
       {
         grid: $(go.Panel, 'Grid'),
-        'draggingTool.dragsLink': true,
+        'draggingTool.dragsLink': false,
         'draggingTool.isGridSnapEnabled': true,
-        'linkingTool.isUnconnectedLinkValid': true,
-        'linkingTool.portGravity': 20,
+        'linkingTool.isUnconnectedLinkValid': false,
+        'linkingTool.portGravity': 10,
         'relinkingTool.isUnconnectedLinkValid': false,
-        'relinkingTool.portGravity': 20,
+        'relinkingTool.portGravity': 10,
         'relinkingTool.fromHandleArchetype': $(go.Shape, 'Diamond', {
           segmentIndex: 0,
           cursor: 'pointer',
@@ -414,7 +414,7 @@ export default {
 
     this.PathPatterns = new go.Map()
 
-    this.definePathPattern('simple', 'M0 0 L1 0')
+    this.definePathPattern('parcial', 'M0 0 L1 0')
     this.definePathPattern('total', 'M0 0 L1 0 M0 3 L1 3')
 
     this.myDiagram.linkTemplate = $(
@@ -425,7 +425,6 @@ export default {
         layerName: 'Foreground',
         reshapable: true,
         routing: go.Link.AvoidsNodes,
-        corner: 5,
         curve: go.Link.JumpOver
       },
       // $(
@@ -434,8 +433,11 @@ export default {
       // ),
       $(
         go.Shape, // the link's path shape
-        { isPanelMain: true, stroke: 'simple' },
-        new go.Binding('stroke', 'participacion'),
+        { isPanelMain: true, stroke: 'parcial' },
+        new go.Binding('stroke', 'participacion', (f) => {
+          console.log(f)
+          return f === '' ? 'parcial' : 'total'
+        }),
         new go.Binding(
           'pathPattern',
           'participacion',
@@ -606,7 +608,7 @@ export default {
             type: 'select',
             choices(node, propName) {
               if (Array.isArray(node.data.choices)) return node.data.choices
-              return ['total']
+              return ['parcial', 'total']
             }
           },
           // isGroup: { readOnly: true, show: Inspector.showIfPresent },
@@ -690,9 +692,9 @@ export default {
               fill: 'white'
             },
             {
-              type: 'attribute',
-              text: 'Atributo',
-              figure: 'Ellipse',
+              type: 'weakEntity',
+              text: 'Entidad débil',
+              figure: 'FramedRectangle',
               dataType: 'varchar',
               fill: 'white'
             },
@@ -704,15 +706,22 @@ export default {
               fill: 'white'
             },
             {
-              type: 'weakEntity',
-              text: 'Entidad débil',
-              figure: 'FramedRectangle',
+              type: 'weakRelation',
+              text: 'Relación débil',
+              figure: 'weakDiamond',
+              dataType: 'varchar',
+              fill: 'white'
+            },
+            {
+              type: 'attribute',
+              text: 'Atributo',
+              figure: 'Ellipse',
               dataType: 'varchar',
               fill: 'white'
             },
             {
               type: 'keyAttribute',
-              text: 'Atributo clave',
+              text: 'clave',
               figure: 'Ellipse',
               dataType: 'varchar',
               isUnderline: true,
@@ -720,26 +729,19 @@ export default {
             },
             {
               type: 'derivedAttribute',
-              text: 'att derivado',
+              text: 'derivado',
               figure: 'Ellipse',
               dataType: 'varchar',
               fill: 'white',
               strokeDashArray: [4, 2]
             },
             {
-              type: 'compositeAttribute',
-              text: 'Att compuesto',
+              type: 'multivalueAttribute',
+              text: 'multivalor',
               figure: 'FramedEllipse',
               dataType: 'varchar',
-              fill: 'white',
-              strokeDashArray: [4, 2]
-            },
-            {
-              type: 'weakRelation',
-              text: 'Relación débil',
-              figure: 'weakDiamond',
-              dataType: 'varchar',
               fill: 'white'
+              // strokeDashArray: [4, 2]
             }
           ])
         }
@@ -930,7 +932,7 @@ export default {
       // Now show the whole context menu element
       if (hasMenuItem) {
         this.cxElement.classList.add('show-menu')
-        // we don't bother overriding positionContextMenu, we just do it here:
+        // we don't bother overriding positionfContextMenu, we just do it here:
         const mousePt = diagram.lastInput.viewPoint
         this.cxElement.style.left = mousePt.x + 5 + 'px'
         this.cxElement.style.top = mousePt.y + 'px'

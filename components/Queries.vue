@@ -35,7 +35,7 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row>
+              <!--<v-row>
                 <v-col>
                   <textarea
                     style="width:100%;height:300px"
@@ -43,7 +43,7 @@
                   >
                   </textarea>
                 </v-col>
-              </v-row>
+              </v-row>-->
             </v-container>
             <!------Fin consultas---------->
           </v-tab-item>
