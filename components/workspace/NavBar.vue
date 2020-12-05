@@ -6,7 +6,7 @@
     <span class="subheading">{{ user.email }}</span>
     <v-spacer></v-spacer>
     <v-btn text @click="logout">
-      Logout
+      Cerrar sesión
     </v-btn>
 
     <template v-slot:extension>

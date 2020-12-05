@@ -42,7 +42,7 @@
               class="menu-item"
               @click="givenValue('givenValue')"
             >
-              Given value (=)
+              Respecto al atributo (=)
             </li>
             <!--<li
               id="givenRange"
@@ -60,7 +60,7 @@
               class="menu-item"
               @click="findValue('findValue')"
             >
-              Find value
+              Encontrar el atributo
             </li>
           </ul>
         </div>

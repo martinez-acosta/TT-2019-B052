@@ -13,7 +13,7 @@
                 <v-col cols="6">
                   <v-card>
                     <v-card-title>
-                      Given
+                      Respecto a los atributos
                     </v-card-title>
                     <v-data-table
                       :headers="givenHeaders"
@@ -25,7 +25,7 @@
                 <v-col cols="6">
                   <v-card>
                     <v-card-title>
-                      Find
+                      Encontrar el atributo
                     </v-card-title>
                     <v-data-table
                       :headers="findHeaders"
@@ -74,13 +74,13 @@ export default {
       componentKey: 0,
       givenHeaders: [
         {
-          text: 'Attribute',
+          text: 'Atributo',
           align: 'start',
           sortable: false,
           value: 'name'
         },
         {
-          text: '(value/range/set)',
+          text: 'Valor',
           align: 'start',
           sortable: false,
           value: 'type'
@@ -88,7 +88,7 @@ export default {
       ],
       findHeaders: [
         {
-          text: 'Attribute',
+          text: 'Atributo',
           align: 'start',
           sortable: false,
           value: 'name'

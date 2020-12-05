@@ -25,8 +25,8 @@ export default {
   data() {
     return {
       links: [
-        { label: 'Home', url: '/' },
-        { label: 'Login', url: '/login' }
+        { label: 'Inicio', url: '/' },
+        { label: 'Iniciar sesión', url: '/login' }
       ]
     }
   },
