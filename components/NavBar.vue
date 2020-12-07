@@ -20,10 +20,10 @@
           {{ links[0].label }}
         </v-btn>
         <v-btn text rounded to="/workspace">
-          workspace
+          Aplicación
         </v-btn>
         <v-btn text rounded @click="logout">
-          Logout
+          Cerrar sesión
         </v-btn>
       </template>
     </v-app-bar>
