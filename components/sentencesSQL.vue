@@ -67,8 +67,8 @@
         <v-card-text>
           En este apartado puede observar las sentencias SQL equivalentes al
           diagrama entidad-relación generado en el paso 1. <br />
-          Puede copiar o descargar estas sencentencias para comprobar su
-          correcto funcionamiento en el gestor de base de datos MySQL.
+          Puede copiar o descargar estas sentencias para comprobar su correcto
+          funcionamiento en el gestor de base de datos MySQL.
         </v-card-text>
 
         <v-card-actions>
