@@ -154,6 +154,28 @@ export default {
             itemTemplate: itemTempl
           },
           new go.Binding('itemArray', 'items')
+        ),
+        // the second collapse/expand button
+        $(
+          'PanelExpanderButton',
+          'LISTA2', // the name of the element whose visibility this button toggles
+          { row: 1, column: 0, alignment: go.Spot.BottomRight }
+        ),
+        // the list of Panels, each showing an attribute
+        $(
+          go.Panel,
+          'Vertical',
+          {
+            name: 'LISTA2',
+            row: 2,
+            column: 1,
+            padding: 3,
+            alignment: go.Spot.Left,
+            defaultAlignment: go.Spot.Left,
+            stretch: go.GraphObject.Horizontal,
+            itemTemplate: itemTempl
+          },
+          new go.Binding('itemArray', 'items2')
         )
       ) // end Table Panel
     ) // end Node
@@ -194,7 +216,15 @@ export default {
             name: 'categoryArray',
             iskey: false,
             figure: 'Hexagon',
-            color: 'purple'
+            color: colors.blue
+          }
+        ],
+        items2: [
+          {
+            name: 'atributo Array',
+            iskey: false,
+            figure: 'TriangleUp',
+            color: colors.pink
           }
         ]
       },
