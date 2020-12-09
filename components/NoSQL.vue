@@ -128,11 +128,13 @@ export default {
           go.TextBlock,
           {
             row: 0,
-            alignment: go.Spot.Center,
+            alignment: go.Spot.Left,
             margin: new go.Margin(0, 24, 0, 2), // leave room for Button
             font: 'bold 16px sans-serif'
           },
-          new go.Binding('text', 'key')
+          new go.Binding('text', '', function(node) {
+            return node.subtype + ' ' + node.key
+          })
         ),
         // the collapse/expand button
         $(
@@ -154,28 +156,6 @@ export default {
             itemTemplate: itemTempl
           },
           new go.Binding('itemArray', 'items')
-        ),
-        // the second collapse/expand button
-        $(
-          'PanelExpanderButton',
-          'LISTA2', // the name of the element whose visibility this button toggles
-          { row: 1, column: 0, alignment: go.Spot.BottomRight }
-        ),
-        // the list of Panels, each showing an attribute
-        $(
-          go.Panel,
-          'Vertical',
-          {
-            name: 'LISTA2',
-            row: 2,
-            column: 1,
-            padding: 3,
-            alignment: go.Spot.Left,
-            defaultAlignment: go.Spot.Left,
-            stretch: go.GraphObject.Horizontal,
-            itemTemplate: itemTempl
-          },
-          new go.Binding('itemArray', 'items2')
         )
       ) // end Table Panel
     ) // end Node
@@ -183,6 +163,7 @@ export default {
     const nodeDataArray = [
       {
         key: 'Product',
+        subtype: 'Collection',
         items: [
           {
             name: 'productId',
@@ -218,72 +199,6 @@ export default {
             figure: 'Hexagon',
             color: colors.blue
           }
-        ],
-        items2: [
-          {
-            name: 'atributo Array',
-            iskey: false,
-            figure: 'TriangleUp',
-            color: colors.pink
-          }
-        ]
-      },
-      {
-        key: 'Client',
-        items: [
-          {
-            name: 'SupplierID',
-            iskey: true,
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'CompanyName',
-            iskey: false,
-            figure: 'Hexagon',
-            color: colors.blue
-          },
-          {
-            name: 'ContactName',
-            iskey: false,
-            figure: 'Hexagon',
-            color: colors.blue
-          },
-          {
-            name: 'Address',
-            iskey: false,
-            figure: 'Hexagon',
-            color: colors.blue
-          }
-        ]
-      },
-      {
-        key: 'Purchase',
-        items: [
-          {
-            name: 'CategoryID',
-            iskey: true,
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'CategoryName',
-            iskey: false,
-            figure: 'Hexagon',
-            color: colors.blue
-          },
-          {
-            name: 'Description',
-            iskey: false,
-            figure: 'Hexagon',
-            color: colors.blue
-          },
-          {
-            name: 'Picture',
-            iskey: false,
-            figure: 'TriangleUp',
-            color: colors.pink
-          }
         ]
       }
     ]
@@ -291,6 +206,76 @@ export default {
       copiesArrays: true,
       copiesArrayObjects: true,
       nodeDataArray
+    })
+    // Set up an unmodeled Part as a legend, and place it directly on the diagram.
+    this.myDiagram.add(
+      $(
+        go.Part,
+        'Table',
+        {
+          layerName: 'Grid', // must be in a Layer that is Layer.isTemporary,
+
+          _viewPosition: new go.Point(50, 70), // some position in the viewport,
+          selectable: false
+        },
+        $(go.TextBlock, 'Nomenclatura', {
+          row: 0,
+          font: '700 14px Droid Serif, sans-serif'
+        }), // end row 0
+        $(
+          go.Panel,
+          'Horizontal',
+          { row: 1, alignment: go.Spot.Left },
+          $(go.Shape, 'Decision', {
+            desiredSize: new go.Size(10, 10),
+            fill: colors.red,
+            margin: 5
+          }),
+          $(go.TextBlock, 'Primitive field', {
+            font: '700 13px Droid Serif, sans-serif'
+          })
+        ), // end row 1
+        $(
+          go.Panel,
+          'Horizontal',
+          { row: 2, alignment: go.Spot.Left },
+          $(go.Shape, 'Rectangle', {
+            desiredSize: new go.Size(10, 10),
+            fill: '#FFD700',
+            margin: 5
+          }),
+          $(go.TextBlock, 'Document', {
+            font: '700 13px Droid Serif, sans-serif'
+          })
+        ), // end row 2
+        $(
+          go.Panel,
+          'Horizontal',
+          { row: 3, alignment: go.Spot.Left },
+          $(go.Shape, 'Hexagon', {
+            desiredSize: new go.Size(10, 10),
+            fill: colors.blue,
+            margin: 5
+          }),
+          $(go.TextBlock, 'Array Field', {
+            font: '700 13px Droid Serif, sans-serif'
+          })
+        ) // end row 3
+      )
+    )
+    // Whenever the Diagram.position or Diagram.scale change,
+    // update the position of all simple Parts that have a _viewPosition property.
+    this.myDiagram.addDiagramListener('ViewportBoundsChanged', function(e) {
+      e.diagram.commit(function(dia) {
+        // only iterates through simple Parts in the diagram, not Nodes or Links
+        dia.parts.each(function(part) {
+          // and only on those that have the "_viewPosition" property set to a Point
+          if (part._viewPosition) {
+            part.position = dia.transformViewToDoc(part._viewPosition)
+            part.scale = 1 / dia.scale
+          }
+        })
+      }, 'fix Parts')
     })
   },
   beforeDestroy() {},
