@@ -163,85 +163,13 @@ export default {
       ) // end Table Panel
     ) // end Node
     // create the model for the E-R diagram
-    let nodeDataArray = [
+    const nodeDataArray = [
       {
-        key: 'Product',
-        subtype: 'Collection',
-        items: [
-          {
-            name: 'productId',
-            type: 'ID',
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'name',
-            type: 'text',
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'description',
-            type: 'text',
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'price',
-            type: 'float',
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'categoryArray',
-            figure: 'Hexagon',
-            color: colors.blue
-          }
-        ]
-      },
-      {
-        key: 'Product',
-        subtype: 'Collection',
-        items: [
-          {
-            name: 'productId',
-            type: 'ID',
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'name',
-            type: 'text',
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'description',
-            type: 'text',
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'price',
-            type: 'float',
-            figure: 'Decision',
-            color: colors.red
-          },
-          {
-            name: 'categoryArray',
-            figure: 'Hexagon',
-            color: colors.blue
-          }
-        ]
-      }
-    ]
-    nodeDataArray = [
-      {
-        name: 'orderArray',
+        name: 'categoryArray',
         type: 'documentDataModel:ArrayField',
         items: [
           {
-            name: 'order',
+            name: 'category',
             type: 'documentDataModel:Document',
             subtype: 'Document',
             figure: 'Rectangle',
@@ -249,89 +177,111 @@ export default {
           }
         ],
         subtype: 'Array',
+        parentKey: 1,
+        key: 2,
         figure: 'Hexagon',
         color: '#6ea5f8'
       },
       {
-        name: 'order',
+        name: 'category',
         type: 'documentDataModel:Document',
         items: [
           {
-            name: 'orderNumber',
+            name: 'categoryId',
             type: 'ID',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'saleDate',
-            type: 'DATE',
+            name: 'name',
+            type: 'TEXT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'totalPrice',
+            name: 'description',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        parentKey: 2,
+        key: 3,
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'Product',
+        subtype: 'Collection',
+        key: 1,
+        items: [
+          {
+            name: 'productId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'name',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'description',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'price',
             type: 'FLOAT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'itemArray',
+            name: 'categoryArray',
             type: 'documentDataModel:ArrayField',
             subtype: 'Array',
+            parentKey: 1,
             figure: 'Hexagon',
             color: '#6ea5f8'
-          },
-          {
-            name: 'payment',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            figure: 'Rectangle',
-            color: '#FFD700'
-          },
-          {
-            name: 'delivery',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            figure: 'Rectangle',
-            color: '#FFD700'
           }
-        ],
-        subtype: 'Document',
-        figure: 'Rectangle',
-        color: '#FFD700'
+        ]
       },
       {
-        name: 'delivery',
-        type: 'documentDataModel:Document',
+        name: 'purchaseRefArray',
+        type: 'documentDataModel:ArrayField',
         items: [
           {
-            name: 'deliveryDate',
-            type: 'DATE',
+            name: 'purchaseRef',
+            type: 'ID',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
-          },
-          {
-            name: 'carrier',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            figure: 'Rectangle',
-            color: '#FFD700'
           }
         ],
-        subtype: 'Document',
-        figure: 'Rectangle',
-        color: '#FFD700'
+        subtype: 'Array',
+        parentKey: 4,
+        key: 5,
+        figure: 'Hexagon',
+        color: '#6ea5f8'
       },
       {
-        name: 'carrier',
-        type: 'documentDataModel:Document',
+        name: 'Client',
+        subtype: 'Collection',
+        key: 4,
         items: [
           {
-            name: 'carrierId',
+            name: 'clientId',
             type: 'ID',
             subtype: 'PrimitiveField',
             figure: 'Decision',
@@ -345,60 +295,28 @@ export default {
             color: '#be4b15'
           },
           {
-            name: 'contacts',
+            name: 'nationality',
             type: 'TEXT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'address',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
+            name: 'purchaseRefArray',
+            type: 'documentDataModel:ArrayField',
+            subtype: 'Array',
+            parentKey: 4,
+            figure: 'Hexagon',
+            color: '#6ea5f8'
           }
-        ],
-        subtype: 'Document',
-        figure: 'Rectangle',
-        color: '#FFD700'
+        ]
       },
       {
-        name: 'payment',
-        type: 'documentDataModel:Document',
-        items: [
-          {
-            name: 'paymentCode',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'paymentDate',
-            type: 'DATE',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'cardNumber',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          }
-        ],
-        subtype: 'Document',
-        figure: 'Rectangle',
-        color: '#FFD700'
-      },
-      {
-        name: 'itemArray',
+        name: 'purchaseLineArray',
         type: 'documentDataModel:ArrayField',
         items: [
           {
-            name: 'item',
+            name: 'purchaseLine',
             type: 'documentDataModel:Document',
             subtype: 'Document',
             figure: 'Rectangle',
@@ -406,22 +324,24 @@ export default {
           }
         ],
         subtype: 'Array',
+        parentKey: 6,
+        key: 7,
         figure: 'Hexagon',
         color: '#6ea5f8'
       },
       {
-        name: 'item',
+        name: 'purchaseLine',
         type: 'documentDataModel:Document',
         items: [
           {
-            name: 'itemNumber',
+            name: 'quantity',
             type: 'FLOAT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'quantity',
+            name: 'unitPrice',
             type: 'FLOAT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
@@ -436,165 +356,178 @@ export default {
           }
         ],
         subtype: 'Document',
+        parentKey: 7,
+        key: 8,
         figure: 'Rectangle',
         color: '#FFD700'
       },
       {
-        name: 'Customer',
-        subtype: 'Collection',
-        key: 1,
+        name: 'address',
+        type: 'documentDataModel:Document',
         items: [
           {
-            name: 'customerId',
+            name: 'street',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'postalCode',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'city',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'country',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        parentKey: 6,
+        key: 9,
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'bill',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'billId',
             type: 'ID',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'name',
-            type: 'TEXT',
+            name: 'billDate',
+            type: 'DATE',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'contacts',
+            name: 'billingData',
             type: 'TEXT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        parentKey: 6,
+        key: 10,
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'Purchase',
+        subtype: 'Collection',
+        key: 6,
+        items: [
+          {
+            name: 'purchaseId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'year',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'month',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'day',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'totalAmount',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'bill',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            parentKey: 6,
+            figure: 'Rectangle',
+            color: '#FFD700'
           },
           {
             name: 'address',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            parentKey: 6,
+            figure: 'Rectangle',
+            color: '#FFD700'
           },
           {
-            name: 'orderArray',
+            name: 'purchaseLineArray',
             type: 'documentDataModel:ArrayField',
             subtype: 'Array',
+            parentKey: 6,
             figure: 'Hexagon',
             color: '#6ea5f8'
           }
         ]
-      },
-      {
-        name: 'supplier',
-        type: 'documentDataModel:Document',
-        items: [
-          {
-            name: 'supplierId',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'name',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'contacts',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'address',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          }
-        ],
-        subtype: 'Document',
-        figure: 'Rectangle',
-        color: '#FFD700'
-      },
-      {
-        name: 'category',
-        type: 'documentDataModel:Document',
-        items: [
-          {
-            name: 'categoryId',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'description',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          }
-        ],
-        subtype: 'Document',
-        figure: 'Rectangle',
-        color: '#FFD700'
-      },
-      {
-        name: 'Product',
-        subtype: 'Collection',
-        key: 2,
-        items: [
-          {
-            name: 'productCode',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'price',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'category',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            figure: 'Rectangle',
-            color: '#FFD700'
-          },
-          {
-            name: 'supplier',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            figure: 'Rectangle',
-            color: '#FFD700'
-          }
-        ]
       }
+    ]
+    const linkDataArray = [
+      { to: 1, from: 2 },
+      { to: 2, from: 3 },
+      { to: 4, from: 5 },
+      { to: 6, from: 7 },
+      { to: 7, from: 8 },
+      { to: 6, from: 9 },
+      { to: 6, from: 10 }
     ]
 
     this.myDiagram.linkTemplate = $(
       go.Link,
       {
-        relinkableFrom: true,
-        relinkableTo: true, // let user reconnect links
+        relinkableFrom: false,
+        relinkableTo: false, // let user reconnect links
         toShortLength: 4,
         fromShortLength: 2
       },
       $(go.Shape, { strokeWidth: 1.5 }),
       $(go.Shape, { toArrow: 'Standard', stroke: null })
     )
+
     this.myDiagram.model = $(go.GraphLinksModel, {
       copiesArrays: true,
       copiesArrayObjects: true,
       linkFromPortIdProperty: 'fromPort',
       linkToPortIdProperty: 'toPort',
-      nodeDataArray
+      nodeDataArray,
+      linkDataArray
     })
     // Set up an unmodeled Part as a legend, and place it directly on the diagram.
     this.myDiagram.add(
