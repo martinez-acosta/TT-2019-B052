@@ -7,6 +7,8 @@
             id="myDiagramDiv"
             style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
           ></div>
+          <div id="myOverviewDiv"></div>
+          <!-- Styled in a <style> tag at the top of the html page -->
         </div>
       </v-col>
     </v-row>
@@ -21,7 +23,8 @@ export default {
   props: {},
   data() {
     return {
-      myDiagram: ''
+      myDiagram: '',
+      myOverview: ''
     }
   },
   computed: {
@@ -133,7 +136,7 @@ export default {
             font: 'bold 16px sans-serif'
           },
           new go.Binding('text', '', function(node) {
-            return node.subtype + ' ' + node.key
+            return node.subtype + ' ' + node.name
           })
         ),
         // the collapse/expand button
@@ -160,7 +163,7 @@ export default {
       ) // end Table Panel
     ) // end Node
     // create the model for the E-R diagram
-    const nodeDataArray = [
+    let nodeDataArray = [
       {
         key: 'Product',
         subtype: 'Collection',
@@ -168,43 +171,429 @@ export default {
           {
             name: 'productId',
             type: 'ID',
-            iskey: true,
             figure: 'Decision',
             color: colors.red
           },
           {
             name: 'name',
             type: 'text',
-            iskey: false,
             figure: 'Decision',
             color: colors.red
           },
           {
             name: 'description',
             type: 'text',
-            iskey: false,
             figure: 'Decision',
             color: colors.red
           },
           {
             name: 'price',
             type: 'float',
-            iskey: false,
             figure: 'Decision',
             color: colors.red
           },
           {
             name: 'categoryArray',
-            iskey: false,
+            figure: 'Hexagon',
+            color: colors.blue
+          }
+        ]
+      },
+      {
+        key: 'Product',
+        subtype: 'Collection',
+        items: [
+          {
+            name: 'productId',
+            type: 'ID',
+            figure: 'Decision',
+            color: colors.red
+          },
+          {
+            name: 'name',
+            type: 'text',
+            figure: 'Decision',
+            color: colors.red
+          },
+          {
+            name: 'description',
+            type: 'text',
+            figure: 'Decision',
+            color: colors.red
+          },
+          {
+            name: 'price',
+            type: 'float',
+            figure: 'Decision',
+            color: colors.red
+          },
+          {
+            name: 'categoryArray',
             figure: 'Hexagon',
             color: colors.blue
           }
         ]
       }
     ]
+    nodeDataArray = [
+      {
+        name: 'orderArray',
+        type: 'documentDataModel:ArrayField',
+        items: [
+          {
+            name: 'order',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            figure: 'Rectangle',
+            color: '#FFD700'
+          }
+        ],
+        subtype: 'Array',
+        figure: 'Hexagon',
+        color: '#6ea5f8'
+      },
+      {
+        name: 'order',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'orderNumber',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'saleDate',
+            type: 'DATE',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'totalPrice',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'itemArray',
+            type: 'documentDataModel:ArrayField',
+            subtype: 'Array',
+            figure: 'Hexagon',
+            color: '#6ea5f8'
+          },
+          {
+            name: 'payment',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            figure: 'Rectangle',
+            color: '#FFD700'
+          },
+          {
+            name: 'delivery',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            figure: 'Rectangle',
+            color: '#FFD700'
+          }
+        ],
+        subtype: 'Document',
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'delivery',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'deliveryDate',
+            type: 'DATE',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'carrier',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            figure: 'Rectangle',
+            color: '#FFD700'
+          }
+        ],
+        subtype: 'Document',
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'carrier',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'carrierId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'name',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'contacts',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'address',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'payment',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'paymentCode',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'paymentDate',
+            type: 'DATE',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'cardNumber',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'itemArray',
+        type: 'documentDataModel:ArrayField',
+        items: [
+          {
+            name: 'item',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            figure: 'Rectangle',
+            color: '#FFD700'
+          }
+        ],
+        subtype: 'Array',
+        figure: 'Hexagon',
+        color: '#6ea5f8'
+      },
+      {
+        name: 'item',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'itemNumber',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'quantity',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'productRef',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'Customer',
+        subtype: 'Collection',
+        key: 1,
+        items: [
+          {
+            name: 'customerId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'name',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'contacts',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'address',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'orderArray',
+            type: 'documentDataModel:ArrayField',
+            subtype: 'Array',
+            figure: 'Hexagon',
+            color: '#6ea5f8'
+          }
+        ]
+      },
+      {
+        name: 'supplier',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'supplierId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'name',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'contacts',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'address',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'category',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'categoryId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'description',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'Product',
+        subtype: 'Collection',
+        key: 2,
+        items: [
+          {
+            name: 'productCode',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'price',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'category',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            figure: 'Rectangle',
+            color: '#FFD700'
+          },
+          {
+            name: 'supplier',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            figure: 'Rectangle',
+            color: '#FFD700'
+          }
+        ]
+      }
+    ]
+
+    this.myDiagram.linkTemplate = $(
+      go.Link,
+      {
+        relinkableFrom: true,
+        relinkableTo: true, // let user reconnect links
+        toShortLength: 4,
+        fromShortLength: 2
+      },
+      $(go.Shape, { strokeWidth: 1.5 }),
+      $(go.Shape, { toArrow: 'Standard', stroke: null })
+    )
     this.myDiagram.model = $(go.GraphLinksModel, {
       copiesArrays: true,
       copiesArrayObjects: true,
+      linkFromPortIdProperty: 'fromPort',
+      linkToPortIdProperty: 'toPort',
       nodeDataArray
     })
     // Set up an unmodeled Part as a legend, and place it directly on the diagram.
@@ -215,7 +604,7 @@ export default {
         {
           layerName: 'Grid', // must be in a Layer that is Layer.isTemporary,
 
-          _viewPosition: new go.Point(50, 70), // some position in the viewport,
+          _viewPosition: new go.Point(50, 120), // some position in the viewport,
           selectable: false
         },
         $(go.TextBlock, 'Nomenclatura', {
@@ -263,6 +652,13 @@ export default {
         ) // end row 3
       )
     )
+
+    this.myOverview = $(
+      go.Overview,
+      'myOverviewDiv', // the HTML DIV element for the Overview
+      { observed: this.myDiagram, contentAlignment: go.Spot.Center }
+    ) // tell it which Diagram to show and pan
+
     // Whenever the Diagram.position or Diagram.scale change,
     // update the position of all simple Parts that have a _viewPosition property.
     this.myDiagram.addDiagramListener('ViewportBoundsChanged', function(e) {
@@ -301,4 +697,15 @@ export default {
 }
 </script>
 
-<style></style>
+<style type="text/css">
+#myOverviewDiv {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  top: 10px;
+  left: 10px;
+  background-color: #f2f2f2;
+  z-index: 300; /* make sure its in front */
+  border: solid 1px #7986cb;
+}
+</style>
