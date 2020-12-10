@@ -944,7 +944,7 @@ export default {
           (obj.data.type === 'attribute' ||
             obj.data.type === 'keyAttribute' ||
             obj.data.type === 'derivedAttribute' ||
-            obj.data.type === 'compositeAttribute')
+            obj.data.type === 'multivalueAttribute')
         ) {
           elt.style.display = 'block'
           hasMenuItem = true
