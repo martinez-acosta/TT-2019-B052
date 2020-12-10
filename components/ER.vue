@@ -5,7 +5,7 @@
     </client-only>
     <v-row no-gutters style="height: 80vh" dense class="ma-0 pa-0">
       <v-col
-        v-if="mostrarPaleta"
+        v-show="mostrarPaleta"
         cols="3"
         class="white lighten-2 fill-height d-flex flex-column"
       >
@@ -16,9 +16,10 @@
             width: 100%;
             display: flex;
             border: solid 0px black;
-            height: 80%;
+            height: 60%;           
           "
         ></div>
+        <div id="myOverviewDiv"></div>
         <div v-show="mostrarPaleta" id="myInspectorDiv"></div>
       </v-col>
       <v-col class="white fill-height d-flex flex-column">
@@ -36,7 +37,6 @@
               height: 100%;
             "
           ></div>
-          <div id="myOverviewDiv"></div>
           <ul id="contextMenu" class="menu">
             <li
               id="givenValue"
@@ -1107,11 +1107,13 @@ export default {
 <style>
 @import 'gojs/extensionsJSM/DataInspector.css';
 #myOverviewDiv {
-  position: absolute;
-  width: 200px;
-  height: 100px;
-  top: 400px;
-  left: 400px;
+  /*position: absolute;*/
+  width: 50%;
+  height: 150%;
+  display: flex;
+
+  /*top: 400px;
+  left: 400px;*/
   background-color: #f2f2f2;
   z-index: 300; /* make sure its in front */
   border: solid 1px #7986cb;

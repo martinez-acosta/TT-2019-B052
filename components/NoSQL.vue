@@ -1,13 +1,13 @@
 <template>
   <v-container>
-    <v-row no-gutters style="height: 80vh" dense class="ma-0 pa-0">
-      <v-col class="white fill-height d-flex flex-column">
+    <v-row style="height: 80vh">
+      <v-col cols="2"><div id="myOverviewDiv"></div></v-col>
+      <v-col cols="10" class="white fill-height d-flex flex-column">
         <div style="position: relative;   height: 100%;">
           <div
             id="myDiagramDiv"
             style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
           ></div>
-          <div id="myOverviewDiv"></div>
         </div>
       </v-col>
     </v-row>
@@ -588,7 +588,11 @@ export default {
     this.myOverview = $(
       go.Overview,
       'myOverviewDiv', // the HTML DIV element for the Overview
-      { observed: this.myDiagram, contentAlignment: go.Spot.Center }
+      {
+        observed: this.myDiagram,
+        // _viewPosition: new go.Point(50, 120), // some position in the viewport,
+        contentAlignment: go.Spot.Center
+      }
     ) // tell it which Diagram to show and pan
 
     // Whenever the Diagram.position or Diagram.scale change,
@@ -631,11 +635,12 @@ export default {
 
 <style type="text/css">
 #myOverviewDiv {
-  position: absolute;
-  width: 200px;
-  height: 100px;
-  top: 10px;
-  left: 10px;
+  /* position: absolute;*/
+  width: 80%;
+  height: 20%;
+  display: flex;
+  top: 0px;
+  left: 0px;
   background-color: #f2f2f2;
   z-index: 300; /* make sure its in front */
   border: solid 1px #7986cb;
