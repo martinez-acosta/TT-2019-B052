@@ -36,6 +36,7 @@
               height: 100%;
             "
           ></div>
+          <div id="myOverviewDiv"></div>
           <ul id="contextMenu" class="menu">
             <li
               id="givenValue"
@@ -150,6 +151,7 @@ export default {
       myContextMenu: '',
       cxElement: '',
       node: '',
+      myOverview: '',
       mostrarPaleta: this.showpallete,
       soloLectura: this.readonly,
       diagramErrors: false,
@@ -771,6 +773,31 @@ export default {
         this.validateDiagram()
       })
     }
+
+    this.myOverview = $(
+      go.Overview,
+      'myOverviewDiv', // the HTML DIV element for the Overview
+      {
+        observed: this.myDiagram,
+        // _viewPosition: new go.Point(100, 10),
+        contentAlignment: go.Spot.Center
+      }
+    ) // tell it which Diagram to show and pan
+
+    // Whenever the Diagram.position or Diagram.scale change,
+    // update the position of all simple Parts that have a _viewPosition property.
+    this.myDiagram.addDiagramListener('ViewportBoundsChanged', function(e) {
+      e.diagram.commit(function(dia) {
+        // only iterates through simple Parts in the diagram, not Nodes or Links
+        dia.parts.each(function(part) {
+          // and only on those that have the "_viewPosition" property set to a Point
+          if (part._viewPosition) {
+            part.position = dia.transformViewToDoc(part._viewPosition)
+            part.scale = 1 / dia.scale
+          }
+        })
+      }, 'fix Parts')
+    })
   },
   beforeDestroy() {
     this.vuexSaveModel()
@@ -1079,6 +1106,17 @@ export default {
 
 <style>
 @import 'gojs/extensionsJSM/DataInspector.css';
+#myOverviewDiv {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  top: 400px;
+  left: 400px;
+  background-color: #f2f2f2;
+  z-index: 300; /* make sure its in front */
+  border: solid 1px #7986cb;
+}
+
 /* CSS for the traditional context menu */
 .menu {
   display: none;

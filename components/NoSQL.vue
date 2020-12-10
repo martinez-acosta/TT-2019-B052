@@ -8,7 +8,6 @@
             style="width: 100%; display: flex; border: solid 1px black; height: 100%;"
           ></div>
           <div id="myOverviewDiv"></div>
-          <!-- Styled in a <style> tag at the top of the html page -->
         </div>
       </v-col>
     </v-row>
