@@ -858,6 +858,7 @@ export default {
           savedModel: this.savedModel
         })
         .then(() => {
+          this.$nuxt.$loading.finish()
           this.$snotify.success('Guardado correctamente.')
         })
         .catch(() => {
@@ -873,6 +874,7 @@ export default {
       this.$store
         .dispatch('axiosER/getLastDiagram')
         .then((response) => {
+          this.$nuxt.$loading.finish()
           this.myDiagram.model = go.Model.fromJson(response.data.diagram)
           this.$snotify.success('Diagrama cargado correctamente.')
         })
@@ -893,6 +895,7 @@ export default {
       this.$store
         .dispatch('axiosER/validateDiagram', diagram)
         .then((response) => {
+          this.$nuxt.$loading.finish()
           this.validDiagram = true
           this.msgDiagramErrors = 'El diagrama es valido estructuralmente.'
         })

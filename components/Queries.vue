@@ -13,7 +13,7 @@
                 <v-col cols="6">
                   <v-card>
                     <v-card-title>
-                      Respecto a los atributos
+                      Respecto a:
                     </v-card-title>
                     <v-data-table
                       :headers="givenHeaders"
@@ -25,7 +25,7 @@
                 <v-col cols="6">
                   <v-card>
                     <v-card-title>
-                      Encontrar el atributo
+                      Encontrar:
                     </v-card-title>
                     <v-data-table
                       :headers="findHeaders"
