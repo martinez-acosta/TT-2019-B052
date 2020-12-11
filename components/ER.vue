@@ -5,7 +5,7 @@
     </client-only>
     <v-row no-gutters style="height: 80vh" dense class="ma-0 pa-0">
       <v-col
-        v-show="mostrarPaleta"
+        v-if="mostrarPaleta"
         cols="3"
         class="white lighten-2 fill-height d-flex flex-column"
       >
@@ -16,10 +16,9 @@
             width: 100%;
             display: flex;
             border: solid 0px black;
-            height: 60%;           
+            height: 100%;           
           "
         ></div>
-        <div id="myOverviewDiv"></div>
         <div v-show="mostrarPaleta" id="myInspectorDiv"></div>
       </v-col>
       <v-col class="white fill-height d-flex flex-column">
@@ -65,6 +64,9 @@
             </li>
           </ul>
         </div>
+      </v-col>
+      <v-col cols="2">
+        <div id="myOverviewDiv"></div>
       </v-col>
     </v-row>
     <!-- Dialog/modals -->
@@ -636,6 +638,14 @@ export default {
               ]
             }
           },
+          gdmType: {
+            show: Inspector.showIfNode,
+            type: 'select',
+            choices(node, propName) {
+              if (Array.isArray(node.data.choices)) return node.data.choices
+              return ['text', 'number']
+            }
+          },
           dataSize: {
             show: Inspector.showIfNode,
             type: 'select',
@@ -719,6 +729,7 @@ export default {
               text: 'Atributo',
               figure: 'Ellipse',
               dataType: 'varchar',
+              gdmType: 'text',
               fill: 'white'
             },
             {
@@ -726,6 +737,7 @@ export default {
               text: 'clave',
               figure: 'Ellipse',
               dataType: 'varchar',
+              gdmType: 'text',
               isUnderline: true,
               fill: 'white'
             },
@@ -734,6 +746,7 @@ export default {
               text: 'derivado',
               figure: 'Ellipse',
               dataType: 'varchar',
+              gdmType: 'text',
               fill: 'white',
               strokeDashArray: [4, 2]
             },
@@ -742,6 +755,7 @@ export default {
               text: 'multivalor',
               figure: 'FramedEllipse',
               dataType: 'varchar',
+              gdmType: 'text',
               fill: 'white'
               // strokeDashArray: [4, 2]
             }
@@ -837,6 +851,8 @@ export default {
       this.saveDiagramProperties()
       this.savedModel = this.myDiagram.model.toJson()
       this.myDiagram.isModified = false
+      this.$nuxt.$loading.start()
+
       this.$store
         .dispatch('axiosER/save', {
           savedModel: this.savedModel
@@ -845,12 +861,15 @@ export default {
           this.$snotify.success('Guardado correctamente.')
         })
         .catch(() => {
+          this.$nuxt.$loading.fail()
+          this.$nuxt.$loading.finish()
           this.$snotify.error(
             '¡Algo ocurrió! El diagrama no ha sido guardado, intente más tarde.'
           )
         })
     },
     axiosLoadModel() {
+      this.$nuxt.$loading.start()
       this.$store
         .dispatch('axiosER/getLastDiagram')
         .then((response) => {
@@ -858,6 +877,8 @@ export default {
           this.$snotify.success('Diagrama cargado correctamente.')
         })
         .catch(() => {
+          this.$nuxt.$loading.fail()
+          this.$nuxt.$loading.finish()
           this.$snotify.error(
             '¡Algo ocurrió! No se ha encontrado un diagrama asociado a este perfil.'
           )
@@ -1006,6 +1027,7 @@ export default {
             data.type === 'keyAttribute' ||
             data.type === 'derivedAttribute' ||
             data.type === 'compositeAttribute' ||
+            data.type === 'multivalueAttribute' ||
             data.type === 'attribute'
           ) {
             const nodoConectado = { ...this.getConnectedNode(node) }
