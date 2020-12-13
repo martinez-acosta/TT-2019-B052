@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ASCII"?>
+<documentDataModel:DocumentDataModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:documentDataModel="http://documentDataModel.mortadelo.istr.unican.es">
+  <collections name="Server">
+    <root name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" name="serverId" type="ID"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="serverName" type="TEXT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="serverIP" type="TEXT"/>
+      <fields xsi:type="documentDataModel:ArrayField" name="sessionRefArray">
+        <type xsi:type="documentDataModel:PrimitiveField" name="sessionRef" type="ID"/>
+      </fields>
+      <fields xsi:type="documentDataModel:ArrayField" name="stateArray">
+        <type xsi:type="documentDataModel:Document" name="state">
+          <fields xsi:type="documentDataModel:PrimitiveField" name="stateId" type="ID"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="posX" type="FLOAT"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="posY" type="FLOAT"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="posZ" type="FLOAT"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="serverTimestamp" type="TIMESTAMP"/>
+        </type>
+      </fields>
+    </root>
+  </collections>
+  <collections name="Session">
+    <root name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" name="sessionId" type="ID"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="timeStarted" type="TIMESTAMP"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="timeEnded" type="TIMESTAMP"/>
+      <fields xsi:type="documentDataModel:Document" name="player">
+        <fields xsi:type="documentDataModel:PrimitiveField" name="playerId" type="ID"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="playerName" type="TEXT"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="playerFrags" type="TEXT"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="isAdmin" type="BOOLEAN"/>
+      </fields>
+    </root>
+  </collections>
+</documentDataModel:DocumentDataModel>

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gdmLang:Model xmlns:xmi="http://www.omg.org/XMI" xmlns:gdmLang="http://www.unican.es/istr/mortadelo/gdm/lang/GdmLang" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmi:version="2.0">
+  <entities xsi:type="gdmLang:Entity" name="User">
+    <features xsi:type="gdmLang:Attribute" name="userId" type="ID" unique="true"/>
+    <features xsi:type="gdmLang:Attribute" name="userName" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="userEmail" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="areasOfExpertise" cardinality="*" type="TEXT"/>
+    <features xsi:type="gdmLang:Reference" entity="//@entities.3" name="reviews" cardinality="*"/>
+    <features xsi:type="gdmLang:Reference" entity="//@entities.2" name="likesArtifacts" cardinality="*"/>
+    <features xsi:type="gdmLang:Reference" entity="//@entities.1" name="likesVenue" cardinality="*"/>
+  </entities>
+  <entities xsi:type="gdmLang:Entity" name="Venue">
+    <features xsi:type="gdmLang:Attribute" name="venueId" type="ID" unique="true"/>
+    <features xsi:type="gdmLang:Attribute" name="venueName" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="year" type="NUMBER"/>
+    <features xsi:type="gdmLang:Attribute" name="country" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="homepage" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="topics" cardinality="*" type="TEXT"/>
+    <features xsi:type="gdmLang:Reference" entity="//@entities.2" name="artifacts" cardinality="*"/>
+  </entities>
+  <entities xsi:type="gdmLang:Entity" name="Artifact">
+    <features xsi:type="gdmLang:Attribute" name="artifactId" type="ID" unique="true"/>
+    <features xsi:type="gdmLang:Attribute" name="artifactTitle" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="authors" cardinality="*" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="keywords" cardinality="*" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="numRatings" type="NUMBER"/>
+    <features xsi:type="gdmLang:Attribute" name="sumRatings" type="NUMBER"/>
+    <features xsi:type="gdmLang:Attribute" name="avgRating" type="NUMBER"/>
+    <features xsi:type="gdmLang:Reference" entity="//@entities.1" name="venue" cardinality="1"/>
+  </entities>
+  <entities xsi:type="gdmLang:Entity" name="Review">
+    <features xsi:type="gdmLang:Attribute" name="reviewId" type="ID" unique="true"/>
+    <features xsi:type="gdmLang:Attribute" name="reviewTitle" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="body" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="rating" type="NUMBER"/>
+    <features xsi:type="gdmLang:Reference" entity="//@entities.2" name="artifact" cardinality="1"/>
+  </entities>
+</gdmLang:Model>

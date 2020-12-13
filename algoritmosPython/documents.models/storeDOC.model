@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ASCII"?>
+<documentDataModel:DocumentDataModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:documentDataModel="http://documentDataModel.mortadelo.istr.unican.es">
+  <collections name="Customer">
+    <root name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" name="customerId" type="ID"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="name" type="TEXT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="contacts" type="TEXT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="address" type="TEXT"/>
+      <fields xsi:type="documentDataModel:ArrayField" name="orderArray">
+        <type xsi:type="documentDataModel:Document" name="order">
+          <fields xsi:type="documentDataModel:PrimitiveField" name="orderNumber" type="ID"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="saleDate" type="DATE"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="totalPrice" type="FLOAT"/>
+          <fields xsi:type="documentDataModel:ArrayField" name="itemArray">
+            <type xsi:type="documentDataModel:Document" name="item">
+              <fields xsi:type="documentDataModel:PrimitiveField" name="itemNumber" type="FLOAT"/>
+              <fields xsi:type="documentDataModel:PrimitiveField" name="quantity" type="FLOAT"/>
+              <fields xsi:type="documentDataModel:PrimitiveField" name="productRef" type="ID"/>
+            </type>
+          </fields>
+          <fields xsi:type="documentDataModel:Document" name="payment">
+            <fields xsi:type="documentDataModel:PrimitiveField" name="paymentCode" type="ID"/>
+            <fields xsi:type="documentDataModel:PrimitiveField" name="paymentDate" type="DATE"/>
+            <fields xsi:type="documentDataModel:PrimitiveField" name="cardNumber" type="TEXT"/>
+          </fields>
+          <fields xsi:type="documentDataModel:Document" name="delivery">
+            <fields xsi:type="documentDataModel:PrimitiveField" name="deliveryDate" type="DATE"/>
+            <fields xsi:type="documentDataModel:Document" name="carrier">
+              <fields xsi:type="documentDataModel:PrimitiveField" name="carrierId" type="ID"/>
+              <fields xsi:type="documentDataModel:PrimitiveField" name="name" type="TEXT"/>
+              <fields xsi:type="documentDataModel:PrimitiveField" name="contacts" type="TEXT"/>
+              <fields xsi:type="documentDataModel:PrimitiveField" name="address" type="TEXT"/>
+            </fields>
+          </fields>
+        </type>
+      </fields>
+    </root>
+  </collections>
+  <collections name="Product">
+    <root name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" name="productCode" type="ID"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="price" type="TEXT"/>
+      <fields xsi:type="documentDataModel:Document" name="category">
+        <fields xsi:type="documentDataModel:PrimitiveField" name="categoryId" type="ID"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="description" type="TEXT"/>
+      </fields>
+      <fields xsi:type="documentDataModel:Document" name="supplier">
+        <fields xsi:type="documentDataModel:PrimitiveField" name="supplierId" type="ID"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="name" type="TEXT"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="contacts" type="TEXT"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="address" type="TEXT"/>
+      </fields>
+    </root>
+  </collections>
+</documentDataModel:DocumentDataModel>

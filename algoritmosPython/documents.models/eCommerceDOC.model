@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ASCII"?>
+<documentDataModel:DocumentDataModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:documentDataModel="http://documentDataModel.mortadelo.istr.unican.es">
+  <collections name="Product">
+    <root name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" name="productId" type="ID"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="name" type="TEXT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="description" type="TEXT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="price" type="FLOAT"/>
+      <fields xsi:type="documentDataModel:ArrayField" name="categoryArray">
+        <type xsi:type="documentDataModel:Document" name="category">
+          <fields xsi:type="documentDataModel:PrimitiveField" name="categoryId" type="ID"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="name" type="TEXT"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="description" type="TEXT"/>
+        </type>
+      </fields>
+    </root>
+  </collections>
+  <collections name="Client">
+    <root name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" name="clientId" type="ID"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="name" type="TEXT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="nationality" type="TEXT"/>
+      <fields xsi:type="documentDataModel:ArrayField" name="purchaseRefArray">
+        <type xsi:type="documentDataModel:PrimitiveField" name="purchaseRef" type="ID"/>
+      </fields>
+    </root>
+  </collections>
+  <collections name="Purchase">
+    <root name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" name="purchaseId" type="ID"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="year" type="FLOAT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="month" type="FLOAT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="day" type="FLOAT"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" name="totalAmount" type="FLOAT"/>
+      <fields xsi:type="documentDataModel:Document" name="bill">
+        <fields xsi:type="documentDataModel:PrimitiveField" name="billId" type="ID"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="billDate" type="DATE"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="billingData" type="TEXT"/>
+      </fields>
+      <fields xsi:type="documentDataModel:Document" name="address">
+        <fields xsi:type="documentDataModel:PrimitiveField" name="street" type="TEXT"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="postalCode" type="TEXT"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="city" type="TEXT"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" name="country" type="TEXT"/>
+      </fields>
+      <fields xsi:type="documentDataModel:ArrayField" name="purchaseLineArray">
+        <type xsi:type="documentDataModel:Document" name="purchaseLine">
+          <fields xsi:type="documentDataModel:PrimitiveField" name="quantity" type="FLOAT"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="unitPrice" type="FLOAT"/>
+          <fields xsi:type="documentDataModel:PrimitiveField" name="productRef" type="ID"/>
+        </type>
+      </fields>
+    </root>
+  </collections>
+</documentDataModel:DocumentDataModel>
