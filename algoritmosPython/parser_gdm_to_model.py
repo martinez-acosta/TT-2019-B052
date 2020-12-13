@@ -101,10 +101,7 @@ def main():
         
         # Si hay una entidad
         if "entity" in line:
-            populateEntity(model, lines, i)
-        
-        
-            
+            populateEntity(model, lines, i)            
     
     # Parseamos el documento para generar las consultas
     for i in range(len(lines)):
@@ -113,18 +110,33 @@ def main():
         if "query" in line:
             count = 1
             query = gdm.Query(name=line.split()[1])
+            
             # Creamos el elemento from
             while not "from " in lines[i+count]:
                 count += 1    
             ln = lines[i+count].split()
-            from_ = gdm.From(entity=getEntity(model,ln[1]),alias=gdm.Alias(ln[3])) 
-
+            entity = getEntity(model,ln[1])
+            query.from_ = gdm.From(entity=entity, alias=gdm.Alias(name=ln[3]))
+            
             # Creamos el elemento including
-            while not "from " in lines[i+count]:
+            while not "including " in lines[i+count]:
                 count += 1    
             ln = lines[i+count].split()
-            including = gdm.Inclusion()
+           
+            alias = gdm.Alias(name=ln[3])
+            refs = gdm.gdmLang.Reference()
+            refAlias = gdm.Alias(name=ln[1].split(".")[0])
+
+            prueba = entity.features
+
+            
+            including = gdm.Inclusion(alias=alias, refAlias=refAlias,refs=refs)
+
+            query.inclusions.append(including)
+            model.queries.append(query)
+            saveModel(model)
             continue
+            model.queries.append(query)
     saveModel(model)
 
 

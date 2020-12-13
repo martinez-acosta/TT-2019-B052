@@ -164,15 +164,15 @@ export default {
     // create the model for the E-R diagram
     const nodeDataArray = [
       {
-        name: 'categoryArray',
+        name: 'artifactRefArray',
         type: 'documentDataModel:ArrayField',
         items: [
           {
-            name: 'category',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            figure: 'Rectangle',
-            color: '#FFD700'
+            name: 'artifactRef',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
           }
         ],
         subtype: 'Array',
@@ -182,263 +182,20 @@ export default {
         color: '#6ea5f8'
       },
       {
-        name: 'category',
-        type: 'documentDataModel:Document',
-        items: [
-          {
-            name: 'categoryId',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'name',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'description',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          }
-        ],
-        subtype: 'Document',
-        parentKey: 2,
-        key: 3,
-        figure: 'Rectangle',
-        color: '#FFD700'
-      },
-      {
-        name: 'Product',
+        name: 'Venue',
         subtype: 'Collection',
         key: 1,
         items: [
           {
-            name: 'productId',
+            name: 'venueId',
             type: 'ID',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'name',
+            name: 'venueName',
             type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'description',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'price',
-            type: 'FLOAT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'categoryArray',
-            type: 'documentDataModel:ArrayField',
-            subtype: 'Array',
-            parentKey: 1,
-            figure: 'Hexagon',
-            color: '#6ea5f8'
-          }
-        ]
-      },
-      {
-        name: 'purchaseRefArray',
-        type: 'documentDataModel:ArrayField',
-        items: [
-          {
-            name: 'purchaseRef',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          }
-        ],
-        subtype: 'Array',
-        parentKey: 4,
-        key: 5,
-        figure: 'Hexagon',
-        color: '#6ea5f8'
-      },
-      {
-        name: 'Client',
-        subtype: 'Collection',
-        key: 4,
-        items: [
-          {
-            name: 'clientId',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'name',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'nationality',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'purchaseRefArray',
-            type: 'documentDataModel:ArrayField',
-            subtype: 'Array',
-            parentKey: 4,
-            figure: 'Hexagon',
-            color: '#6ea5f8'
-          }
-        ]
-      },
-      {
-        name: 'purchaseLineArray',
-        type: 'documentDataModel:ArrayField',
-        items: [
-          {
-            name: 'purchaseLine',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            figure: 'Rectangle',
-            color: '#FFD700'
-          }
-        ],
-        subtype: 'Array',
-        parentKey: 6,
-        key: 7,
-        figure: 'Hexagon',
-        color: '#6ea5f8'
-      },
-      {
-        name: 'purchaseLine',
-        type: 'documentDataModel:Document',
-        items: [
-          {
-            name: 'quantity',
-            type: 'FLOAT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'unitPrice',
-            type: 'FLOAT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'productRef',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          }
-        ],
-        subtype: 'Document',
-        parentKey: 7,
-        key: 8,
-        figure: 'Rectangle',
-        color: '#FFD700'
-      },
-      {
-        name: 'address',
-        type: 'documentDataModel:Document',
-        items: [
-          {
-            name: 'street',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'postalCode',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'city',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'country',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          }
-        ],
-        subtype: 'Document',
-        parentKey: 6,
-        key: 9,
-        figure: 'Rectangle',
-        color: '#FFD700'
-      },
-      {
-        name: 'bill',
-        type: 'documentDataModel:Document',
-        items: [
-          {
-            name: 'billId',
-            type: 'ID',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'billDate',
-            type: 'DATE',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          },
-          {
-            name: 'billingData',
-            type: 'TEXT',
-            subtype: 'PrimitiveField',
-            figure: 'Decision',
-            color: '#be4b15'
-          }
-        ],
-        subtype: 'Document',
-        parentKey: 6,
-        key: 10,
-        figure: 'Rectangle',
-        color: '#FFD700'
-      },
-      {
-        name: 'Purchase',
-        subtype: 'Collection',
-        key: 6,
-        items: [
-          {
-            name: 'purchaseId',
-            type: 'ID',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
@@ -451,47 +208,253 @@ export default {
             color: '#be4b15'
           },
           {
-            name: 'month',
-            type: 'FLOAT',
+            name: 'country',
+            type: 'TEXT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'day',
-            type: 'FLOAT',
+            name: 'homepage',
+            type: 'TEXT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'totalAmount',
-            type: 'FLOAT',
+            name: 'topics',
+            type: 'TEXT',
             subtype: 'PrimitiveField',
             figure: 'Decision',
             color: '#be4b15'
           },
           {
-            name: 'bill',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            parentKey: 6,
-            figure: 'Rectangle',
-            color: '#FFD700'
-          },
-          {
-            name: 'address',
-            type: 'documentDataModel:Document',
-            subtype: 'Document',
-            parentKey: 6,
-            figure: 'Rectangle',
-            color: '#FFD700'
-          },
-          {
-            name: 'purchaseLineArray',
+            name: 'artifactRefArray',
             type: 'documentDataModel:ArrayField',
             subtype: 'Array',
-            parentKey: 6,
+            parentKey: 1,
+            figure: 'Hexagon',
+            color: '#6ea5f8'
+          }
+        ]
+      },
+      {
+        name: 'Artifact',
+        subtype: 'Collection',
+        key: 3,
+        items: [
+          {
+            name: 'artifactId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'artifactTitle',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'authors',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'keywords',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'numRatings',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'sumRatings',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'avgRating',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'venueRef',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ]
+      },
+      {
+        name: 'reviewArray',
+        type: 'documentDataModel:ArrayField',
+        items: [
+          {
+            name: 'review',
+            type: 'documentDataModel:Document',
+            subtype: 'Document',
+            figure: 'Rectangle',
+            color: '#FFD700'
+          }
+        ],
+        subtype: 'Array',
+        parentKey: 4,
+        key: 5,
+        figure: 'Hexagon',
+        color: '#6ea5f8'
+      },
+      {
+        name: 'review',
+        type: 'documentDataModel:Document',
+        items: [
+          {
+            name: 'reviewId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'reviewTitle',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'body',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'rating',
+            type: 'FLOAT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'artifactRef',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Document',
+        parentKey: 5,
+        key: 6,
+        figure: 'Rectangle',
+        color: '#FFD700'
+      },
+      {
+        name: 'venueRefArray',
+        type: 'documentDataModel:ArrayField',
+        items: [
+          {
+            name: 'venueRef',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Array',
+        parentKey: 4,
+        key: 7,
+        figure: 'Hexagon',
+        color: '#6ea5f8'
+      },
+      {
+        name: 'artifactRefArray',
+        type: 'documentDataModel:ArrayField',
+        items: [
+          {
+            name: 'artifactRef',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          }
+        ],
+        subtype: 'Array',
+        parentKey: 4,
+        key: 8,
+        figure: 'Hexagon',
+        color: '#6ea5f8'
+      },
+      {
+        name: 'User',
+        subtype: 'Collection',
+        key: 4,
+        items: [
+          {
+            name: 'userId',
+            type: 'ID',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'userName',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'userEmail',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'areasOfExpertise',
+            type: 'TEXT',
+            subtype: 'PrimitiveField',
+            figure: 'Decision',
+            color: '#be4b15'
+          },
+          {
+            name: 'artifactRefArray',
+            type: 'documentDataModel:ArrayField',
+            subtype: 'Array',
+            parentKey: 4,
+            figure: 'Hexagon',
+            color: '#6ea5f8'
+          },
+          {
+            name: 'venueRefArray',
+            type: 'documentDataModel:ArrayField',
+            subtype: 'Array',
+            parentKey: 4,
+            figure: 'Hexagon',
+            color: '#6ea5f8'
+          },
+          {
+            name: 'reviewArray',
+            type: 'documentDataModel:ArrayField',
+            subtype: 'Array',
+            parentKey: 4,
             figure: 'Hexagon',
             color: '#6ea5f8'
           }
@@ -500,14 +463,11 @@ export default {
     ]
     const linkDataArray = [
       { to: 1, from: 2 },
-      { to: 2, from: 3 },
       { to: 4, from: 5 },
-      { to: 6, from: 7 },
-      { to: 7, from: 8 },
-      { to: 6, from: 9 },
-      { to: 6, from: 10 }
+      { to: 5, from: 6 },
+      { to: 4, from: 7 },
+      { to: 4, from: 8 }
     ]
-
     this.myDiagram.linkTemplate = $(
       go.Link,
       {

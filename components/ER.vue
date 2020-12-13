@@ -431,15 +431,10 @@ export default {
         routing: go.Link.AvoidsNodes,
         curve: go.Link.JumpOver
       },
-      // $(
-      //  go.Shape, // the link shape
-      //  { stroke: '#303B45', strokeWidth: 2.5 }
-      // ),
       $(
         go.Shape, // the link's path shape
         { isPanelMain: true, stroke: 'parcial' },
         new go.Binding('stroke', 'participacion', (f) => {
-          console.log(f)
           return f === '' ? 'parcial' : 'total'
         }),
         new go.Binding(
@@ -643,7 +638,7 @@ export default {
             type: 'select',
             choices(node, propName) {
               if (Array.isArray(node.data.choices)) return node.data.choices
-              return ['text', 'number']
+              return ['text', 'number', 'timestamp', 'boolean', 'date']
             }
           },
           dataSize: {
