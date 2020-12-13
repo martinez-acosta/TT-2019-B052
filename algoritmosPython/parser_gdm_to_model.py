@@ -124,13 +124,10 @@ def main():
             ln = lines[i+count].split()
            
             alias = gdm.Alias(name=ln[3])
-            refs = gdm.gdmLang.Reference()
-            refAlias = gdm.Alias(name=ln[1].split(".")[0])
-
-            prueba = entity.features
-
+            refs = [gdm.Reference(name="hola")]
+            refAlias = query.from_.alias
             
-            including = gdm.Inclusion(alias=alias, refAlias=refAlias,refs=refs)
+            including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
 
             query.inclusions.append(including)
             model.queries.append(query)
