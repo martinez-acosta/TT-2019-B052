@@ -24,6 +24,48 @@ def getEntity(model, name):
 
     return entity
 
+def getRefs(entity,feature_name):
+    refs = []
+    for item in entity.features.items:
+        if item.name == feature_name:
+            refs.append(item)
+            break
+    return refs
+
+def getRefAliasFromQuery(query,reference):
+    refAlias = ''
+    #Obtener la referencia en la query
+    #continue
+    if not reference == query.from_.alias.name:
+        for item in query.inclusions.items:
+            if item.alias.name == reference:
+                refAlias = item.alias
+                break
+    else:
+        refAlias = query.from_.alias
+    return refAlias
+
+def getAttributeFromEntity(model, query, reference,attributeReference):
+    feature = ''
+    # Obtener el atributo de la entidad X por medio de una referencia en query
+    
+    # Obtenemos la entidad por su referencia
+    # Si no está en el elemento from de la query, es una inclusión
+    if not reference == query.from_.alias.name:
+        for item in query.inclusions.items:
+            if item.alias.name == reference:
+                # FALTA OBTENER LA ENTIDAD
+                entity = item.alias
+                break
+    else:
+        entity = query.from_.entity
+        for item in entity.features.items:
+            if item.name == attributeReference:
+                feature = item
+                break
+    
+    return feature
+
 def populateEntity(model, lines, i):
     line = lines[i]
     name = line.split()[1]
@@ -124,14 +166,48 @@ def main():
             ln = lines[i+count].split()
            
             alias = gdm.Alias(name=ln[3])
-            refs = [entity.features.items[6]]
+            refs = getRefs(entity,ln[1].split(".")[1])            
             refAlias = query.from_.alias
             
             including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
 
-            query.inclusions.append(including)
-            model.queries.append(query)
-            saveModel(model)
+            query.inclusions.append(including) #####
+            model.queries.append(query) #####
+
+            # Elemento select 
+            start_query = lines[i:]
+            for j in range(len(start_query)):
+                line = start_query[j]
+                tmp = 1
+                
+                while not "select " in start_query[j+tmp]:
+                    tmp += 1
+                # Obtenemos todos las cadenas select
+                start_select = start_query[j+tmp:]
+                tmp = 1
+                while not "from " in start_select[tmp]:
+                    tmp += 1
+                start_select = start_select[0:tmp]
+                start_select = [s.replace(',', '').replace('\n', '').replace('select','') for s in start_select]
+
+                elements = []
+                for line in start_select:                    
+                    x = line.split()
+                    elements = elements + x
+                
+                for element in elements:
+                    reference = element.split(".")[0]
+                    attributeReference = element.split(".")[1]
+                    refAlias = getRefAliasFromQuery(query,reference)
+                    attribute = getAttributeFromEntity(model, query, reference,attributeReference)
+                    projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute)
+                    query.projections.append(projection)
+                    saveModel(model)
+                    continue
+                
+                continue
+
+            
             continue
             model.queries.append(query)
     saveModel(model)
