@@ -91,7 +91,7 @@ def main():
             entity = gdm.Entity(name=line.split()[1])
             model.entities.append(entity)
 
-    # Parseamos el documento
+    # Parseamos el documento para agregar llenar las entidades
     for i in range(len(lines)):
         line = lines[i]
         
@@ -103,9 +103,27 @@ def main():
         if "entity" in line:
             populateEntity(model, lines, i)
         
+        
+            
+    
+    # Parseamos el documento para generar las consultas
+    for i in range(len(lines)):
+        line = lines[i]
         # Si hay una consulta
         if "query" in line:
-            
+            count = 1
+            query = gdm.Query(name=line.split()[1])
+            # Creamos el elemento from
+            while not "from " in lines[i+count]:
+                count += 1    
+            ln = lines[i+count].split()
+            from_ = gdm.From(entity=getEntity(model,ln[1]),alias=gdm.Alias(ln[3])) 
+
+            # Creamos el elemento including
+            while not "from " in lines[i+count]:
+                count += 1    
+            ln = lines[i+count].split()
+            including = gdm.Inclusion()
             continue
     saveModel(model)
 
