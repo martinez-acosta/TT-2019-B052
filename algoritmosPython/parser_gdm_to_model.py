@@ -124,7 +124,7 @@ def main():
             ln = lines[i+count].split()
            
             alias = gdm.Alias(name=ln[3])
-            refs = [gdm.Reference(name="hola")]
+            refs = [entity.features.items[6]]
             refAlias = query.from_.alias
             
             including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
