@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <gdmLang:Model xmlns:xmi="http://www.omg.org/XMI" xmlns:gdmLang="http://www.unican.es/istr/mortadelo/gdm/lang/GdmLang" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmi:version="2.0">
   <entities xsi:type="gdmLang:Entity" name="User">
-    <features xsi:type="gdmLang:Attribute" unique="true" name="userId" type="ID"/>
+    <features xsi:type="gdmLang:Attribute" name="userId" type="ID" unique="true"/>
     <features xsi:type="gdmLang:Attribute" name="userName" type="TEXT"/>
     <features xsi:type="gdmLang:Attribute" name="userEmail" type="TEXT"/>
     <features xsi:type="gdmLang:Attribute" type="TEXT" name="areasOfExpertise" cardinality="*"/>
@@ -10,7 +10,7 @@
     <features xsi:type="gdmLang:Reference" entity="//@entities.1" name="likesVenue" cardinality="*"/>
   </entities>
   <entities xsi:type="gdmLang:Entity" name="Venue">
-    <features xsi:type="gdmLang:Attribute" unique="true" name="venueId" type="ID"/>
+    <features xsi:type="gdmLang:Attribute" name="venueId" type="ID" unique="true"/>
     <features xsi:type="gdmLang:Attribute" name="venueName" type="TEXT"/>
     <features xsi:type="gdmLang:Attribute" name="year" type="NUMBER"/>
     <features xsi:type="gdmLang:Attribute" name="country" type="TEXT"/>
@@ -19,7 +19,7 @@
     <features xsi:type="gdmLang:Reference" entity="//@entities.2" name="artifacts" cardinality="*"/>
   </entities>
   <entities xsi:type="gdmLang:Entity" name="Artifact">
-    <features xsi:type="gdmLang:Attribute" unique="true" name="artifactId" type="ID"/>
+    <features xsi:type="gdmLang:Attribute" name="artifactId" type="ID" unique="true"/>
     <features xsi:type="gdmLang:Attribute" name="artifactTitle" type="TEXT"/>
     <features xsi:type="gdmLang:Attribute" type="TEXT" name="authors" cardinality="*"/>
     <features xsi:type="gdmLang:Attribute" type="TEXT" name="keywords" cardinality="*"/>
@@ -29,19 +29,30 @@
     <features xsi:type="gdmLang:Reference" entity="//@entities.1" name="venue" cardinality="1"/>
   </entities>
   <entities xsi:type="gdmLang:Entity" name="Review">
-    <features xsi:type="gdmLang:Attribute" unique="true" name="reviewId" type="ID"/>
+    <features xsi:type="gdmLang:Attribute" name="reviewId" type="ID" unique="true"/>
     <features xsi:type="gdmLang:Attribute" name="reviewTitle" type="TEXT"/>
     <features xsi:type="gdmLang:Attribute" name="body" type="TEXT"/>
     <features xsi:type="gdmLang:Attribute" name="rating" type="NUMBER"/>
     <features xsi:type="gdmLang:Reference" entity="//@entities.2" name="artifact" cardinality="1"/>
   </entities>
-  <queries xsi:type="gdmLang:Query" name="Q1_artifactsByVenue:">
-    <from_ xsi:type="gdmLang:From" entity="//@entities.1">
-      <alias xsi:type="gdmLang:Alias" name="venue"/>
-    </from_>
-    <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.0/@from_/@alias" attribute="//@entities.1/@features.1"/>
-    <inclusions xsi:type="gdmLang:Inclusion" refAlias="//@queries.0/@from_/@alias" refs="//@entities.1/@features.6">
-      <alias xsi:type="gdmLang:Alias" name="artifacts"/>
+  <queries xsi:type="gdmLang:Query" name="Q0_reviewsByUser">
+    <inclusions xsi:type="gdmLang:Inclusion" refAlias="//@queries.0/@from_/@alias" refs="//@entities.0/@features.4">
+      <alias xsi:type="gdmLang:Alias" name="reviews"/>
     </inclusions>
+    <inclusions xsi:type="gdmLang:Inclusion" refAlias="//@queries.0/@from_/@alias" refs="//@entities.0/@features.4 //@entities.3/@features.4">
+      <alias xsi:type="gdmLang:Alias" name="artifact"/>
+    </inclusions>
+    <from_ xsi:type="gdmLang:From" entity="//@entities.0">
+      <alias xsi:type="gdmLang:Alias" name="user"/>
+    </from_>
   </queries>
+  <queries xsi:type="gdmLang:Query" name="Q1_artifactsByVenue"/>
+  <queries xsi:type="gdmLang:Query" name="Q2_artifactsByAuthor"/>
+  <queries xsi:type="gdmLang:Query" name="Q3_usersByLikedArtifact"/>
+  <queries xsi:type="gdmLang:Query" name="Q4_expertsByLikedArtifact"/>
+  <queries xsi:type="gdmLang:Query" name="Q5_ratingByArtifact"/>
+  <queries xsi:type="gdmLang:Query" name="Q6_venuesLikedByUser"/>
+  <queries xsi:type="gdmLang:Query" name="Q7_artifactsLikedByUser"/>
+  <queries xsi:type="gdmLang:Query" name="Q8_reviewsByUser"/>
+  <queries xsi:type="gdmLang:Query" name="Q9_artifacts"/>
 </gdmLang:Model>

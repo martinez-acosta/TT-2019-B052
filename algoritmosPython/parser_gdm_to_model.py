@@ -33,12 +33,27 @@ def getQuery(model, name):
 
     return query
 
-def getRefs(entity,feature_name):
+def getRefs(entity,inclusion):
     refs = []
-    for item in entity.features.items:
-        if item.name == feature_name:
-            refs.append(item)
-            break
+    feature_name = inclusion[-1]
+
+    # Si hay una referencia anidada denotadada por más de un "." punto:
+    if inclusion[0].count('.') > 1:
+        ref = inclusion[0].split(".")[1]
+        # primera referencia
+        for item in entity.features.items:
+            if item.name == ref:
+                refs.append(item)
+                # referencia anidada
+                for i in item.entity.features.items:
+                    if i.name == feature_name:
+                        refs.append(i)
+                        break
+    else:
+        for item in entity.features.items:
+            if item.name == feature_name:
+                refs.append(item)
+                break
     return refs
 
 def getRefAliasFromQuery(query,reference):
@@ -158,14 +173,14 @@ def populateQuery(model, lines, i):
 
     for inclusion in inclusions:
         ln = inclusion    
-        alias = gdm.Alias(name=ln[3])
-        refs = getRefs(entity,ln[1].split(".")[1])            
+        alias = gdm.Alias(name=ln[2])
+        refs = getRefs(entity,inclusion)            
         refAlias = query.from_.alias
         
         including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
 
         query.inclusions.append(including)
-
+    saveModel(model)
     for i in range(len(lines)):
         line = lines[i]
         # Si hay una consulta
