@@ -35,7 +35,12 @@ def getQuery(model, name):
 
 def getRefs(entity,inclusion):
     refs = []
-    feature_name = inclusion[-1]
+
+    if inclusion[1] == "as":
+        feature_name = inclusion[0].split(".")[1]
+    else:
+        feature_name = inclusion[-1]
+
 
     # Si hay una referencia anidada denotadada por más de un "." punto:
     if inclusion[0].count('.') > 1:
@@ -77,7 +82,7 @@ def getAttributeFromAliasEntity(query, aliasEntity,attributeReference):
     if not aliasEntity == query.from_.alias.name:
         for inclusion in query.inclusions.items:
             if inclusion.alias.name == aliasEntity:
-                for ref in inclusion.refs:
+                for ref in inclusion.refs:#ERROR QUERY TRES
                     if ref.name == aliasEntity:
                         entity = ref.entity
                         for i in entity.features.items:
@@ -167,6 +172,7 @@ def populateEntity(model, lines, i):
     return
 
 def populateQuery(model, lines, i):
+    start = i
     line = lines[i]
     name = line.split()[1].strip(":")
     query = getQuery(model, name)
@@ -179,6 +185,7 @@ def populateQuery(model, lines, i):
     ln = lines[i+count].split()
     entity = getEntity(model,ln[1])
     query.from_ = gdm.From(entity=entity, alias=gdm.Alias(name=ln[3]))
+    saveModel(model)
 
     ###### Elemento Inclusion ######
     count = 1
@@ -206,6 +213,7 @@ def populateQuery(model, lines, i):
         including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
 
         query.inclusions.append(including)
+    saveModel(model)
     del inclusions
 
     ##### Elementos Select (Projection) ########
@@ -241,7 +249,7 @@ def populateQuery(model, lines, i):
         if " as " in select:
             ln = select.split(".")    
             
-            alias = gdm.Alias(name=ln[2])
+            alias = gdm.Alias(name=ln[2]) #ERROR EN QUERY 2
             attribute = getRefs(entity,inclusion)            
             refAlias = query.from_.alias
             
@@ -256,19 +264,20 @@ def populateQuery(model, lines, i):
             
             projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute)
             query.projections.append(projection)
+    saveModel(model)
     del selects
 
     ##### Elemento Condition (AndConjuction) #########
     count = 1
-    while not "where " in lines[i+count]:
+    while not "where " in lines[start+count]:
         count += 1
     # indicamos inicio de la sección de los elementos condition
-    conditions = [lines[i+count]]
+    conditions = [lines[start+count]]
 
     # obtenemos fin de la sección de los elementos condition
     count += 1
-    while lines[i+count].strip():
-        conditions.append(lines[i+count])
+    while lines[start+count].strip():
+        conditions.append(lines[start+count])
         count += 1
 
     conditions = [s.replace('\n', '').split() for s in conditions]
@@ -283,11 +292,11 @@ def populateQuery(model, lines, i):
         right = getCondition(query, conditions[1])
         
         condition = gdm.AndConjunction(left=left, right=right)
-
+    
     query.condition = condition
+    saveModel(model)
     del conditions
 
-    saveModel(model)
     return
 
 def main():
@@ -319,10 +328,12 @@ def main():
         if "entity" in line:
             populateEntity(model, lines, i)
 
+    # Parseamos el documento para agregar llenar las consultas
+    for i in range(len(lines)):
+        line = lines[i]
         # Si es una consulta            
         if "query" in line:
             populateQuery(model,lines,i)
-            continue
 
     saveModel(model)
 
