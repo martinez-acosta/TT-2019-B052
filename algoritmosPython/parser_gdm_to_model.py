@@ -56,29 +56,29 @@ def getRefs(entity,inclusion):
                 break
     return refs
 
-def getRefAliasFromQuery(query,reference):
+def getRefAliasFromQuery(query, aliasEntity):
     refAlias = ''
     #Obtener la referencia en la query
-    if not reference == query.from_.alias.name:
+    if not aliasEntity == query.from_.alias.name:
         for item in query.inclusions.items:
-            if item.alias.name == reference:
+            if item.alias.name == aliasEntity:
                 refAlias = item.alias
                 break
     else:
         refAlias = query.from_.alias
     return refAlias
 
-def getAttributeFromEntity(model, query, reference,attributeReference):
+def getAttributeFromAliasEntity(query, aliasEntity,attributeReference):
     feature = ''
     # Obtener el atributo de la entidad X por medio de una referencia en query
     
     # Obtenemos la entidad por su referencia
     # Si no está en el elemento from de la query, es una inclusión
-    if not reference == query.from_.alias.name:
+    if not aliasEntity == query.from_.alias.name:
         for inclusion in query.inclusions.items:
-            if inclusion.alias.name == reference:
+            if inclusion.alias.name == aliasEntity:
                 for ref in inclusion.refs:
-                    if ref.name == reference:
+                    if ref.name == aliasEntity:
                         entity = ref.entity
                         for i in entity.features.items:
                             if i.name == attributeReference:
@@ -92,6 +92,29 @@ def getAttributeFromEntity(model, query, reference,attributeReference):
                 break
     
     return feature
+
+def getCondition(query, booleanCondition):
+    condition = ''
+    aliasEntity = booleanCondition[1].split(".")[0]
+    attributeOfAliasEntity = booleanCondition[1].split(".")[1]
+
+    attribute = getAttributeFromAliasEntity(query,aliasEntity,attributeOfAliasEntity)
+    refAlias = getRefAliasFromQuery(query,aliasEntity)
+    
+    selection = gdm.AttributeSelection(attribute=attribute, refAlias=refAlias)
+    
+    if booleanCondition[2] == '=':
+        condition = gdm.Equality(value='?', selection=selection)
+    elif booleanCondition[2] == '>':
+        condition = gdm.MoreThan(value='?', selection=selection)
+    elif booleanCondition[2] == '>=':
+        condition = gdm.MoreThanOrEqual(value='?', selection=selection)
+    elif booleanCondition[2] == '<':
+        condition = gdm.LessThan(value='?', selection=selection)
+    elif booleanCondition[2] == '<=':
+        condition = gdm.LessThanOrEqual(value='?', selection=selection)
+
+    return condition
 
 def populateEntity(model, lines, i):
     line = lines[i]
@@ -183,7 +206,8 @@ def populateQuery(model, lines, i):
         including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
 
         query.inclusions.append(including)
-    
+    del inclusions
+
     ##### Elementos Select (Projection) ########
     count = 1
     while not "select " in lines[i+count]:
@@ -227,54 +251,45 @@ def populateQuery(model, lines, i):
             
             aliasEntity = ln[0]
             attributeOfAliasEntity = ln[1]
-            attribute = getAttributeFromEntity(model, query, aliasEntity,attributeOfAliasEntity)
+            attribute = getAttributeFromAliasEntity(query, aliasEntity,attributeOfAliasEntity)
             refAlias = getRefAliasFromQuery(query,aliasEntity)
             
             projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute)
             query.projections.append(projection)
-            saveModel(model)
+    del selects
 
-    ##### Elemento Condition #########
+    ##### Elemento Condition (AndConjuction) #########
+    count = 1
+    while not "where " in lines[i+count]:
+        count += 1
+    # indicamos inicio de la sección de los elementos condition
+    conditions = [lines[i+count]]
+
+    # obtenemos fin de la sección de los elementos condition
+    count += 1
+    while lines[i+count].strip():
+        conditions.append(lines[i+count])
+        count += 1
+
+    conditions = [s.replace('\n', '').split() for s in conditions]
+
+    # Solo puede haber máximo dos condiciones:
+    # Si solo hay una condición...
+    if len(conditions) == 1:
+        left = getCondition(query, conditions[0])
+        condition = gdm.AndConjunction(left=left)
+    else:
+        left = getCondition(query, conditions[0])
+        right = getCondition(query, conditions[1])
+        
+        condition = gdm.AndConjunction(left=left, right=right)
+
+    query.condition = condition
+    del conditions
+
     saveModel(model)
-    for i in range(len(lines)):
-        line = lines[i]
-        # Si hay una consulta
-        if "query" in line:
-            count = 1
-            name = line.split()[1].strip(":")
-            query = getQuery(model,name)
-            
-            # Elemento select 
-            start_query = lines[i:]
-            for j in range(len(start_query)):
-                line = start_query[j]
-                tmp = 1
-                
-                while not "select " in start_query[j+tmp]:
-                    tmp += 1
-                # Obtenemos todos las cadenas select
-                start_select = start_query[j+tmp:]
-                tmp = 1
-                while not "from " in start_select[tmp]:
-                    tmp += 1
-                start_select = start_select[0:tmp]
-                start_select = [s.replace(',', '').replace('\n', '').replace('select','') for s in start_select]
-
-                elements = []
-                for line in start_select:                    
-                    x = line.split()
-                    elements = elements + x
-                
-                for element in elements:
-                    reference = element.split(".")[0]
-                    attributeReference = element.split(".")[1]
-                    refAlias = getRefAliasFromQuery(query,reference)
-                    attribute = getAttributeFromEntity(model, query, reference,attributeReference)
-                    projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute)
-                    query.projections.append(projection)
-                    saveModel(model)
-                    continue
     return
+
 def main():
 
     # Creamos el modelo GDM
