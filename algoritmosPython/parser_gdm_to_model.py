@@ -87,8 +87,14 @@ def getAttributeFromAliasEntity(query, aliasEntity,attributeReference):
                         entity = ref.entity
                         for i in entity.features.items:
                             if i.name == attributeReference:
-                                feature = i
-                                break
+                                feature = i            
+                    if feature == '':
+                        for item in ref.entity.features.items:
+                            if item.name == attributeReference:
+                                feature = item
+
+
+
     else:
         entity = query.from_.entity
         for item in entity.features.items:
