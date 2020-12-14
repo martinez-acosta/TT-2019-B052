@@ -59,7 +59,6 @@ def getRefs(entity,inclusion):
 def getRefAliasFromQuery(query,reference):
     refAlias = ''
     #Obtener la referencia en la query
-    #continue
     if not reference == query.from_.alias.name:
         for item in query.inclusions.items:
             if item.alias.name == reference:
@@ -76,11 +75,15 @@ def getAttributeFromEntity(model, query, reference,attributeReference):
     # Obtenemos la entidad por su referencia
     # Si no está en el elemento from de la query, es una inclusión
     if not reference == query.from_.alias.name:
-        for item in query.inclusions.items:
-            if item.alias.name == reference:
-                # FALTA OBTENER LA ENTIDAD
-                entity = item.alias
-                break
+        for inclusion in query.inclusions.items:
+            if inclusion.alias.name == reference:
+                for ref in inclusion.refs:
+                    if ref.name == reference:
+                        entity = ref.entity
+                        for i in entity.features.items:
+                            if i.name == attributeReference:
+                                feature = i
+                                break
     else:
         entity = query.from_.entity
         for item in entity.features.items:
@@ -180,6 +183,58 @@ def populateQuery(model, lines, i):
         including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
 
         query.inclusions.append(including)
+    
+    ##### Elementos Select (Projection) ########
+    count = 1
+    while not "select " in lines[i+count]:
+        count += 1
+    # indicamos inicio de la sección de los elementos select
+    selects = [lines[i+count]]
+
+    # obtenemos fin de la sección de los elementos select
+    count += 1
+    while not "from" in lines[i+count]:
+        selects.append(lines[i+count])
+        count += 1
+
+    selects = [s.replace(',', '').replace('\n', '').replace('select ','') for s in selects]
+    selects = [s.split() for s in selects]
+    selects = [item for sublist in selects for item in sublist]
+
+    s = []
+    for i in range(len(selects)):
+        # Revisamos si el siguiente elemento contiene la palabra "as"
+        if i+1 < len(selects) and selects[i+1] == "as":
+            s.append(selects[i] + " " +selects[i+1] + " " + selects[i+2])
+            i += 2
+        else:
+            s.append(selects[i])
+    selects = s
+    del s
+
+
+    for select in selects:
+        if " as " in select:
+            ln = select.split(".")    
+            
+            alias = gdm.Alias(name=ln[2])
+            attribute = getRefs(entity,inclusion)            
+            refAlias = query.from_.alias
+            
+            projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute)
+        else:
+            ln = select.split(".")    
+            
+            aliasEntity = ln[0]
+            attributeOfAliasEntity = ln[1]
+            attribute = getAttributeFromEntity(model, query, aliasEntity,attributeOfAliasEntity)
+            refAlias = getRefAliasFromQuery(query,aliasEntity)
+            
+            projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute)
+            query.projections.append(projection)
+            saveModel(model)
+
+    ##### Elemento Condition #########
     saveModel(model)
     for i in range(len(lines)):
         line = lines[i]
@@ -189,31 +244,6 @@ def populateQuery(model, lines, i):
             name = line.split()[1].strip(":")
             query = getQuery(model,name)
             
-            # Elemento Inclusion
-            # Elemento Select (Projection)
-            # Elemento Condition
-            # Elemento Selection
-            
-            # # Creamos el elemento from
-            # while not "from " in lines[i+count]:
-            #     count += 1    
-            # ln = lines[i+count].split()
-            # entity = getEntity(model,ln[1])
-            # query.from_ = gdm.From(entity=entity, alias=gdm.Alias(name=ln[3]))
-            
-            # Creamos el elemento including
-            # while not "including " in lines[i+count]:
-            #     count += 1    
-            # ln = lines[i+count].split()
-           
-            # alias = gdm.Alias(name=ln[3])
-            # refs = getRefs(entity,ln[1].split(".")[1])            
-            # refAlias = query.from_.alias
-            
-            # including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
-
-            # query.inclusions.append(including) #####
-
             # Elemento select 
             start_query = lines[i:]
             for j in range(len(start_query)):

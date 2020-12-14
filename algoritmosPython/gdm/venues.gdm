@@ -55,16 +55,6 @@ entity Review {
 /* Queries definition */
 /**********************/
 
-query Q0_reviewsByUser:
-  select user.userId,
-         reviews.reviewId, reviews.reviewTitle, reviews.body,
-         artifact.artifactId, artifact.artifactTitle
-  from User as user
-  including user.reviews as reviews,
-            user.reviews.artifact as artifact
-  where user.userId = "?"
-    and reviews.rating > "?"
-
 query Q1_artifactsByVenue:
   select venue.venueName, venue.year,
          artifacts.artifactId, artifacts.artifactTitle, artifacts.avgRating,
