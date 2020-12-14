@@ -24,6 +24,15 @@ def getEntity(model, name):
 
     return entity
 
+def getQuery(model, name):
+    query = ''
+    for item in model.queries.items:
+        if item.name == name:
+            query = item
+            break
+
+    return query
+
 def getRefs(entity,feature_name):
     refs = []
     for item in entity.features.items:
@@ -116,63 +125,79 @@ def populateEntity(model, lines, i):
 
     return
 
-def main():
+def populateQuery(model, lines, i):
+    line = lines[i]
+    name = line.split()[1].strip(":")
+    query = getQuery(model, name)
+    
+    
+    ###### Elemento From ######
+    count = 1
+    while not "from " in lines[i+count]:
+        count += 1    
+    ln = lines[i+count].split()
+    entity = getEntity(model,ln[1])
+    query.from_ = gdm.From(entity=entity, alias=gdm.Alias(name=ln[3]))
 
-    # Creamos el modelo GDM
-    model = gdm.Model()
-    
-    #userEntity = gdm.Entity(name="User")
-    #venuesModel.entities.append(userEntity)
-    
-    input_file = open('gdm/venues.gdm', 'r') 
-    lines = input_file.readlines()
-    
-    # Primero creamos las entidades, porque las necesitamos para crear las referencias
-    for line in lines:
-        if "entity " in line:
-            entity = gdm.Entity(name=line.split()[1])
-            model.entities.append(entity)
+    ###### Elemento Inclusion ######
+    count = 1
+    while not "including " in lines[i+count]:
+        count += 1
+    # indicamos inicio de la sección del elemento inclusion
+    inclusions = [lines[i+count]]
 
-    # Parseamos el documento para agregar llenar las entidades
-    for i in range(len(lines)):
-        line = lines[i]
+    # obtenemos fin de la sección del elemento inclusion
+    count += 1
+    while not "where" in lines[i+count]:
+        inclusions.append(lines[i+count])
+        count += 1
+
+    inclusions = [s.replace(',', '').replace('\n', '').replace('including','') for s in inclusions]
+    inclusions = [s.split() for s in inclusions]
+
+
+    for inclusion in inclusions:
+        ln = inclusion    
+        alias = gdm.Alias(name=ln[3])
+        refs = getRefs(entity,ln[1].split(".")[1])            
+        refAlias = query.from_.alias
         
-        # Ignoramos los comentarios
-        if "/*" in line or "* " in line or "*/" in line:
-            continue
-        
-        # Si hay una entidad
-        if "entity" in line:
-            populateEntity(model, lines, i)            
-    
-    # Parseamos el documento para generar las consultas
+        including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
+
+        query.inclusions.append(including)
+
     for i in range(len(lines)):
         line = lines[i]
         # Si hay una consulta
         if "query" in line:
             count = 1
-            query = gdm.Query(name=line.split()[1])
+            name = line.split()[1].strip(":")
+            query = getQuery(model,name)
             
-            # Creamos el elemento from
-            while not "from " in lines[i+count]:
-                count += 1    
-            ln = lines[i+count].split()
-            entity = getEntity(model,ln[1])
-            query.from_ = gdm.From(entity=entity, alias=gdm.Alias(name=ln[3]))
+            # Elemento Inclusion
+            # Elemento Select (Projection)
+            # Elemento Condition
+            # Elemento Selection
+            
+            # # Creamos el elemento from
+            # while not "from " in lines[i+count]:
+            #     count += 1    
+            # ln = lines[i+count].split()
+            # entity = getEntity(model,ln[1])
+            # query.from_ = gdm.From(entity=entity, alias=gdm.Alias(name=ln[3]))
             
             # Creamos el elemento including
-            while not "including " in lines[i+count]:
-                count += 1    
-            ln = lines[i+count].split()
+            # while not "including " in lines[i+count]:
+            #     count += 1    
+            # ln = lines[i+count].split()
            
-            alias = gdm.Alias(name=ln[3])
-            refs = getRefs(entity,ln[1].split(".")[1])            
-            refAlias = query.from_.alias
+            # alias = gdm.Alias(name=ln[3])
+            # refs = getRefs(entity,ln[1].split(".")[1])            
+            # refAlias = query.from_.alias
             
-            including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
+            # including = gdm.Inclusion(alias=alias, refAlias=refAlias, refs=refs)
 
-            query.inclusions.append(including) #####
-            model.queries.append(query) #####
+            # query.inclusions.append(including) #####
 
             # Elemento select 
             start_query = lines[i:]
@@ -204,12 +229,41 @@ def main():
                     query.projections.append(projection)
                     saveModel(model)
                     continue
-                
-                continue
+    return
+def main():
 
-            
-            continue
+    # Creamos el modelo GDM
+    model = gdm.Model()
+    
+    input_file = open('gdm/venues.gdm', 'r') 
+    lines = input_file.readlines()
+    
+    # Primero creamos las entidades y las consultas, porque las necesitamos para crear las referencias
+    for line in lines:
+        if "entity " in line:
+            entity = gdm.Entity(name=line.split()[1])
+            model.entities.append(entity)
+        if "query " in line:
+            query = gdm.Query(name=line.split()[1].strip(":"))
             model.queries.append(query)
+
+    # Parseamos el documento para agregar llenar las entidades
+    for i in range(len(lines)):
+        line = lines[i]
+        
+        # Ignoramos los comentarios
+        if "/*" in line or "* " in line or "*/" in line:
+            continue
+        
+        # Si es una entidad
+        if "entity" in line:
+            populateEntity(model, lines, i)
+
+        # Si es una consulta            
+        if "query" in line:
+            populateQuery(model,lines,i)
+            continue
+
     saveModel(model)
 
 
