@@ -244,8 +244,11 @@ def populateQuery(model, lines, i):
         # Revisamos si el siguiente elemento contiene la palabra "as"
         if i+1 < len(selects) and selects[i+1] == "as":
             s.append(selects[i] + " " +selects[i+1] + " " + selects[i+2])
-            i += 2
-        else:
+              
+            del selects[i+2]
+            del selects[i+1]
+            del selects[i]
+        elif i+1 < len(selects):
             s.append(selects[i])
     selects = s
     del s
@@ -255,11 +258,12 @@ def populateQuery(model, lines, i):
         if " as " in select:
             ln = select.split(".")    
             
-            alias = gdm.Alias(name=ln[2]) #ERROR EN QUERY 2
-            attribute = getRefs(entity,inclusion)            
+            alias = name=ln[-1].split()[-1] #ERROR EN QUERY 2
+            attribute = getRefs(entity,select.split())            
+            attribute = attribute[0]
             refAlias = query.from_.alias
             
-            projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute)
+            projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute, alias=alias)
         else:
             ln = select.split(".")    
             
