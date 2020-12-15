@@ -1,5 +1,5 @@
 import langs.gdmLang as gdm
-import lagns.ddmLang as ddm
+import langs.ddmLang as ddm
 from pyecore.resources import ResourceSet, URI
 from pyecore.resources.xmi import XMIResource
 
@@ -15,8 +15,9 @@ def loadModel(input_file):
 
 def main():
     
-    model = loadModel("Static_model_test.xmi")
-    hola = "hola"
+    gdmModel = loadModel("Static_model_test.xmi")
+    ddmModel = ddm.DocumentDataModel()
+
 
 if __name__ == '__main__':
     main()
