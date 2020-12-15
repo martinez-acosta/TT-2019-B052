@@ -125,3 +125,4 @@ query Q9_artifacts:
   from Artifact as artifact
   including artifact.venue as venue
   where artifact.artifactId = "?"
+  

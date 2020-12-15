@@ -124,3 +124,4 @@ query Q6_productInformation:
   including product.category as category,
             product.supplier as supplier
   where product.productCode = "?"
+  

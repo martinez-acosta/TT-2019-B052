@@ -1,9 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <gdmLang:Model xmlns:xmi="http://www.omg.org/XMI" xmlns:gdmLang="http://www.unican.es/istr/mortadelo/gdm/lang/GdmLang" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmi:version="2.0">
   <queries xsi:type="gdmLang:Query" name="Q1_artifactsByVenue">
-    <from_ xsi:type="gdmLang:From" entity="//@entities.1">
-      <alias xsi:type="gdmLang:Alias" name="venue"/>
-    </from_>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.0/@from_/@alias" attribute="//@entities.1/@features.1"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.0/@from_/@alias" attribute="//@entities.1/@features.2"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.0/@inclusions.0/@alias" attribute="//@entities.2/@features.0"/>
@@ -22,11 +19,11 @@
     <inclusions xsi:type="gdmLang:Inclusion" refs="//@entities.1/@features.6" refAlias="//@queries.0/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="artifacts"/>
     </inclusions>
+    <from_ xsi:type="gdmLang:From" entity="//@entities.1">
+      <alias xsi:type="gdmLang:Alias" name="venue"/>
+    </from_>
   </queries>
   <queries xsi:type="gdmLang:Query" name="Q2_artifactsByAuthor">
-    <from_ xsi:type="gdmLang:From" entity="//@entities.2">
-      <alias xsi:type="gdmLang:Alias" name="artifact"/>
-    </from_>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.1/@from_/@alias" attribute="//@entities.2/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.1/@from_/@alias" attribute="//@entities.2/@features.1"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.1/@from_/@alias" attribute="//@entities.2/@features.6"/>
@@ -40,11 +37,11 @@
     <inclusions xsi:type="gdmLang:Inclusion" refAlias="//@queries.1/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="artifacts"/>
     </inclusions>
+    <from_ xsi:type="gdmLang:From" entity="//@entities.2">
+      <alias xsi:type="gdmLang:Alias" name="artifact"/>
+    </from_>
   </queries>
   <queries xsi:type="gdmLang:Query" name="Q3_usersByLikedArtifact">
-    <from_ xsi:type="gdmLang:From" entity="//@entities.0">
-      <alias xsi:type="gdmLang:Alias" name="user"/>
-    </from_>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.2/@from_/@alias" attribute="//@entities.0/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.2/@from_/@alias" attribute="//@entities.0/@features.1"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.2/@from_/@alias" attribute="//@entities.0/@features.2"/>
@@ -56,11 +53,11 @@
     <inclusions xsi:type="gdmLang:Inclusion" refs="//@entities.0/@features.5" refAlias="//@queries.2/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="artifacts"/>
     </inclusions>
-  </queries>
-  <queries xsi:type="gdmLang:Query" name="Q4_expertsByLikedArtifact">
     <from_ xsi:type="gdmLang:From" entity="//@entities.0">
       <alias xsi:type="gdmLang:Alias" name="user"/>
     </from_>
+  </queries>
+  <queries xsi:type="gdmLang:Query" name="Q4_expertsByLikedArtifact">
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.3/@from_/@alias" attribute="//@entities.0/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.3/@from_/@alias" attribute="//@entities.0/@features.3"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.3/@from_/@alias" attribute="//@entities.0/@features.1"/>
@@ -76,11 +73,11 @@
     <inclusions xsi:type="gdmLang:Inclusion" refs="//@entities.0/@features.5" refAlias="//@queries.3/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="artifacts"/>
     </inclusions>
+    <from_ xsi:type="gdmLang:From" entity="//@entities.0">
+      <alias xsi:type="gdmLang:Alias" name="user"/>
+    </from_>
   </queries>
   <queries xsi:type="gdmLang:Query" name="Q5_ratingByArtifact">
-    <from_ xsi:type="gdmLang:From" entity="//@entities.2">
-      <alias xsi:type="gdmLang:Alias" name="artifact"/>
-    </from_>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.4/@from_/@alias" attribute="//@entities.2/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.4/@from_/@alias" attribute="//@entities.2/@features.6"/>
     <condition xsi:type="gdmLang:AndConjunction">
@@ -91,11 +88,11 @@
     <inclusions xsi:type="gdmLang:Inclusion" refAlias="//@queries.4/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="venues"/>
     </inclusions>
+    <from_ xsi:type="gdmLang:From" entity="//@entities.2">
+      <alias xsi:type="gdmLang:Alias" name="artifact"/>
+    </from_>
   </queries>
   <queries xsi:type="gdmLang:Query" name="Q6_venuesLikedByUser">
-    <from_ xsi:type="gdmLang:From" entity="//@entities.0">
-      <alias xsi:type="gdmLang:Alias" name="user"/>
-    </from_>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.5/@from_/@alias" attribute="//@entities.0/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.5/@inclusions.0/@alias" attribute="//@entities.1/@features.1"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.5/@inclusions.0/@alias" attribute="//@entities.1/@features.2"/>
@@ -109,11 +106,11 @@
     <inclusions xsi:type="gdmLang:Inclusion" refs="//@entities.0/@features.6" refAlias="//@queries.5/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="venues"/>
     </inclusions>
-  </queries>
-  <queries xsi:type="gdmLang:Query" name="Q7_artifactsLikedByUser">
     <from_ xsi:type="gdmLang:From" entity="//@entities.0">
       <alias xsi:type="gdmLang:Alias" name="user"/>
     </from_>
+  </queries>
+  <queries xsi:type="gdmLang:Query" name="Q7_artifactsLikedByUser">
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.6/@from_/@alias" attribute="//@entities.0/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.6/@inclusions.0/@alias" attribute="//@entities.2/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.6/@inclusions.0/@alias" attribute="//@entities.2/@features.1"/>
@@ -133,11 +130,11 @@
     <inclusions xsi:type="gdmLang:Inclusion" refs="//@entities.0/@features.5 //@entities.2/@features.7" refAlias="//@queries.6/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="venue"/>
     </inclusions>
-  </queries>
-  <queries xsi:type="gdmLang:Query" name="Q8_reviewsByUser">
     <from_ xsi:type="gdmLang:From" entity="//@entities.0">
       <alias xsi:type="gdmLang:Alias" name="user"/>
     </from_>
+  </queries>
+  <queries xsi:type="gdmLang:Query" name="Q8_reviewsByUser">
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.7/@from_/@alias" attribute="//@entities.0/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.7/@inclusions.0/@alias" attribute="//@entities.3/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.7/@inclusions.0/@alias" attribute="//@entities.3/@features.1"/>
@@ -158,11 +155,11 @@
     <inclusions xsi:type="gdmLang:Inclusion" refs="//@entities.0/@features.4 //@entities.3/@features.4" refAlias="//@queries.7/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="artifact"/>
     </inclusions>
+    <from_ xsi:type="gdmLang:From" entity="//@entities.0">
+      <alias xsi:type="gdmLang:Alias" name="user"/>
+    </from_>
   </queries>
   <queries xsi:type="gdmLang:Query" name="Q9_artifacts">
-    <from_ xsi:type="gdmLang:From" entity="//@entities.2">
-      <alias xsi:type="gdmLang:Alias" name="artifact"/>
-    </from_>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.8/@from_/@alias" attribute="//@entities.2/@features.0"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.8/@from_/@alias" attribute="//@entities.2/@features.1"/>
     <projections xsi:type="gdmLang:AttributeSelection" refAlias="//@queries.8/@from_/@alias" attribute="//@entities.2/@features.6"/>
@@ -177,40 +174,43 @@
     <inclusions xsi:type="gdmLang:Inclusion" refs="//@entities.2/@features.7" refAlias="//@queries.8/@from_/@alias">
       <alias xsi:type="gdmLang:Alias" name="venue"/>
     </inclusions>
+    <from_ xsi:type="gdmLang:From" entity="//@entities.2">
+      <alias xsi:type="gdmLang:Alias" name="artifact"/>
+    </from_>
   </queries>
   <entities xsi:type="gdmLang:Entity" name="User">
-    <features xsi:type="gdmLang:Attribute" type="ID" unique="true" name="userId"/>
-    <features xsi:type="gdmLang:Attribute" type="TEXT" name="userName"/>
-    <features xsi:type="gdmLang:Attribute" type="TEXT" name="userEmail"/>
-    <features xsi:type="gdmLang:Attribute" cardinality="*" type="TEXT" name="areasOfExpertise"/>
-    <features xsi:type="gdmLang:Reference" cardinality="*" entity="//@entities.3" name="reviews"/>
-    <features xsi:type="gdmLang:Reference" cardinality="*" entity="//@entities.2" name="likesArtifacts"/>
-    <features xsi:type="gdmLang:Reference" cardinality="*" entity="//@entities.1" name="likesVenue"/>
+    <features xsi:type="gdmLang:Attribute" unique="true" name="userId" type="ID"/>
+    <features xsi:type="gdmLang:Attribute" name="userName" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="userEmail" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="areasOfExpertise" type="TEXT" cardinality="*"/>
+    <features xsi:type="gdmLang:Reference" name="reviews" entity="//@entities.3" cardinality="*"/>
+    <features xsi:type="gdmLang:Reference" name="likesArtifacts" entity="//@entities.2" cardinality="*"/>
+    <features xsi:type="gdmLang:Reference" name="likesVenue" entity="//@entities.1" cardinality="*"/>
   </entities>
   <entities xsi:type="gdmLang:Entity" name="Venue">
-    <features xsi:type="gdmLang:Attribute" type="ID" unique="true" name="venueId"/>
-    <features xsi:type="gdmLang:Attribute" type="TEXT" name="venueName"/>
-    <features xsi:type="gdmLang:Attribute" type="NUMBER" name="year"/>
-    <features xsi:type="gdmLang:Attribute" type="TEXT" name="country"/>
-    <features xsi:type="gdmLang:Attribute" type="TEXT" name="homepage"/>
-    <features xsi:type="gdmLang:Attribute" cardinality="*" type="TEXT" name="topics"/>
-    <features xsi:type="gdmLang:Reference" cardinality="*" entity="//@entities.2" name="artifacts"/>
+    <features xsi:type="gdmLang:Attribute" unique="true" name="venueId" type="ID"/>
+    <features xsi:type="gdmLang:Attribute" name="venueName" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="year" type="NUMBER"/>
+    <features xsi:type="gdmLang:Attribute" name="country" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="homepage" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="topics" type="TEXT" cardinality="*"/>
+    <features xsi:type="gdmLang:Reference" name="artifacts" entity="//@entities.2" cardinality="*"/>
   </entities>
   <entities xsi:type="gdmLang:Entity" name="Artifact">
-    <features xsi:type="gdmLang:Attribute" type="ID" unique="true" name="artifactId"/>
-    <features xsi:type="gdmLang:Attribute" type="TEXT" name="artifactTitle"/>
-    <features xsi:type="gdmLang:Attribute" cardinality="*" type="TEXT" name="authors"/>
-    <features xsi:type="gdmLang:Attribute" cardinality="*" type="TEXT" name="keywords"/>
-    <features xsi:type="gdmLang:Attribute" type="NUMBER" name="numRatings"/>
-    <features xsi:type="gdmLang:Attribute" type="NUMBER" name="sumRatings"/>
-    <features xsi:type="gdmLang:Attribute" type="NUMBER" name="avgRating"/>
-    <features xsi:type="gdmLang:Reference" cardinality="1" entity="//@entities.1" name="venue"/>
+    <features xsi:type="gdmLang:Attribute" unique="true" name="artifactId" type="ID"/>
+    <features xsi:type="gdmLang:Attribute" name="artifactTitle" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="authors" type="TEXT" cardinality="*"/>
+    <features xsi:type="gdmLang:Attribute" name="keywords" type="TEXT" cardinality="*"/>
+    <features xsi:type="gdmLang:Attribute" name="numRatings" type="NUMBER"/>
+    <features xsi:type="gdmLang:Attribute" name="sumRatings" type="NUMBER"/>
+    <features xsi:type="gdmLang:Attribute" name="avgRating" type="NUMBER"/>
+    <features xsi:type="gdmLang:Reference" name="venue" entity="//@entities.1" cardinality="1"/>
   </entities>
   <entities xsi:type="gdmLang:Entity" name="Review">
-    <features xsi:type="gdmLang:Attribute" type="ID" unique="true" name="reviewId"/>
-    <features xsi:type="gdmLang:Attribute" type="TEXT" name="reviewTitle"/>
-    <features xsi:type="gdmLang:Attribute" type="TEXT" name="body"/>
-    <features xsi:type="gdmLang:Attribute" type="NUMBER" name="rating"/>
-    <features xsi:type="gdmLang:Reference" cardinality="1" entity="//@entities.2" name="artifact"/>
+    <features xsi:type="gdmLang:Attribute" unique="true" name="reviewId" type="ID"/>
+    <features xsi:type="gdmLang:Attribute" name="reviewTitle" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="body" type="TEXT"/>
+    <features xsi:type="gdmLang:Attribute" name="rating" type="NUMBER"/>
+    <features xsi:type="gdmLang:Reference" name="artifact" entity="//@entities.2" cardinality="1"/>
   </entities>
 </gdmLang:Model>

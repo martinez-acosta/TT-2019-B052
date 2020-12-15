@@ -127,6 +127,6 @@ query Q7_clientPurchasesInYearRange:
   including client.purchases as purchases,
             client.purchases.lines as lines,
             client.purchases.lines.product as product
-  where client.clientId = "?1"
-    and purchases.year = "?2"
-    and purchases.month = "?3"
+  where client.clientId = "?"
+    and purchases.year = "?"
+    and purchases.month = "?"

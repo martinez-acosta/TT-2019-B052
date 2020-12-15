@@ -265,8 +265,6 @@ def populateQuery(model, lines, i):
             
             projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute, alias=alias)
         else:
-            if "Q7" in query.name:
-                hola = "hola"
             ln = select.split(".")    
             aliasEntity = ln[0]
             attributeOfAliasEntity = ln[1]
