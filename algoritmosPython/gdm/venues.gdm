@@ -64,17 +64,17 @@ query Q1_artifactsByVenue:
   where venue.venueName = "?"
     and venue.year > "?"
 
-query Q3_usersByLikedArtifact:
-  select user.userId, user.userName, user.userEmail
-  from User as user
-  including user.likesArtifacts as artifacts
-  where artifacts.artifactId = "?"
-
 query Q2_artifactsByAuthor:
   select artifact.artifactId, artifact.artifactTitle, artifact.avgRating,
          artifact.authors, artifact.keywords, artifact.authors as author
   from Artifact as artifact
   where artifact.authors = "?"
+
+query Q3_usersByLikedArtifact:
+  select user.userId, user.userName, user.userEmail
+  from User as user
+  including user.likesArtifacts as artifacts
+  where artifacts.artifactId = "?"
 
 query Q4_expertsByLikedArtifact:
   select user.userId, user.areasOfExpertise, user.userName, user.userEmail,
@@ -124,3 +124,4 @@ query Q9_artifacts:
   from Artifact as artifact
   including artifact.venue as venue
   where artifact.artifactId = "?"
+  

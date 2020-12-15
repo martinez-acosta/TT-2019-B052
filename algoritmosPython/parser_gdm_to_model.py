@@ -37,7 +37,7 @@ def getRefs(entity,inclusion):
     refs = []
 
     if inclusion[1] == "as":
-        feature_name = inclusion[0].split(".")[1]
+        feature_name = inclusion[0].split(".")[-1]
     else:
         feature_name = inclusion[-1]
 
@@ -248,7 +248,7 @@ def populateQuery(model, lines, i):
             del selects[i+2]
             del selects[i+1]
             del selects[i]
-        elif i+1 < len(selects):
+        elif i+1 <= len(selects):
             s.append(selects[i])
     selects = s
     del s
@@ -258,15 +258,16 @@ def populateQuery(model, lines, i):
         if " as " in select:
             ln = select.split(".")    
             
-            alias = name=ln[-1].split()[-1] #ERROR EN QUERY 2
+            alias = name=ln[-1].split()[-1] 
             attribute = getRefs(entity,select.split())            
             attribute = attribute[0]
             refAlias = query.from_.alias
             
             projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute, alias=alias)
         else:
+            if "Q7" in query.name:
+                hola = "hola"
             ln = select.split(".")    
-            
             aliasEntity = ln[0]
             attributeOfAliasEntity = ln[1]
             attribute = getAttributeFromAliasEntity(query, aliasEntity,attributeOfAliasEntity)
@@ -274,7 +275,7 @@ def populateQuery(model, lines, i):
             
             projection = gdm.AttributeSelection(refAlias=refAlias, attribute=attribute)
             query.projections.append(projection)
-    saveModel(model)
+        saveModel(model)
     del selects
 
     ##### Elemento Condition (AndConjuction) #########
