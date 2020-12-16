@@ -15,14 +15,8 @@ def loadModel(input_file):
 
 def allQueryPaths(me, queries):
     accessTree = ''
-    # Obtenemos las queries en donde aparezca la entidad "me" in el elemento "from_"
+    # Obtenemos las queries en donde aparezca la entidad "me" en el elemento "from_"
     
-    entityToQueries = []
-    for q in queries:
-        if q.from_.entity.name == me.name:
-            entityToQueries.append(q)
-    
-    # Obtenemos todos los elementos Inclusion de cada query en entityToQueries
     
     return accessTree
 
@@ -37,19 +31,30 @@ def main():
     ddmModel = ddm.DocumentDataModel()
 
     # Obtenemos las entidades de los elementos From
-    mainEntities = set()
-    for q in gdmModel.queries:
-        mainEntities.add(q.from_.entity)
+    # mainEntities = gdm.queries.map[q | q.from.entity].toSet    
+    mainEntities = set(map(lambda q: q.from_.entity, gdmModel.queries))
 
-     
-    for me in mainEntities:
-        collection = ddm.Collection(name=me.name,root=ddm.Document(name="root")) # Por cada entidad en mainEntities creamos una colección
-        accessTree = allQueryPaths(me,gdmModel.queries)
-        root = populateDocumentType(collection.root,accessTree)
-        collection.root = root
-        ddmModel.collections.append(collection)
-    
+    # entityToQueries =  mainEntities.map[me | me -> gdm.queries.filter[q | q.from.entity.equals(me)]]
+    entityToQueries = list(map(lambda me: (me, list(filter(lambda q: q.from_.entity.name == me.name, gdmModel.queries))), mainEntities))
+        
+
     hola = "hola"
+    
+    # f1_b = list( map(lambda x: list(map(lambda t: t.strip(), x.split(',', 1))), lst))
+    # Though in most cases you should prefer list comprehensions to map calls:
+    # f1_a = [[t.strip() for t in x.split(',', 1)] for x in lst]
+
+    valor = "hola"
+    
+
+    
+    #for me in mainEntities:
+    #    collection = ddm.Collection(name=me.name,root=ddm.Document(name="root")) # Por cada entidad en mainEntities creamos una colección
+    #    accessTree = allQueryPaths(me,gdmModel.queries)
+    #    root = populateDocumentType(collection.root,accessTree)
+    #    collection.root = root
+    #    ddmModel.collections.append(collection)
+    
     
 
 
