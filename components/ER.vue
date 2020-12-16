@@ -6,7 +6,7 @@
     <v-row no-gutters style="height: 80vh" dense class="ma-0 pa-0">
       <v-col
         v-if="mostrarPaleta"
-        cols="3"
+        cols="2"
         class="white lighten-2 fill-height d-flex flex-column"
       >
         <v-btn
@@ -62,8 +62,62 @@
           </ul>
         </div>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="3">
         <div id="myOverviewDiv"></div>
+        <div v-show="mostrarPaleta" id="myNotes" class="h-50" scrollable>
+          <v-col cols="12">
+            <v-card color="white" max-width="400">
+              <v-card-subtitle class="headline" color>
+                Notas:
+              </v-card-subtitle>
+              <v-card-text>
+                Modelo relacional
+              </v-card-text>
+              <v-card-subtitle class="caption">
+                <v-icon small left>mdi-table-row-height</v-icon>
+                <span class="font-weight-light"
+                  >DataSize: es el tamaño de dato para la transformación a
+                  sentencias SQL, este campo solo acepta valores entre 1 y
+                  255.</span
+                >
+              </v-card-subtitle>
+              <v-card-subtitle class="caption">
+                <v-icon small left>mdi-format-list-bulleted-type</v-icon>
+                <span class="font-weight-light"
+                  >DataType: es el tipo de dato para la transformación a
+                  sentencias SQL, se consideran solo los tipos de datos mas
+                  utilizads en MySQL.</span
+                >
+              </v-card-subtitle>
+              <v-card-subtitle class="caption">
+                <v-icon small left>mdi-null</v-icon>
+                <span class="font-weight-light"
+                  >NotNull: es el indicador para señalar si el atributo puede
+                  ser o no nulo en la transformación a sentencias SQL.</span
+                >
+              </v-card-subtitle>
+              <v-card-subtitle class="caption">
+                <v-icon small left>mdi-debug-step-out</v-icon>
+                <span class="font-weight-light"
+                  >Auto Increment: es el indicador para señalar si el atributo
+                  incrementara su valor de manera automatica en la
+                  transformación a sentencias SQL, esta propiedad solo es tomada
+                  en cuenta para los tipos de datos int y bigint.</span
+                >
+              </v-card-subtitle>
+              <v-card-subtitle>
+                Modelo no relacional
+              </v-card-subtitle>
+              <v-card-subtitle class="caption">
+                <v-icon small left>mdi-group</v-icon>
+                <span class="font-weight-light"
+                  >GDMType: es el tipo de dato que adoptará el atributo en la
+                  tranformación al gdm del modelo NoSQL.</span
+                >
+              </v-card-subtitle>
+            </v-card>
+          </v-col>
+        </div>
       </v-col>
     </v-row>
     <!-- Dialog/modals -->
@@ -600,7 +654,14 @@ export default {
           // Comments and LinkComments are not in any node or link data (yet), so we add them here:
           Comments: { show: false },
           LinkComments: { show: false },
-          cardinality: { show: Inspector.showIfLink },
+          cardinality: {
+            show: Inspector.showIfLink,
+            type: 'select',
+            choices(node, propName) {
+              if (Array.isArray(node.data.choices)) return node.data.choices
+              return ['1', 'N', 'M']
+            }
+          },
           participacion: {
             show: Inspector.showIfLink,
             type: 'select',
@@ -642,7 +703,8 @@ export default {
           },
           dataSize: {
             show: Inspector.showIfNode,
-            type: 'select',
+            type: 'number',
+            defaultValue: 1,
             choices(node, propName) {
               if (Array.isArray(node.data.choices)) return node.data.choices
               return [...Array(256).keys()]
