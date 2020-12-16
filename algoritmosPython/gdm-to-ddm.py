@@ -3,6 +3,22 @@ import langs.ddmLang as ddm
 from pyecore.resources import ResourceSet, URI
 from pyecore.resources.xmi import XMIResource
 
+class Tree(object):
+    "Generic tree node."
+    def __init__(self, name='root', children=None,data=None):
+        self.name = name
+        self.children = []
+        if children is not None:
+            for child in children:
+                self.add_child(child)
+        if data is not None:
+            self.data = data
+    def __repr__(self):
+        return self.name
+    def add_child(self, node):
+        assert isinstance(node, Tree)
+        self.children.append(node)
+
 def loadModel(input_file):
     rset = ResourceSet()
     # register the metamodel (available in the generated files)
@@ -13,16 +29,23 @@ def loadModel(input_file):
 
     return model
 
-def allQueryPaths(me, queries):
-    accessTree = ''
-    # Obtenemos las queries en donde aparezca la entidad "me" en el elemento "from_"
-    
-    
-    return accessTree
-
 def populateDocumentType(dt, accessTree):
     root = ''
     return root
+
+
+def createAccessTree(queries):
+    tree = Tree()
+
+    for query in queries:
+        for inclusion in query.inclusions:
+            auxTree = tree
+            for ref in inclusion.refs:
+                child = Tree(name=ref.name,data=ref)
+                auxTree.add_child(child)
+                auxTree = child
+    
+    return tree
 
 def main():
     
@@ -37,12 +60,8 @@ def main():
     # entityToQueries =  mainEntities.map[me | me -> gdm.queries.filter[q | q.from.entity.equals(me)]]
     entityToQueries = list(map(lambda me: (me, list(filter(lambda q: q.from_.entity.name == me.name, gdmModel.queries))), mainEntities))
         
-
-    hola = "hola"
-    
-    # f1_b = list( map(lambda x: list(map(lambda t: t.strip(), x.split(',', 1))), lst))
-    # Though in most cases you should prefer list comprehensions to map calls:
-    # f1_a = [[t.strip() for t in x.split(',', 1)] for x in lst]
+    # val entity2accessTree = newImmutableMap(entityToQueries.map[e2q | e2q.key -> createAccessTree(e2q.value)])
+    entity2accessTree = list(map(lambda e2q: ( e2q[0], createAccessTree(e2q[1])), entityToQueries))
 
     valor = "hola"
     
