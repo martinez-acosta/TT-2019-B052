@@ -47,6 +47,38 @@ def createAccessTree(queries):
     
     return tree
 
+def getTree(entity2accessTree, entity):
+
+    for pair in entity2accessTree:
+        if pair[0] == entity:
+            tree = pair[1]
+
+    return tree
+
+def getAllTreesBut(entity2accessTree,tree):
+    lista = []
+
+    for pair in entity2accessTree:
+        if pair[1] != tree:
+            lista.append(pair[1])
+    return lista
+
+def searchEntity(entity,tree):
+    treeNodes = []
+    for child in tree.children:
+        if child.data.entity == entity:
+            treeNodes.append(child)
+        treeNodes.append(searchEntity(entity,child))
+    return treeNodes 
+
+def completeAccessTree(entity, tree, othersTrees):
+
+    for oTree in othersTrees:
+        treeNodes = searchEntity(entity,oTree)
+        for treeNode in treeNodes:
+            tree.add_child(treeNode)
+    return
+
 def main():
     
     gdmModel = loadModel("Static_model_test.xmi")
@@ -63,16 +95,16 @@ def main():
     # val entity2accessTree = newImmutableMap(entityToQueries.map[e2q | e2q.key -> createAccessTree(e2q.value)])
     entity2accessTree = list(map(lambda e2q: ( e2q[0], createAccessTree(e2q[1])), entityToQueries))
 
-    valor = "hola"
+    for entity in mainEntities:
+      tree = getTree(entity2accessTree,entity)
+      othersTrees = getAllTreesBut(entity2accessTree,tree)
+      completeAccessTree(entity, tree, othersTrees)
     
+    for entity in mainEntities:
+        
+      
 
-    
-    #for me in mainEntities:
-    #    collection = ddm.Collection(name=me.name,root=ddm.Document(name="root")) # Por cada entidad en mainEntities creamos una colección
-    #    accessTree = allQueryPaths(me,gdmModel.queries)
-    #    root = populateDocumentType(collection.root,accessTree)
-    #    collection.root = root
-    #    ddmModel.collections.append(collection)
+
     
     
 
