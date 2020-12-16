@@ -45,14 +45,26 @@
           ></div>
           <ul id="contextMenu" class="menu">
             <li
+              v-show="!submenuEntity"
               id="givenValue"
               class="menu-item"
               @click="givenValue('givenValue')"
             >
               Respecto al atributo (=)
             </li>
+            <!-- <li
+              id="givenRange"
+              class="menu-item"
+              @click="givenValue('givenRange')"
+            >
+              Given range (&gt;, &lt;, &gt;=, &lt;= )
+            </li> -->
+            <li v-show="submenuEntity" id="aliasEntity" class="menu-item">
+              Agregar alias
+            </li>
             <li><hr /></li>
             <li
+              v-show="!submenuEntity"
               id="findValue"
               class="menu-item"
               @click="findValue('findValue')"
@@ -217,7 +229,8 @@ export default {
         relations_errors: 'Errores en relaciones.'
       },
       msgDiagramErrors: '',
-      validDiagram: false
+      validDiagram: false,
+      submenuEntity: false
     }
   },
   computed: {
@@ -1018,14 +1031,21 @@ export default {
       // Show only the relevant buttons given the current state.
       const cmd = diagram.commandHandler
       let hasMenuItem = false
+      let submenuEntityCtx = this.submenuEntity
       function maybeShowItem(elt, pred) {
         if (
           pred &&
           (obj.data.type === 'attribute' ||
             obj.data.type === 'keyAttribute' ||
             obj.data.type === 'derivedAttribute' ||
-            obj.data.type === 'multivalueAttribute')
+            obj.data.type === 'multivalueAttribute' ||
+            obj.data.type === 'entity' ||
+            obj.data.type === 'weakEntity')
         ) {
+          const isEntity = ['entity', 'weakEntity'].find(
+            (k) => k === obj.data.type
+          )
+          submenuEntityCtx = Boolean(isEntity)
           elt.style.display = 'block'
           hasMenuItem = true
         } else {
@@ -1044,6 +1064,7 @@ export default {
         this.cxElement.style.left = mousePt.x + 5 + 'px'
         this.cxElement.style.top = mousePt.y + 'px'
       }
+      this.submenuEntity = submenuEntityCtx
       // Optional: Use a `window` click listener with event capture to
       //           remove the context menu if the user clicks elsewhere on the page
       window.addEventListener('click', this.hideCX, true)
