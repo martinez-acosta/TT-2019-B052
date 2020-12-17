@@ -83,28 +83,31 @@ def getTree(entity2accessTree, entity):
 
     return tree
 
-def getAllTreesBut(entity2accessTree,tree):
+def getAllTrees(entity2accessTree):
     lista = []
 
     for pair in entity2accessTree:
-        if pair[1] != tree:
-            lista.append(pair[1])
+        #if pair[1] != tree:
+        lista.append(pair[1])
     return lista
+
+def addAllTreeNodes(treeNodes,lista):
+    for item in lista:
+        treeNodes.append(item)
+    return 
 
 def searchEntity(entity,tree):
     treeNodes = []
     for child in tree.children:
         if child.data.entity == entity:
             treeNodes.append(child)
-            break
-        treeNodes.append(searchEntity(entity,child))
+        addAllTreeNodes(treeNodes, searchEntity(entity,child))
     return treeNodes 
 
 def addTreeNode(tree, treeNode):
-    for children in treeNode:
-        for child in children.children:
-            addedChild = tree.add_child(Tree(data=child.data))
-            addTreeNode(addedChild,child)
+    for child in treeNode.children:
+        addedChild = tree.add_child(Tree(data=child.data))
+        addTreeNode(addedChild,child)
     return
 
 def completeAccessTree(entity, tree, othersTrees):
@@ -134,7 +137,7 @@ def main():
     # Completamos cada árbol de acceso
     for entity in mainEntities:
       tree = getTree(entity2accessTree,entity)
-      othersTrees = getAllTreesBut(entity2accessTree,tree)
+      othersTrees = getAllTrees(entity2accessTree)
       completeAccessTree(entity, tree, othersTrees)
     
     # Generamos las colecciones
