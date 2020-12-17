@@ -26,11 +26,12 @@ Develop a web app that allows the edition of a database diagram under the entity
 - Entity-Relationship diagrams can be made with GoJS libray.
 
 ## TODO
-- ~~ER diagram's validations~~
-- ~~Mapping from ER Diagram to Relational Model~~
-- ~~SQL script generation~~
-- Mapping from ER Diagram to NoSQL Conceptual Model
-- Generate data schema for MongoDB with MongoDB’s query language
+- [x] ER diagram's validations
+- [x] Mapping from ER Diagram to Relational Model
+- [x] SQL script generation~~
+- [] Mapping from ER Diagram to NoSQL Conceptual Model
+- [x] Mapping GDM to Document Data Model 
+- [] Generate data schema for MongoDB with MongoDB’s query language
 
 ## Build Setup
 

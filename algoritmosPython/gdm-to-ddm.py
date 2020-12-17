@@ -199,13 +199,7 @@ def main():
         saveModelDDM(ddmModel)
 
     saveModelDDM(ddmModel)
-    final = "final"
-      
-
 
     
-    
-
-
 if __name__ == '__main__':
     main()
