@@ -29,8 +29,31 @@ def loadModel(input_file):
 
     return model
 
-def populateDocumentType(dt, accessTree):
+def populateDocumentType(document, entity, tree, mainEntities):
     root = ''
+    addAttributes(document,entity)
+    for child in tree.children:
+        reference = child.data
+        newField = null
+        if mainEntities.contains(reference.entity):
+            newField = createPrimitiveField()
+            newField.name = reference.entity.name + "Ref"
+            (newField as PrimitiveField).type = PrimitiveType.ID
+        else: 
+            newField = docFactory.createDocument()
+            newField.name = reference.entity.name.toFirstLower
+            populateDocument(newField as Document, docFactory, reference.entity, child, mainEntities)
+      
+        if (!reference.cardinality.equals("1")):
+            # encapsulate field in an array
+            val arrayField = docFactory.createArrayField()
+            arrayField.name = newField.name + "Array"
+            arrayField.type = newField
+            document.fields.add(arrayField)
+        else:
+            document.fields.add(newField)
+        
+
     return root
 
 
@@ -95,13 +118,21 @@ def main():
     # val entity2accessTree = newImmutableMap(entityToQueries.map[e2q | e2q.key -> createAccessTree(e2q.value)])
     entity2accessTree = list(map(lambda e2q: ( e2q[0], createAccessTree(e2q[1])), entityToQueries))
 
+    # Completamos cada árbol de acceso
     for entity in mainEntities:
       tree = getTree(entity2accessTree,entity)
       othersTrees = getAllTreesBut(entity2accessTree,tree)
       completeAccessTree(entity, tree, othersTrees)
     
+    # Generamos las collecciones
     for entity in mainEntities:
-        
+        tree = getTree(entity2accessTree,entity)
+        collection = ddm.Collection()
+        collection.name = entity.name
+        docType = ddm.Document()
+        docType.name = "root"
+        populateDocumentType(docType,entity,tree,mainEntities)
+        ddmModel.collections.append(collection)
       
 
 
