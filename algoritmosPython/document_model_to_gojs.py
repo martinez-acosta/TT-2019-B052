@@ -69,8 +69,9 @@ def generateKey():
     global x
     x = x + 1 
     return x
-
-with open("modelDocuments/venues2DOC.model") as xml_file: 
+#input_file = "prueba_ddm.xmi"
+input_file = "documents.models/venuesDOC.model"
+with open(input_file) as xml_file: 
       
     data_dict = xmltodict.parse(xml_file.read()) 
     xml_file.close() 
@@ -199,9 +200,17 @@ with open("modelDocuments/venues2DOC.model") as xml_file:
         
     # Write the json data to output  
     # json file 
-    json_data = json.dumps(nodeDataArray) 
-    json_dataLinks = json.dumps(linksDataArray) 
-    with open("hola.json", "w") as json_file: 
-        json_file.write(json_data) 
-        json_file.write(json_dataLinks)
+    data = {}
+    json_nodeDataArray = json.dumps(nodeDataArray)
+    json_linksDataArray = json.dumps(linksDataArray) 
+    data["nodeDataArray"] = nodeDataArray 
+    data["linkDataArray"] = linksDataArray
+    ofile = "venuesLalo.json"
+    with open(ofile, "w") as json_file:
+        json_file.write(json.dumps(data)) 
+        #json_file.write(json_nodeDataArray) 
+        #json_file.write(json_linksDataArray)
+        
         json_file.close() 
+
+    prueba = "pausa"
