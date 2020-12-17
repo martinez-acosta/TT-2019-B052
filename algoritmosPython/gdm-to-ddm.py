@@ -35,9 +35,34 @@ def loadModel(input_file):
 
     return model
 
-def populateDocumentType(document, entity, tree, mainEntities):
-    root = ''
-    # addAttributes(document,entity)
+def addAttributes(document,entity):
+     # features = list(filter(lambda f: isinstance(f,gdm.Attribute),entity.features))
+    for attr in list(filter(lambda f: isinstance(f,gdm.Attribute),entity.features)):
+        field = ddm.PrimitiveField()
+        field.name = attr.name
+        field.type = convertType(attr.type)
+        document.fields.append(field)
+    return
+
+def convertType(type_):    
+    if type_.name == "ID":
+        ddmType = ddm.PrimitiveType.from_string("ID")
+    elif type_.name == "NUMBER":
+        ddmType = ddm.PrimitiveType.from_string("FLOAT")
+    elif type_.name == "DATE":
+        ddmType = ddm.PrimitiveType.from_string("DATE")
+    elif type_.name == "TIMESTAMP":
+        ddmType = ddm.PrimitiveType.from_string("TIMESTAMP")
+    elif type_.name == "BOOLEAN":
+        ddmType = ddm.PrimitiveType.from_string("BOOLEAN")
+    else:
+        ddmType = ddm.PrimitiveType.from_string("TEXT")
+
+    return ddmType
+
+def populateDocument(document, entity, tree, mainEntities):
+    addAttributes(document,entity)
+    hola = "hola"
     # for child in tree.children:
     #     reference = child.data
     #     newField = null
@@ -60,7 +85,7 @@ def populateDocumentType(document, entity, tree, mainEntities):
     #         document.fields.add(newField)
         
 
-    return root
+    return 
 
 
 def createAccessTree(queries):
@@ -147,7 +172,7 @@ def main():
         collection.name = entity.name
         docType = ddm.Document()
         docType.name = "root"
-        populateDocumentType(docType,entity,tree,mainEntities)
+        populateDocument(docType,entity,tree,mainEntities)
         ddmModel.collections.append(collection)
       
 
