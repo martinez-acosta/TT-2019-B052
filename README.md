@@ -27,11 +27,11 @@ Develop a web app that allows the edition of a database diagram under the entity
 
 ## TODO
 - [x] ER diagram's validations
-- [x] Mapping from ER Diagram to Relational Model
-- [x] SQL script generation~~
-- [] Mapping from ER Diagram to NoSQL Conceptual Model
+- [x] Mapping ER Diagram to Relational Model
+- [x] SQL script generation
+- [ ] Mapping ER Diagram to NoSQL Conceptual Model
 - [x] Mapping GDM to Document Data Model 
-- [] Generate data schema for MongoDB with MongoDB’s query language
+- [ ] Generate data schema for MongoDB with MongoDB’s query language
 
 ## Build Setup
 
