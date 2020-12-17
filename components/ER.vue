@@ -9,6 +9,13 @@
         cols="3"
         class="white lighten-2 fill-height d-flex flex-column"
       >
+        <v-btn
+          :download="scriptName"
+          :href="urlFile"
+          @click="downloadGoJSData()"
+        >
+          Descargar Gojs</v-btn
+        >
         <div
           v-show="mostrarPaleta"
           id="myPaletteDiv"
@@ -152,6 +159,8 @@ export default {
       PathPatterns: '',
       myContextMenu: '',
       cxElement: '',
+      urlFile: '',
+      scriptName: '',
       node: '',
       myOverview: '',
       mostrarPaleta: this.showpallete,
@@ -1119,6 +1128,14 @@ export default {
     convertPathPatternToShape(name) {
       if (!name) return null
       return this.PathPatterns.get(name)
+    },
+    downloadGoJSData() {
+      this.saveDiagramProperties()
+      const diagram = this.myDiagram.model.toJson()
+      const scriptData = encodeURIComponent(diagram)
+      // this.scriptName = 'prueba.txt'
+      this.urlFile = `data:json/plain;charset=utf-8,${scriptData}` // application/sql
+      this.$snotify.success('Archivo descargado. ')
     }
   }
 }
