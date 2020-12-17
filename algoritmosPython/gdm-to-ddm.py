@@ -35,6 +35,18 @@ def loadModel(input_file):
 
     return model
 
+def saveModelDDM(model):
+    # create a resourceSet that hold the contents of the gdm.ecore model and the instances we use/create
+    rset = ResourceSet()
+    # register the metamodel (available in the generated files)
+    rset.metamodel_registry[ddm.nsURI] = ddm
+    rset.resource_factory['ddm'] = lambda uri: XMIResource(uri)  
+
+    resource = rset.create_resource(URI('prueba_ddm.xmi'))
+    resource.append(model)
+    resource.save()
+    return
+
 def addAttributes(document,entity):
      # features = list(filter(lambda f: isinstance(f,gdm.Attribute),entity.features))
     for attr in list(filter(lambda f: isinstance(f,gdm.Attribute),entity.features)):
@@ -60,29 +72,34 @@ def convertType(type_):
 
     return ddmType
 
+def toFirstLower(test_str):
+    return test_str[0].lower() + test_str[1:]
+
 def populateDocument(document, entity, tree, mainEntities):
     addAttributes(document,entity)
-    hola = "hola"
-    # for child in tree.children:
-    #     reference = child.data
-    #     newField = null
-    #     if mainEntities.contains(reference.entity):
-    #         newField = createPrimitiveField()
-    #         newField.name = reference.entity.name + "Ref"
-    #         (newField as PrimitiveField).type = PrimitiveType.ID
-    #     else: 
-    #         newField = docFactory.createDocument()
-    #         newField.name = reference.entity.name.toFirstLower
-    #         populateDocument(newField as Document, docFactory, reference.entity, child, mainEntities)
+
+    for child in tree.children:
+        reference = child.data
+        newField = None
+        # si la referencia apunta a una entidad principal, en lugar de generar el documento creamos una referencia
+        if any(map(lambda me: me == reference.entity, mainEntities)):
+            newField = ddm.PrimitiveField()
+            newField.name = toFirstLower(reference.entity.name) + "Ref"
+            newField.type = ddm.PrimitiveType.from_string("ID")
+            prueba = "hola"
+        else: 
+            newField = ddm.Document()
+            newField.name = toFirstLower(reference.entity.name)
+            populateDocument(newField, reference.entity, child, mainEntities)
       
-    #     if (!reference.cardinality.equals("1")):
-    #         # encapsulate field in an array
-    #         val arrayField = docFactory.createArrayField()
-    #         arrayField.name = newField.name + "Array"
-    #         arrayField.type = newField
-    #         document.fields.add(arrayField)
-    #     else:
-    #         document.fields.add(newField)
+        if (reference.cardinality == "1"):
+            # encapsulate field in an array
+            arrayField = ddm.ArrayField()
+            arrayField.name = newField.name + "Array"
+            arrayField.type = newField
+            document.fields.add(arrayField)
+        else:
+            document.fields.add(newField)
         
 
     return 
@@ -163,6 +180,10 @@ def main():
     for entity in mainEntities:
       tree = getTree(entity2accessTree,entity)
       othersTrees = getAllTrees(entity2accessTree)
+    #   for t in othersTrees:
+    #       if t == tree:
+    #           othersTrees.remove(t)
+    #           hola = "hola"
       completeAccessTree(entity, tree, othersTrees)
     
     # Generamos las colecciones
@@ -172,8 +193,13 @@ def main():
         collection.name = entity.name
         docType = ddm.Document()
         docType.name = "root"
+        collection.root = docType
         populateDocument(docType,entity,tree,mainEntities)
         ddmModel.collections.append(collection)
+        saveModelDDM(ddmModel)
+
+    saveModelDDM(ddmModel)
+    final = "final"
       
 
 
