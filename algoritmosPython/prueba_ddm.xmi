@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<documentDataModel:DocumentDataModel xmlns:xmi="http://www.omg.org/XMI" xmlns:documentDataModel="http://documentDataModel.mortadelo.istr.unican.es" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmi:version="2.0">
+  <collections xsi:type="documentDataModel:Collection" name="Artifact">
+    <root xsi:type="documentDataModel:Document" name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" type="ID" name="artifactId"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="artifactTitle"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="authors"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="keywords"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="FLOAT" name="numRatings"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="FLOAT" name="sumRatings"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="FLOAT" name="avgRating"/>
+      <fields xsi:type="documentDataModel:ArrayField" name="venueRefArray">
+        <type xsi:type="documentDataModel:PrimitiveField" type="ID" name="venueRef"/>
+      </fields>
+    </root>
+  </collections>
+  <collections xsi:type="documentDataModel:Collection" name="User">
+    <root xsi:type="documentDataModel:Document" name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" type="ID" name="userId"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="userName"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="userEmail"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="areasOfExpertise"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="ID" name="artifactRef"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="ID" name="venueRef"/>
+      <fields xsi:type="documentDataModel:Document" name="review">
+        <fields xsi:type="documentDataModel:PrimitiveField" type="ID" name="reviewId"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="reviewTitle"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="body"/>
+        <fields xsi:type="documentDataModel:PrimitiveField" type="FLOAT" name="rating"/>
+        <fields xsi:type="documentDataModel:ArrayField" name="artifactRefArray">
+          <type xsi:type="documentDataModel:PrimitiveField" type="ID" name="artifactRef"/>
+        </fields>
+      </fields>
+    </root>
+  </collections>
+  <collections xsi:type="documentDataModel:Collection" name="Venue">
+    <root xsi:type="documentDataModel:Document" name="root">
+      <fields xsi:type="documentDataModel:PrimitiveField" type="ID" name="venueId"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="venueName"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="FLOAT" name="year"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="country"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="homepage"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="TEXT" name="topics"/>
+      <fields xsi:type="documentDataModel:PrimitiveField" type="ID" name="artifactRef"/>
+    </root>
+  </collections>
+</documentDataModel:DocumentDataModel>
