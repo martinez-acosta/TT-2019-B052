@@ -5,8 +5,9 @@ from pyecore.resources.xmi import XMIResource
 
 class Tree(object):
     "Generic tree node."
-    def __init__(self, name='root', children=None,data=None):
-        self.name = name
+    def __init__(self, name=None, children=None,data=None):
+        if name is not None:
+            self.name = name
         self.children = []
         if children is not None:
             for child in children:
@@ -17,7 +18,12 @@ class Tree(object):
         return self.name
     def add_child(self, node):
         assert isinstance(node, Tree)
+        for child in self.children:
+            if (child.data is None and node.data is None) or child.data == node.data:
+                return child
+
         self.children.append(node)
+        return node
 
 def loadModel(input_file):
     rset = ResourceSet()
@@ -31,27 +37,27 @@ def loadModel(input_file):
 
 def populateDocumentType(document, entity, tree, mainEntities):
     root = ''
-    addAttributes(document,entity)
-    for child in tree.children:
-        reference = child.data
-        newField = null
-        if mainEntities.contains(reference.entity):
-            newField = createPrimitiveField()
-            newField.name = reference.entity.name + "Ref"
-            (newField as PrimitiveField).type = PrimitiveType.ID
-        else: 
-            newField = docFactory.createDocument()
-            newField.name = reference.entity.name.toFirstLower
-            populateDocument(newField as Document, docFactory, reference.entity, child, mainEntities)
+    # addAttributes(document,entity)
+    # for child in tree.children:
+    #     reference = child.data
+    #     newField = null
+    #     if mainEntities.contains(reference.entity):
+    #         newField = createPrimitiveField()
+    #         newField.name = reference.entity.name + "Ref"
+    #         (newField as PrimitiveField).type = PrimitiveType.ID
+    #     else: 
+    #         newField = docFactory.createDocument()
+    #         newField.name = reference.entity.name.toFirstLower
+    #         populateDocument(newField as Document, docFactory, reference.entity, child, mainEntities)
       
-        if (!reference.cardinality.equals("1")):
-            # encapsulate field in an array
-            val arrayField = docFactory.createArrayField()
-            arrayField.name = newField.name + "Array"
-            arrayField.type = newField
-            document.fields.add(arrayField)
-        else:
-            document.fields.add(newField)
+    #     if (!reference.cardinality.equals("1")):
+    #         # encapsulate field in an array
+    #         val arrayField = docFactory.createArrayField()
+    #         arrayField.name = newField.name + "Array"
+    #         arrayField.type = newField
+    #         document.fields.add(arrayField)
+    #     else:
+    #         document.fields.add(newField)
         
 
     return root
@@ -64,8 +70,7 @@ def createAccessTree(queries):
         for inclusion in query.inclusions:
             auxTree = tree
             for ref in inclusion.refs:
-                child = Tree(name=ref.name,data=ref)
-                auxTree.add_child(child)
+                child = auxTree.add_child(Tree(data=ref))
                 auxTree = child
     
     return tree
@@ -91,15 +96,23 @@ def searchEntity(entity,tree):
     for child in tree.children:
         if child.data.entity == entity:
             treeNodes.append(child)
+            break
         treeNodes.append(searchEntity(entity,child))
     return treeNodes 
+
+def addTreeNode(tree, treeNode):
+    for children in treeNode:
+        for child in children.children:
+            addedChild = tree.add_child(Tree(data=child.data))
+            addTreeNode(addedChild,child)
+    return
 
 def completeAccessTree(entity, tree, othersTrees):
 
     for oTree in othersTrees:
         treeNodes = searchEntity(entity,oTree)
         for treeNode in treeNodes:
-            tree.add_child(treeNode)
+            addTreeNode(tree,treeNode)
     return
 
 def main():
@@ -124,7 +137,7 @@ def main():
       othersTrees = getAllTreesBut(entity2accessTree,tree)
       completeAccessTree(entity, tree, othersTrees)
     
-    # Generamos las collecciones
+    # Generamos las colecciones
     for entity in mainEntities:
         tree = getTree(entity2accessTree,entity)
         collection = ddm.Collection()
