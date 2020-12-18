@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="10">
+      <v-col cols="12">
         <v-tabs v-model="currentTab" background-color="white" show-arrows flat>
           <v-tab v-for="n in length" :key="n"> Q{{ n }} </v-tab>
         </v-tabs>
@@ -9,7 +9,7 @@
           <v-tab-item v-for="n in length" :key="n">
             <!------Consultas---------->
             <v-container>
-              <v-row>
+              <!-- <v-row>
                 <v-col cols="6">
                   <v-card>
                     <v-card-title>
@@ -34,23 +34,45 @@
                     ></v-data-table>
                   </v-card>
                 </v-col>
-              </v-row>
-              <!--<v-row>
-                <v-col>
-                  <textarea
-                    style="width:100%;height:300px"
-                    :value="diagramaObtenido"
-                  >
-                  </textarea>
+              </v-row> -->
+              <v-row>
+                <v-col cols="6">
+                  <div class="overflow-auto" style="overflow: auto;">
+                    <ssh-pre
+                      language="pug"
+                      label="entidades del GDM"
+                      :reactive="true"
+                      :copy-button="false"
+                      :dark="false"
+                    >
+                      {{ entitiesER }}
+                    </ssh-pre>
+                  </div>
                 </v-col>
-              </v-row>-->
+                <v-col cols="6">
+                  <p>Agrega tus consulta para el modelo GDM</p>
+                  <v-textarea
+                    id="queriesGDM"
+                    outlined
+                    label="Consultas de accesso"
+                  >
+                  </v-textarea>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn block color="success"
+                    >Obtener Modelo NoSQL</v-btn
+                  ></v-col
+                >
+              </v-row>
             </v-container>
             <!------Fin consultas---------->
           </v-tab-item>
         </v-tabs-items>
       </v-col>
       <!-------Botones------->
-      <v-col cols="2">
+      <!-- <v-col cols="2">
         <v-tabs>
           <v-btn icon>
             <v-icon @click="setLength(1)">mdi-plus</v-icon>
@@ -59,7 +81,7 @@
             <v-icon @click="setLength(-1)">mdi-minus</v-icon>
           </v-btn>
         </v-tabs>
-      </v-col>
+      </v-col> -->
       <!-------Fin Botones------->
     </v-row>
   </v-container>
@@ -67,8 +89,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import SshPre from 'simple-syntax-highlighter'
+import 'simple-syntax-highlighter/dist/sshpre.css'
 
 export default {
+  components: {
+    SshPre
+  },
   data() {
     return {
       componentKey: 0,
@@ -86,6 +113,45 @@ export default {
           value: 'type'
         }
       ],
+      entitiesER: `
+entity User {
+  id userId unique
+  text userName
+  text userEmail
+  text[*] areasOfExpertise
+  ref Review[*] reviews
+  ref Artifact[*] likesArtifacts
+  ref Venue[*] likesVenue
+}
+
+entity Venue {
+  id venueId unique
+  text venueName
+  number year
+  text country
+  text homepage
+  text[*] topics
+  ref Artifact[*] artifacts
+}
+
+entity Artifact {
+  id artifactId unique
+  text artifactTitle
+  text[*] authors
+  text[*] keywords
+  number numRatings
+  number sumRatings
+  number avgRating
+  ref Venue[1] venue
+}
+
+entity Review {
+  id reviewId unique
+  text reviewTitle
+  text body
+  number rating
+  ref Artifact[1] artifact
+}`,
       findHeaders: [
         {
           text: 'Atributo',
@@ -97,7 +163,8 @@ export default {
       // givenEntries: [],
       // findEntries: [],
       currentTab: null,
-      tab: null
+      tab: null,
+      aliasEntity: 'alias'
     }
   },
   computed: {
@@ -173,12 +240,18 @@ export default {
         })
         .then(this.forceRerender())
     })
+
+    this.$nuxt.$on('emitAliasEntity', () => {
+      const nodo = this.nodoObtenido
+      console.log(nodo)
+    })
   },
   beforeDestroy() {
     this.$nuxt.$off('emitGivenValue')
     this.$nuxt.$off('emitGivenRange')
     this.$nuxt.$off('emitGivenSet')
     this.$nuxt.$off('emitFindValue')
+    this.$nuxt.$off('emitAliasEntity')
   },
 
   methods: {

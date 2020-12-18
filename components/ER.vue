@@ -1108,7 +1108,9 @@ export default {
             data.type === 'derivedAttribute' ||
             data.type === 'compositeAttribute' ||
             data.type === 'multivalueAttribute' ||
-            data.type === 'attribute'
+            data.type === 'attribute' ||
+            data.type === 'entity' ||
+            data.type === 'weakEntity'
           ) {
             const nodoConectado = { ...this.getConnectedNode(node) }
             Promise.all([
@@ -1127,6 +1129,9 @@ export default {
                   break
                 case 'givenSet':
                   this.$nuxt.$emit('emitGivenSet')
+                  break
+                case 'aliasEntity':
+                  this.$nuxt.$emit('emitAliasEntity')
                   break
               }
             })
