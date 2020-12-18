@@ -1,0 +1,90 @@
+db.createCollection("Product", {
+  validator: {
+    $jsonSchema: {
+          bsonType: "object",
+    properties: {
+  productId : {bsonType: "ObjectId"}
+  name : {bsonType: "string"}
+  description : {bsonType: "string"}
+  price : {bsonType: "double"}
+  categoryArray : {
+    bsonType: "array",
+    items: {
+          bsonType: "object",
+    properties: {
+  categoryId : {bsonType: "ObjectId"}
+  name : {bsonType: "string"}
+  description : {bsonType: "string"}
+    }
+
+    }
+  }
+    }
+
+    }
+  }
+})
+
+db.createCollection("Client", {
+  validator: {
+    $jsonSchema: {
+          bsonType: "object",
+    properties: {
+  clientId : {bsonType: "ObjectId"}
+  name : {bsonType: "string"}
+  nationality : {bsonType: "string"}
+  purchaseRefArray : {
+    bsonType: "array",
+    items: {
+        purchaseRef : {bsonType: "ObjectId"}
+
+    }
+  }
+    }
+
+    }
+  }
+})
+
+db.createCollection("Purchase", {
+  validator: {
+    $jsonSchema: {
+          bsonType: "object",
+    properties: {
+  purchaseId : {bsonType: "ObjectId"}
+  year : {bsonType: "double"}
+  month : {bsonType: "double"}
+  day : {bsonType: "double"}
+  totalAmount : {bsonType: "double"}
+    bsonType: "object",
+    properties: {
+  billId : {bsonType: "ObjectId"}
+  billDate : {bsonType: "date"}
+  billingData : {bsonType: "string"}
+    }
+    bsonType: "object",
+    properties: {
+  street : {bsonType: "string"}
+  postalCode : {bsonType: "string"}
+  city : {bsonType: "string"}
+  country : {bsonType: "string"}
+    }
+  purchaseLineArray : {
+    bsonType: "array",
+    items: {
+          bsonType: "object",
+    properties: {
+  quantity : {bsonType: "double"}
+  unitPrice : {bsonType: "double"}
+  productRef : {bsonType: "ObjectId"}
+    }
+
+    }
+  }
+    }
+
+    }
+  }
+})
+
+
