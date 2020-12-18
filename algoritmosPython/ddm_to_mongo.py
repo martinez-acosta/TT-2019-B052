@@ -25,7 +25,7 @@ def getMongoDBType(type_):
     elif type_.name == "BOOLEAN":
         tipo = "boolean"
     elif type_.name == "ID":
-        tipo = "ObjectId"
+        tipo = "objectId"
     else:
         tipo = "string"
 
@@ -63,6 +63,9 @@ def generateDocumentField(output_file,document):
             generateDocumentField(output_file,field)
         elif isinstance(field, ddm.ArrayField):
             generateArrayField(output_file,field)
+        if field != document.fields[-1]:
+                output_file.write(",")
+
     output_file.write("    }\n")
     return
 

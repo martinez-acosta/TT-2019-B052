@@ -1,73 +1,79 @@
-db.createCollection("Artifact", {
+db.createCollection("Artifact",
+{
   validator: {
     $jsonSchema: {    bsonType: "object",
     properties: {
-artifactId: { bsonType: "ObjectId"}
-artifactTitle: { bsonType: "string"}
-authors: { bsonType: "string"}
-keywords: { bsonType: "string"}
-numRatings: { bsonType: "double"}
-sumRatings: { bsonType: "double"}
-avgRating: { bsonType: "double"}
-venueRef: { bsonType: "ObjectId"}
+artifactId: { bsonType: "objectId"
+        },artifactTitle: { bsonType: "string"
+        },authors: { bsonType: "string"
+        },keywords: { bsonType: "string"
+        },numRatings: { bsonType: "double"
+        },sumRatings: { bsonType: "double"
+        },avgRating: { bsonType: "double"
+        },venueRef: { bsonType: "objectId"
+        }
+      }
     }
-    }
-}
+  }
 })
-db.createCollection("Venue", {
+db.createCollection("Venue",
+{
   validator: {
     $jsonSchema: {    bsonType: "object",
     properties: {
-venueId: { bsonType: "ObjectId"}
-venueName: { bsonType: "string"}
-year: { bsonType: "double"}
-country: { bsonType: "string"}
-homepage: { bsonType: "string"}
-topics: { bsonType: "string"}
-artifactRefArray: {
+venueId: { bsonType: "objectId"
+        },venueName: { bsonType: "string"
+        },year: { bsonType: "double"
+        },country: { bsonType: "string"
+        },homepage: { bsonType: "string"
+        },topics: { bsonType: "string"
+        },artifactRefArray: {
     bsonType: "array",
     items: {
-artifactRef: { bsonType: "ObjectId"}
+artifactRef: { bsonType: "objectId"
+            }
+          }
+        }
+      }
     }
   }
-    }
-    }
-}
 })
-db.createCollection("User", {
+db.createCollection("User",
+{
   validator: {
     $jsonSchema: {    bsonType: "object",
     properties: {
-userId: { bsonType: "ObjectId"}
-userName: { bsonType: "string"}
-userEmail: { bsonType: "string"}
-areasOfExpertise: { bsonType: "string"}
-artifactRefArray: {
+userId: { bsonType: "objectId"
+        },userName: { bsonType: "string"
+        },userEmail: { bsonType: "string"
+        },areasOfExpertise: { bsonType: "string"
+        },artifactRefArray: {
     bsonType: "array",
     items: {
-artifactRef: { bsonType: "ObjectId"}
-    }
-  }
-venueRefArray: {
+artifactRef: { bsonType: "objectId"
+            }
+          }
+        },venueRefArray: {
     bsonType: "array",
     items: {
-venueRef: { bsonType: "ObjectId"}
-    }
-  }
-reviewArray: {
+venueRef: { bsonType: "objectId"
+            }
+          }
+        },reviewArray: {
     bsonType: "array",
     items: {
     bsonType: "object",
     properties: {
-reviewId: { bsonType: "ObjectId"}
-reviewTitle: { bsonType: "string"}
-body: { bsonType: "string"}
-rating: { bsonType: "double"}
-artifactRef: { bsonType: "ObjectId"}
-    }
+reviewId: { bsonType: "objectId"
+              },reviewTitle: { bsonType: "string"
+              },body: { bsonType: "string"
+              },rating: { bsonType: "double"
+              },artifactRef: { bsonType: "objectId"
+              }
+            }
+          }
+        }
+      }
     }
   }
-    }
-    }
-}
 })
