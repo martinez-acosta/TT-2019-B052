@@ -86,13 +86,12 @@ def populateDocument(document, entity, tree, mainEntities):
             newField = ddm.PrimitiveField()
             newField.name = toFirstLower(reference.entity.name) + "Ref"
             newField.type = ddm.PrimitiveType.from_string("ID")
-            prueba = "hola"
         else: 
             newField = ddm.Document()
             newField.name = toFirstLower(reference.entity.name)
             populateDocument(newField, reference.entity, child, mainEntities)
       
-        if (reference.cardinality == "1"):
+        if (reference.cardinality != "1"):
             # encapsulate field in an array
             arrayField = ddm.ArrayField()
             arrayField.name = newField.name + "Array"
