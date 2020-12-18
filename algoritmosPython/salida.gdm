@@ -1,0 +1,45 @@
+entiy User {
+  id userId unique
+  text userName
+  text userEmail
+  text[*] areasOfExpertise
+  ref Review[*] reviews
+  ref Artifact[*] likes_ua
+  ref Venue[*] likes_uv
+  ref Review[*] likes_ur
+}
+
+entiy Artifact {
+  id artifactId unique
+  text[*] authors
+  number numRatings
+  number avgRating
+  number sumRatings
+  text artifactTitle
+  text[*] keywords
+  ref Review[*] rates
+  ref Venue[1] features
+  ref User[*] likes_ua
+}
+
+entiy Venue {
+  text venueName
+  number year
+  id venueId unique
+  text homepage
+  text country
+  text[*] topics
+  ref Artifact[*] features
+  ref User[*] likes_uv
+}
+
+entiy Review {
+  number rating
+  text body
+  text reviewTitle
+  id reviewId unique
+  ref Artifact[1] rates
+  ref User[1] reviews
+  ref User[*] likes_ur
+}
+

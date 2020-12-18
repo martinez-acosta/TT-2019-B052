@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <client-only>
       <vue-snotify></vue-snotify>
     </client-only>
@@ -23,7 +23,7 @@
             width: 100%;
             display: flex;
             border: solid 0px black;
-            height: 100%;           
+            height: 70%;           
           "
         ></div>
         <div v-show="mostrarPaleta" id="myInspectorDiv"></div>
@@ -51,16 +51,6 @@
             >
               Respecto al atributo (=)
             </li>
-            <!--<li
-              id="givenRange"
-              class="menu-item"
-              @click="givenValue('givenRange')"
-            >
-              Given range (&gt;, &lt;, &gt;=, &lt;= )
-            </li>
-            <li id="givenSet" class="menu-item" @click="givenValue('givenSet')">
-              Given set
-            </li>-->
             <li><hr /></li>
             <li
               id="findValue"

@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <v-container>
+    <v-container fluid>
       <v-row>
         <SubNavBar />
       </v-row>
