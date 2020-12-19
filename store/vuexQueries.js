@@ -4,7 +4,8 @@ export const state = () => ({
   findEntries: [[]],
   length: 1,
   node: null,
-  connectedNode: null
+  connectedNode: null,
+  nosqlDiagram: null
 })
 
 export const mutations = {
@@ -54,6 +55,9 @@ export const mutations = {
         state.findEntries[i] = []
       }
     }
+  },
+  SET_NOSQL_DIAGRAM(state, diagram) {
+    state.nosqlDiagram = diagram
   }
 }
 
@@ -78,6 +82,9 @@ export const actions = {
   },
   setArraySize({ commit }, n) {
     commit('SET_ARRAY_SIZE', n)
+  },
+  setNoSQLDiagram({ commit }, diagram) {
+    commit('SET_NOSQL_DIAGRAM', diagram)
   }
 }
 
@@ -99,5 +106,8 @@ export const getters = {
   },
   getFindEntries(state) {
     return state.findEntries
+  },
+  getNoSQLDiagram(state) {
+    return state.nosqlDiagram
   }
 }
