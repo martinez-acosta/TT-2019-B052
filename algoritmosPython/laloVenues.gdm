@@ -1,0 +1,115 @@
+entity User {
+  id userId unique
+  text userName
+  text userEmail
+  text[*] areasOfExpertise
+  ref Review[*] postsReview
+  ref Artifact[*] likesArtifact
+  ref Venue[*] likesVenue
+  ref Review[*] likesReview
+}
+
+entity Artifact {
+  id artifactId unique
+  text[*] authors
+  number numRatings
+  number avgRating
+  number sumRatings
+  text artifactTitle
+  text[*] keywords
+  ref Review[*] ratesReview
+  ref Venue[1] venue
+  ref User[*] likesUser
+}
+
+entity Venue {
+  text venueName
+  number year
+  id venueId unique
+  text homepage
+  text country
+  text[*] topics
+  ref Artifact[*] featuresArtifact
+  ref User[*] likesUser
+}
+
+entity Review {
+  number rating
+  text body
+  text reviewTitle
+  id reviewId unique
+  ref Artifact[1] artifact
+  ref User[1] user
+  ref User[*] likesUser
+}
+
+query Q1_artifactsByVenue:
+  select venue.venueName, venue.year,
+         artifacts.artifactId, artifacts.artifactTitle, artifacts.avgRating,
+         artifacts.authors, artifacts.keywords
+  from Venue as venue
+  including venue.featuresArtifact as artifacts
+  where venue.venueName = "?"
+    and venue.year > "?"
+
+query Q2_artifactsByAuthor:
+  select artifact.artifactId, artifact.artifactTitle, artifact.avgRating,
+         artifact.authors, artifact.keywords, artifact.authors as author
+  from Artifact as artifact
+  where artifact.authors = "?"
+
+query Q3_usersByLikedArtifact:
+  select user.userId, user.userName, user.userEmail
+  from User as user
+  including user.likesArtifact as artifacts
+  where artifacts.artifactId = "?"
+
+query Q4_expertsByLikedArtifact:
+  select user.userId, user.areasOfExpertise, user.userName, user.userEmail,
+         user.areasOfExpertise as areaOfExpertise
+  from User as user
+  including user.likesArtifact as artifacts
+  where artifacts.artifactId = "?"
+    and user.areasOfExpertise = "?"
+
+query Q5_ratingByArtifact:
+  select artifact.artifactId, artifact.avgRating
+  from Artifact as artifact
+  where artifact.artifactId = "?"
+
+query Q6_venuesLikedByUser:
+  select user.userId, venues.venueName, venues.year,
+         venues.country, venues.homepage
+  from User as user
+  including user.likesVenue as venues
+  where user.userId = "?"
+
+query Q7_artifactsLikedByUser:
+  select user.userId,
+         likesArtifacts.artifactId,
+         likesArtifacts.artifactTitle, likesArtifacts.authors,
+         venue.venueName
+  from User as user
+  including user.likesArtifact as likesArtifacts,
+            user.likesArtifact.venue as venue
+  where user.userId = "?"
+    and venue.year > "?"
+
+query Q8_reviewsByUser:
+  select user.userId,
+         reviews.reviewId, reviews.reviewTitle, reviews.body,
+         artifact.artifactId, artifact.artifactTitle
+  from User as user
+  including user.postsReview as reviews,
+            user.postsReview.artifact as artifact
+  where user.userId = "?"
+    and reviews.rating > "?"
+
+query Q9_artifacts:
+  select artifact.artifactId, artifact.artifactTitle, artifact.avgRating,
+         artifact.authors, artifact.keywords,
+         venue.venueName
+  from Artifact as artifact
+  including artifact.venue as venue
+  where artifact.artifactId = "?"
+  
