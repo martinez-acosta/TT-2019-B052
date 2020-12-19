@@ -70,7 +70,7 @@
       <v-col v-show="mostrarPaleta" cols="3">
         <div id="myOverviewDiv"></div>
         <div id="myNotes" class="h-50" scrollable>
-          <v-card color="white" fluid>
+          <v-card color="white" fluid outlined>
             <v-card-subtitle class="headline" color>
               Notas:
             </v-card-subtitle>
@@ -1223,7 +1223,7 @@ export default {
   left: 400px;*/
   background-color: #f2f2f2;
   z-index: 300; /* make sure its in front */
-  border: solid 1px #7986cb;
+  /*border: solid 1px #7986cb;*/
 }
 
 /* CSS for the traditional context menu */
