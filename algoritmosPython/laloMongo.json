@@ -1,79 +1,78 @@
-db.createCollection("Artifact",
-{
+db.createCollection("Artifact", {
   validator: {
     $jsonSchema: {    bsonType: "object",
     properties: {
-artifactId: { bsonType: "objectId"
-        },artifactTitle: { bsonType: "string"
-        },authors: { bsonType: "string"
-        },keywords: { bsonType: "string"
-        },numRatings: { bsonType: "double"
-        },sumRatings: { bsonType: "double"
-        },avgRating: { bsonType: "double"
-        },venueRef: { bsonType: "objectId"
-        }
-      }
+artifactId: { bsonType: "objectId"}
+,artifactTitle: { bsonType: "string"}
+,authors: { bsonType: "string"}
+,keywords: { bsonType: "string"}
+,numRatings: { bsonType: "double"}
+,sumRatings: { bsonType: "double"}
+,avgRating: { bsonType: "double"}
+,venueRef: { bsonType: "objectId"}
     }
-  }
+    }
+}
 })
-db.createCollection("Venue",
-{
+db.createCollection("Venue", {
   validator: {
     $jsonSchema: {    bsonType: "object",
     properties: {
-venueId: { bsonType: "objectId"
-        },venueName: { bsonType: "string"
-        },year: { bsonType: "double"
-        },country: { bsonType: "string"
-        },homepage: { bsonType: "string"
-        },topics: { bsonType: "string"
-        },artifactRefArray: {
-    bsonType: "array",
+venueId: { bsonType: "objectId"}
+,venueName: { bsonType: "string"}
+,year: { bsonType: "double"}
+,country: { bsonType: "string"}
+,homepage: { bsonType: "string"}
+,topics: { bsonType: "string"}
+,artifactRefArray: {
+    bsonType: ["array"],
     items: {
-artifactRef: { bsonType: "objectId"
-            }
-          }
-        }
-      }
+         properties: {
+artifactRef: { bsonType: "objectId"}
+         }
     }
   }
+    }
+    }
+}
 })
-db.createCollection("User",
-{
+db.createCollection("User", {
   validator: {
     $jsonSchema: {    bsonType: "object",
     properties: {
-userId: { bsonType: "objectId"
-        },userName: { bsonType: "string"
-        },userEmail: { bsonType: "string"
-        },areasOfExpertise: { bsonType: "string"
-        },artifactRefArray: {
-    bsonType: "array",
+userId: { bsonType: "objectId"}
+,userName: { bsonType: "string"}
+,userEmail: { bsonType: "string"}
+,areasOfExpertise: { bsonType: "string"}
+,artifactRefArray: {
+    bsonType: ["array"],
     items: {
-artifactRef: { bsonType: "objectId"
-            }
-          }
-        },venueRefArray: {
-    bsonType: "array",
-    items: {
-venueRef: { bsonType: "objectId"
-            }
-          }
-        },reviewArray: {
-    bsonType: "array",
-    items: {
-    bsonType: "object",
-    properties: {
-reviewId: { bsonType: "objectId"
-              },reviewTitle: { bsonType: "string"
-              },body: { bsonType: "string"
-              },rating: { bsonType: "double"
-              },artifactRef: { bsonType: "objectId"
-              }
-            }
-          }
-        }
-      }
+         properties: {
+artifactRef: { bsonType: "objectId"}
+         }
     }
   }
+,venueRefArray: {
+    bsonType: ["array"],
+    items: {
+         properties: {
+venueRef: { bsonType: "objectId"}
+         }
+    }
+  }
+,reviewArray: {
+    bsonType: ["array"],
+    items: {
+         properties: {
+reviewId: { bsonType: "objectId"}
+,reviewTitle: { bsonType: "string"}
+,body: { bsonType: "string"}
+,rating: { bsonType: "double"}
+,artifactRef: { bsonType: "objectId"}
+         }
+    }
+  }
+    }
+    }
+}
 })

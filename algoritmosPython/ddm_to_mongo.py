@@ -42,9 +42,11 @@ def generateField(output_file,field):
 
 def generateArrayField(output_file, field):
     output_file.write(field.name + ": {\n")
-    output_file.write("    bsonType: \"array\",\n")
+    output_file.write("    bsonType: [\"array\"],\n")
     output_file.write("    items: {\n")
+    output_file.write("         properties: {\n")
     generateField(output_file,field.type)
+    output_file.write("         }\n")
     output_file.write("    }\n")
     output_file.write("  }\n")
     return
@@ -54,8 +56,7 @@ def generatePrimitiveField(output_file, field):
     return
 
 def generateDocumentField(output_file,document):
-    output_file.write("    bsonType: \"object\",\n")
-    output_file.write("    properties: {\n")
+
     for field in document.fields:
         if isinstance(field, ddm.PrimitiveField):
             generatePrimitiveField(output_file,field)
@@ -66,17 +67,22 @@ def generateDocumentField(output_file,document):
         if field != document.fields[-1]:
                 output_file.write(",")
 
-    output_file.write("    }\n")
     return
 
 def writeFile(output_file,collection):
     output_file.write("db.createCollection(\"" + collection.name + "\", {\n")
     output_file.write("  validator: {\n")
     output_file.write("    $jsonSchema: {")
+    output_file.write("    bsonType: \"object\",\n")
+    output_file.write("    properties: {\n")
+    
     generateDocumentField(output_file,collection.root)
+    
+    output_file.write("    }\n")
     output_file.write("    }\n}\n})\n")
     output_file.close()
     return
+
 def main():
     ddmModel = loadModelDDM("prueba_ddm.xmi")
     ofile = "laloMongo.json"
