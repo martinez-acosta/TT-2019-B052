@@ -1,8 +1,12 @@
 <template>
-  <!------Consultas---------->
   <v-container fluid>
+    <!------Consultas---------->
     <v-row>
-      <v-btn block color="success" :disabled="!enableBtnQueries"
+      <v-btn
+        block
+        color="success"
+        :disabled="!enableBtnQueries"
+        @click="getNoSQLDiagram"
         >Obtener Modelo NoSQL</v-btn
       >
     </v-row>
@@ -32,8 +36,29 @@
         </v-textarea>
       </v-col>
     </v-row>
+    <!------Fin consultas---------->
+    <!-- Dialog/modals -->
+    <v-dialog v-model="validDiagram" scrollable min-width="450" max-width="600">
+      <v-card>
+        <v-card-title class="headline">
+          Transformación al modelo No SQL
+        </v-card-title>
+        <v-card-text font-size="24px">
+          La Tranformación fue exitosa, presione continuar para visualizar el
+          diagrama.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn left color="success" to="/workspace/nosql">
+            Continuar
+          </v-btn>
+          <v-btn color="primary" @click="validDiagram = false">
+            Cerrar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
-  <!------Fin consultas---------->
 </template>
 
 <script>
@@ -113,7 +138,9 @@ entity Review {
       // findEntries: [],
       currentTab: null,
       tab: null,
-      gdmQueries: ''
+      gdmQueries: '',
+      nosqlDiagram: '',
+      validDiagram: false
     }
   },
   computed: {
@@ -214,6 +241,25 @@ entity Review {
     },
     forceRerender() {
       this.componentKey += 1
+    },
+    getNoSQLDiagram() {
+      if (this.gdmQueries.length < 50) {
+        console.log('la consulta es muy corta')
+      } else {
+        this.$store
+          .dispatch('axiosGDM/getNoSQLDiagram', {
+            entities: this.entitiesER,
+            queries: this.gdmQueries
+          })
+          .then((response) => {
+            this.validDiagram = true
+            const diagram = response.data.diagram
+            this.$store.dispatch('vuexQueries/setNoSQLDiagram', diagram)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     }
   }
 }
