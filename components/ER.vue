@@ -10,13 +10,13 @@
         class="white lighten-2 fill-height d-flex flex-column"
       >
         <div
-          v-show="mostrarPaleta"
+          v-if="mostrarPaleta"
           id="myPaletteDiv"
           style="
             width: 100%;
             display: flex;
             border: solid 0px black;
-            height: 70%;           
+            height: 80%;           
           "
         ></div>
         <div v-show="mostrarPaleta" id="myInspectorDiv"></div>
