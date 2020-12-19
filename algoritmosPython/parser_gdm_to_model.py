@@ -313,15 +313,15 @@ def main():
     # Creamos el modelo GDM
     model = gdm.Model()
     
-    input_file = open('gdm/venues.gdm', 'r') 
+    input_file = open('laloVenues.gdm', 'r') 
     lines = input_file.readlines()
     
     # Primero creamos las entidades y las consultas, porque las necesitamos para crear las referencias
     for line in lines:
-        if "entity " in line:
+        if "entity" in line:
             entity = gdm.Entity(name=line.split()[1])
             model.entities.append(entity)
-        if "query " in line:
+        if "query" in line:
             query = gdm.Query(name=line.split()[1].strip(":"))
             model.queries.append(query)
 

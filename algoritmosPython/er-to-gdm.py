@@ -138,8 +138,8 @@ def main():
         # Escribimos el archivo de texto
         if count == 0:
             count += 1
-            with open("salida.gdm", 'w') as output_file:
-                output_file.write("entiy " + entity["text"] + " {\n")
+            with open("laloVenues.gdm", 'w') as output_file:
+                output_file.write("entity " + entity["text"] + " {\n")
                 for attribute in reversed(attributes):
                     output_file.write(parseAttribute(attribute))
                 for reference in reversed(references):
@@ -147,8 +147,8 @@ def main():
                 output_file.write("}\n\n")
                 output_file.close()
         else:
-            with open("salida.gdm", 'a') as output_file:
-                output_file.write("entiy " + entity["text"] + " {\n")
+            with open("laloVenues.gdm", 'a') as output_file:
+                output_file.write("entity " + entity["text"] + " {\n")
                 for attribute in reversed(attributes):
                     output_file.write(parseAttribute(attribute))
                 for reference in reversed(references):

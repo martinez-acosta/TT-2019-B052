@@ -1,28 +1,12 @@
-db.createCollection("Artifact", {
-  validator: {
-    $jsonSchema: {    bsonType: "object",
-    properties: {
-artifactId: { bsonType: "objectId"}
-,artifactTitle: { bsonType: "string"}
-,authors: { bsonType: "string"}
-,keywords: { bsonType: "string"}
-,numRatings: { bsonType: "double"}
-,sumRatings: { bsonType: "double"}
-,avgRating: { bsonType: "double"}
-,venueRef: { bsonType: "objectId"}
-    }
-    }
-}
-})
 db.createCollection("Venue", {
   validator: {
     $jsonSchema: {    bsonType: "object",
     properties: {
-venueId: { bsonType: "objectId"}
-,venueName: { bsonType: "string"}
+venueName: { bsonType: "string"}
 ,year: { bsonType: "double"}
-,country: { bsonType: "string"}
+,venueId: { bsonType: "objectId"}
 ,homepage: { bsonType: "string"}
+,country: { bsonType: "string"}
 ,topics: { bsonType: "string"}
 ,artifactRefArray: {
     bsonType: ["array"],
@@ -32,6 +16,22 @@ artifactRef: { bsonType: "objectId"}
          }
     }
   }
+    }
+    }
+}
+})
+db.createCollection("Artifact", {
+  validator: {
+    $jsonSchema: {    bsonType: "object",
+    properties: {
+artifactId: { bsonType: "objectId"}
+,authors: { bsonType: "string"}
+,numRatings: { bsonType: "double"}
+,avgRating: { bsonType: "double"}
+,sumRatings: { bsonType: "double"}
+,artifactTitle: { bsonType: "string"}
+,keywords: { bsonType: "string"}
+,venueRef: { bsonType: "objectId"}
     }
     }
 }
@@ -64,10 +64,10 @@ venueRef: { bsonType: "objectId"}
     bsonType: ["array"],
     items: {
          properties: {
-reviewId: { bsonType: "objectId"}
-,reviewTitle: { bsonType: "string"}
+rating: { bsonType: "double"}
 ,body: { bsonType: "string"}
-,rating: { bsonType: "double"}
+,reviewTitle: { bsonType: "string"}
+,reviewId: { bsonType: "objectId"}
 ,artifactRef: { bsonType: "objectId"}
          }
     }
