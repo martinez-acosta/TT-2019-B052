@@ -69,8 +69,8 @@ def generateKey():
     global x
     x = x + 1 
     return x
-#input_file = "prueba_ddm.xmi"
-input_file = "documents.models/venuesDOC.model"
+input_file = "prueba_ddm.xmi"
+#input_file = "documents.models/venuesDOC.model"
 with open(input_file) as xml_file: 
       
     data_dict = xmltodict.parse(xml_file.read()) 
