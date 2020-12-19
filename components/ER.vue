@@ -9,13 +9,6 @@
         cols="2"
         class="white lighten-2 fill-height d-flex flex-column"
       >
-        <v-btn
-          :download="scriptName"
-          :href="urlFile"
-          @click="downloadGoJSData()"
-        >
-          Descargar Gojs</v-btn
-        >
         <div
           v-show="mostrarPaleta"
           id="myPaletteDiv"
@@ -74,9 +67,9 @@
           </ul>
         </div>
       </v-col>
-      <v-col cols="3">
+      <v-col v-show="mostrarPaleta" cols="3">
         <div id="myOverviewDiv"></div>
-        <div v-show="mostrarPaleta" id="myNotes" class="h-50" scrollable>
+        <div id="myNotes" class="h-50" scrollable>
           <v-col cols="12">
             <v-card color="white" max-width="400">
               <v-card-subtitle class="headline" color>

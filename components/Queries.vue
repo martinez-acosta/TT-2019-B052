@@ -1,90 +1,39 @@
 <template>
-  <v-container>
+  <!------Consultas---------->
+  <v-container fluid>
     <v-row>
-      <v-col cols="12">
-        <v-tabs v-model="currentTab" background-color="white" show-arrows flat>
-          <v-tab v-for="n in length" :key="n"> Q{{ n }} </v-tab>
-        </v-tabs>
-        <v-tabs-items :key="componentKey" v-model="currentTab">
-          <v-tab-item v-for="n in length" :key="n">
-            <!------Consultas---------->
-            <v-container>
-              <!-- <v-row>
-                <v-col cols="6">
-                  <v-card>
-                    <v-card-title>
-                      Respecto a:
-                    </v-card-title>
-                    <v-data-table
-                      :headers="givenHeaders"
-                      hide-default-footer
-                      :items="givenEntries[n - 1]"
-                    ></v-data-table>
-                  </v-card>
-                </v-col>
-                <v-col cols="6">
-                  <v-card>
-                    <v-card-title>
-                      Encontrar:
-                    </v-card-title>
-                    <v-data-table
-                      :headers="findHeaders"
-                      hide-default-footer
-                      :items="findEntries[n - 1]"
-                    ></v-data-table>
-                  </v-card>
-                </v-col>
-              </v-row> -->
-              <v-row>
-                <v-col cols="6">
-                  <div class="overflow-auto" style="overflow: auto;">
-                    <ssh-pre
-                      language="pug"
-                      label="entidades del GDM"
-                      :reactive="true"
-                      :copy-button="false"
-                      :dark="false"
-                    >
-                      {{ entitiesER }}
-                    </ssh-pre>
-                  </div>
-                </v-col>
-                <v-col cols="6">
-                  <p>Agrega tus consulta para el modelo GDM</p>
-                  <v-textarea
-                    id="queriesGDM"
-                    outlined
-                    label="Consultas de accesso"
-                  >
-                  </v-textarea>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-btn block color="success"
-                    >Obtener Modelo NoSQL</v-btn
-                  ></v-col
-                >
-              </v-row>
-            </v-container>
-            <!------Fin consultas---------->
-          </v-tab-item>
-        </v-tabs-items>
+      <v-btn block color="success" :disabled="!enableBtnQueries"
+        >Obtener Modelo NoSQL</v-btn
+      >
+    </v-row>
+    <v-row>
+      <v-col cols="6">
+        <div style="width: 100%; height: 70%; overflow: auto;">
+          <ssh-pre
+            language="pug"
+            label="entidades del GDM"
+            :reactive="true"
+            :copy-button="false"
+            :dark="false"
+          >
+            {{ entitiesER }}
+          </ssh-pre>
+        </div>
       </v-col>
-      <!-------Botones------->
-      <!-- <v-col cols="2">
-        <v-tabs>
-          <v-btn icon>
-            <v-icon @click="setLength(1)">mdi-plus</v-icon>
-          </v-btn>
-          <v-btn v-show="length - 1" icon>
-            <v-icon @click="setLength(-1)">mdi-minus</v-icon>
-          </v-btn>
-        </v-tabs>
-      </v-col> -->
-      <!-------Fin Botones------->
+      <v-col cols="6">
+        <v-card-title>Agrega tus consulta para el modelo GDM</v-card-title>
+        <v-textarea
+          id="queriesGDM"
+          v-model="gdmQueries"
+          outlined
+          rows="24"
+          label="Consultas de accesso"
+        >
+        </v-textarea>
+      </v-col>
     </v-row>
   </v-container>
+  <!------Fin consultas---------->
 </template>
 
 <script>
@@ -164,7 +113,7 @@ entity Review {
       // findEntries: [],
       currentTab: null,
       tab: null,
-      aliasEntity: 'alias'
+      gdmQueries: ''
     }
   },
   computed: {
@@ -176,7 +125,10 @@ entity Review {
       queries: 'vuexQueries/getQueries',
       givenEntries: 'vuexQueries/getGivenEntries',
       findEntries: 'vuexQueries/getFindEntries'
-    })
+    }),
+    enableBtnQueries() {
+      return Boolean(this.gdmQueries)
+    }
   },
   watch: {},
   mounted() {

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row style="height: 80vh">
       <v-col cols="2"><div id="myOverviewDiv"></div></v-col>
       <v-col cols="10" class="white fill-height d-flex flex-column">

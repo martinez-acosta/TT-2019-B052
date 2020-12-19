@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <v-container fluid>
     <client-only>
       <vue-snotify></vue-snotify>
     </client-only>
@@ -45,7 +45,10 @@
       </v-toolbar>
     </div>
 
-    <div class="container overflow-auto">
+    <div
+      class="container-fluid"
+      style="width: 100%; height: 70%; overflow: auto;"
+    >
       <ssh-pre
         language="sql"
         label="SQL"
@@ -100,7 +103,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </div>
+  </v-container>
 </template>
 
 <script type="module">
