@@ -37,32 +37,46 @@
             "
           ></div>
           <ul id="contextMenu" class="menu">
-            <li
-              v-show="submenuEntity"
-              id="givenValue"
-              class="menu-item"
-              @click="givenValue('givenValue')"
-            >
-              Respecto al atributo (=)
+            <li id="cut" class="menu-item" onclick="cxcommand(event)">Cut</li>
+            <li id="copy" class="menu-item" onclick="cxcommand(event)">Copy</li>
+            <li id="paste" class="menu-item" onclick="cxcommand(event)">
+              Paste
             </li>
-            <!-- <li
-              id="givenRange"
-              class="menu-item"
-              @click="givenValue('givenRange')"
-            >
-              Given range (&gt;, &lt;, &gt;=, &lt;= )
-            </li> -->
-            <li v-show="submenuEntity" id="aliasEntity" class="menu-item">
-              Agregar alias
+            <li id="delete" class="menu-item" onclick="cxcommand(event)">
+              Delete
             </li>
-            <li><hr /></li>
-            <li
-              v-show="!submenuEntity"
-              id="findValue"
-              class="menu-item"
-              @click="findValue('findValue')"
-            >
-              Encontrar el atributo
+            <li id="color" class="menu-item">
+              Color
+              <ul class="menu">
+                <li
+                  class="menu-item"
+                  style="background-color: #f38181;"
+                  onclick="cxcommand(event, 'color')"
+                >
+                  Red
+                </li>
+                <li
+                  class="menu-item"
+                  style="background-color: #eaffd0;"
+                  onclick="cxcommand(event, 'color')"
+                >
+                  Green
+                </li>
+                <li
+                  class="menu-item"
+                  style="background-color: #95e1d3;"
+                  onclick="cxcommand(event, 'color')"
+                >
+                  Blue
+                </li>
+                <li
+                  class="menu-item"
+                  style="background-color: #fce38a;"
+                  onclick="cxcommand(event, 'color')"
+                >
+                  Yellow
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -371,19 +385,19 @@ export default {
 
     // Since we have only one main element, we don't have to declare a hide method,
     // we can set mainElement and GoJS will hide it automatically
-    if (this.soloLectura) {
-      this.myContextMenu = $(go.HTMLInfo, {
-        show: this.showContextMenu,
-        hide: this.hideContextMenu
-      })
-    }
+    // if (this.soloLectura) {
+    this.myContextMenu = $(go.HTMLInfo, {
+      show: this.showContextMenu,
+      hide: this.hideContextMenu
+    })
+    // }
 
     /* Creamos el modelo de datos, está conformado por dos partes, los nodos y los links, [nodos], [links] donde los links tienen la estructura { from: a, to: b } siendo a, b las llaves de los objetos que están en el arreglo nodos */
     this.myDiagram.nodeTemplate = $(
       go.Node,
       'Spot',
       {
-        contextMenu: this.mostrarMenuContextual(),
+        // contextMenu: this.mostrarMenuContextual(),
         locationSpot: go.Spot.Center
       },
       new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(
@@ -886,7 +900,7 @@ export default {
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
   methods: {
     mostrarMenuContextual() {
-      if (this.soloLectura) return this.myContextMenu
+      if (!this.soloLectura) return this.myContextMenu
     },
     // tell the GoJS Diagram to update based on the arbitrarily modified model data
     updateDiagramFromData() {
@@ -1023,40 +1037,34 @@ export default {
       // Show only the relevant buttons given the current state.
       const cmd = diagram.commandHandler
       let hasMenuItem = false
-      let submenuEntityCtx = this.submenuEntity
       function maybeShowItem(elt, pred) {
-        if (
-          pred &&
-          (obj.data.type === 'attribute' ||
-            obj.data.type === 'keyAttribute' ||
-            obj.data.type === 'derivedAttribute' ||
-            obj.data.type === 'multivalueAttribute' ||
-            obj.data.type === 'entity' ||
-            obj.data.type === 'weakEntity')
-        ) {
-          const isEntity = ['entity', 'weakEntity'].find(
-            (k) => k === obj.data.type
-          )
-          submenuEntityCtx = Boolean(isEntity)
+        if (pred) {
           elt.style.display = 'block'
           hasMenuItem = true
         } else {
           elt.style.display = 'none'
         }
       }
+      maybeShowItem(document.getElementById('cut'), cmd.canCutSelection())
+      maybeShowItem(document.getElementById('copy'), cmd.canCopySelection())
       maybeShowItem(
-        document.getElementById('givenValue'),
-        cmd.canCutSelection()
+        document.getElementById('paste'),
+        cmd.canPasteSelection(
+          diagram.toolManager.contextMenuTool.mouseDownPoint
+        )
       )
+      maybeShowItem(document.getElementById('delete'), cmd.canDeleteSelection())
+      maybeShowItem(document.getElementById('color'), obj !== null)
+
       // Now show the whole context menu element
       if (hasMenuItem) {
         this.cxElement.classList.add('show-menu')
-        // we don't bother overriding positionfContextMenu, we just do it here:
+        // we don't bother overriding positionContextMenu, we just do it here:
         const mousePt = diagram.lastInput.viewPoint
         this.cxElement.style.left = mousePt.x + 5 + 'px'
         this.cxElement.style.top = mousePt.y + 'px'
       }
-      this.submenuEntity = submenuEntityCtx
+
       // Optional: Use a `window` click listener with event capture to
       //           remove the context menu if the user clicks elsewhere on the page
       window.addEventListener('click', this.hideCX, true)

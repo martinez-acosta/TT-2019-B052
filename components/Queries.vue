@@ -15,7 +15,7 @@
     </v-row>
     <v-row>
       <v-col cols="6">
-        <div style="width: 100%; height: 70%; overflow: auto; font-size: 11px;">
+        <div style="width: 100%; height: 70%; overflow: auto; font-size: 12px;">
           <ssh-pre
             language="pug"
             label="entidades del GDM"
@@ -35,6 +35,7 @@
           outlined
           rows="24"
           label="Consultas de accesso"
+          style="font-size: 12px;"
         >
         </v-textarea>
       </v-col>
@@ -96,38 +97,44 @@ entity User {
   text userName
   text userEmail
   text[*] areasOfExpertise
-  ref Review[*] reviews
-  ref Artifact[*] likesArtifacts
+  ref Review[*] postsReview
+  ref Artifact[*] likesArtifact
   ref Venue[*] likesVenue
-}
-
-entity Venue {
-  id venueId unique
-  text venueName
-  number year
-  text country
-  text homepage
-  text[*] topics
-  ref Artifact[*] artifacts
+  ref Review[*] likesReview
 }
 
 entity Artifact {
   id artifactId unique
-  text artifactTitle
   text[*] authors
-  text[*] keywords
   number numRatings
-  number sumRatings
   number avgRating
+  number sumRatings
+  text artifactTitle
+  text[*] keywords
+  ref Review[*] ratesReview
   ref Venue[1] venue
+  ref User[*] likesUser
+}
+
+entity Venue {
+  text venueName
+  number year
+  id venueId unique
+  text homepage
+  text country
+  text[*] topics
+  ref Artifact[*] featuresArtifact
+  ref User[*] likesUser
 }
 
 entity Review {
-  id reviewId unique
-  text reviewTitle
-  text body
   number rating
+  text body
+  text reviewTitle
+  id reviewId unique
   ref Artifact[1] artifact
+  ref User[1] user
+  ref User[*] likesUser
 }`,
       findHeaders: [
         {
