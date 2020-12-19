@@ -3,10 +3,10 @@ entiy User {
   text userName
   text userEmail
   text[*] areasOfExpertise
-  ref Review[*] reviews
-  ref Artifact[*] likes_ua
-  ref Venue[*] likes_uv
-  ref Review[*] likes_ur
+  ref Review[*] postsReview
+  ref Artifact[*] likesArtifact
+  ref Venue[*] likesVenue
+  ref Review[*] likesReview
 }
 
 entiy Artifact {
@@ -17,9 +17,9 @@ entiy Artifact {
   number sumRatings
   text artifactTitle
   text[*] keywords
-  ref Review[*] rates
-  ref Venue[1] features
-  ref User[*] likes_ua
+  ref Review[*] ratesReview
+  ref Venue[1] venue
+  ref User[*] likesUser
 }
 
 entiy Venue {
@@ -29,8 +29,8 @@ entiy Venue {
   text homepage
   text country
   text[*] topics
-  ref Artifact[*] features
-  ref User[*] likes_uv
+  ref Artifact[*] featuresArtifact
+  ref User[*] likesUser
 }
 
 entiy Review {
@@ -38,8 +38,8 @@ entiy Review {
   text body
   text reviewTitle
   id reviewId unique
-  ref Artifact[1] rates
-  ref User[1] reviews
-  ref User[*] likes_ur
+  ref Artifact[1] artifact
+  ref User[1] user
+  ref User[*] likesUser
 }
 

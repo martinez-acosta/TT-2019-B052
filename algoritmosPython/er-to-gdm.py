@@ -78,6 +78,10 @@ def parseReference(reference):
 
     line = "ref " + reference["entity"] + cardinality + " " + reference["name"]
     return "  " + line + "\n"
+
+def toFirstLower(test_str):
+    return test_str[0].lower() + test_str[1:]
+
 def main():
   
     input_file = open('er.json') 
@@ -101,15 +105,24 @@ def main():
         for feature in features:
             if (feature['type'] == "relation"):
                 reference = {}
-                reference["name"] = feature["text"]
                 relation = getRelationInfo( feature["key"], linkData, nodeData)
 
                 if (relation["from"]["key"] != entity["key"]):
                     reference["entity"] = relation["from"]["text"]
                     reference["cardinality"] = relation["fromC"]
+                    if relation["fromC"] != '1':
+                        reference["name"] = feature["text"] + relation["from"]["text"]
+                    else:
+                        reference["name"] = toFirstLower(relation["from"]["text"])
                 else:
                     reference["entity"] = relation["to"]["text"]
                     reference["cardinality"] = relation["toC"]
+                    # Si la relación es a N, va el nombre de la relación concatenado con el nombre de la entidad
+                    if relation["toC"] != '1':
+                        reference["name"] = feature["text"] + relation["to"]["text"]
+                    else:
+                        reference["name"] = toFirstLower(relation["to"]["text"])
+
 
                 references.append(reference)
             if ( isAttribute(feature['type']) ):
