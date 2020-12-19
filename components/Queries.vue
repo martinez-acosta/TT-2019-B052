@@ -91,51 +91,7 @@ export default {
           value: 'type'
         }
       ],
-      entitiesER: `
-entity User {
-  id userId unique
-  text userName
-  text userEmail
-  text[*] areasOfExpertise
-  ref Review[*] postsReview
-  ref Artifact[*] likesArtifact
-  ref Venue[*] likesVenue
-  ref Review[*] likesReview
-}
-
-entity Artifact {
-  id artifactId unique
-  text[*] authors
-  number numRatings
-  number avgRating
-  number sumRatings
-  text artifactTitle
-  text[*] keywords
-  ref Review[*] ratesReview
-  ref Venue[1] venue
-  ref User[*] likesUser
-}
-
-entity Venue {
-  text venueName
-  number year
-  id venueId unique
-  text homepage
-  text country
-  text[*] topics
-  ref Artifact[*] featuresArtifact
-  ref User[*] likesUser
-}
-
-entity Review {
-  number rating
-  text body
-  text reviewTitle
-  id reviewId unique
-  ref Artifact[1] artifact
-  ref User[1] user
-  ref User[*] likesUser
-}`,
+      entitiesER: ``,
       findHeaders: [
         {
           text: 'Atributo',
@@ -169,7 +125,7 @@ entity Review {
   },
   watch: {},
   created() {
-    // this.getEntitiesGdm()
+    this.getEntitiesGdm()
   },
   mounted() {
     // listeners
@@ -284,7 +240,7 @@ entity Review {
           })
           .then((response) => {
             const nosqlRawDiagram = response.data
-            this.entitiesER = nosqlRawDiagram
+            this.entitiesER = '\n' + nosqlRawDiagram
           })
           .catch(() => {
             const msg =
