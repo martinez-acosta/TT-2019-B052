@@ -1,5 +1,37 @@
 <template>
   <v-container fluid>
+    <client-only>
+      <vue-snotify></vue-snotify>
+    </client-only>
+    <v-row>
+      <v-toolbar dense>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              v-bind="attrs"
+              :download="scriptName"
+              v-on="on"
+              @click="helpDialog = true"
+            >
+              <v-icon>mdi-download</v-icon>
+            </v-btn>
+          </template>
+          <span>Descargar</span>
+        </v-tooltip>
+
+        <v-spacer></v-spacer>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-help</v-icon>
+            </v-btn>
+          </template>
+          <span>Ayuda</span>
+        </v-tooltip>
+      </v-toolbar>
+    </v-row>
     <v-row style="height: 80vh">
       <v-col cols="2"><div id="myOverviewDiv"></div></v-col>
       <v-col cols="10" class="white fill-height d-flex flex-column">
@@ -11,6 +43,29 @@
         </div>
       </v-col>
     </v-row>
+    <!-- Dialog/modals -->
+    <v-dialog v-model="helpDialog" max-width="360">
+      <v-card>
+        <v-card-title class="headline">
+          Modelo noSQL del diagrama ER
+        </v-card-title>
+        <v-card-text>
+          Para crear el script de MongoDB proporcione un nombre para el archivo
+          de descarga.
+        </v-card-text>
+        <v-card-subtitle>
+          <v-text-field
+            v-model="db_name"
+            label="Nombre para el archivo"
+          ></v-text-field>
+        </v-card-subtitle>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="success" text @click="downloadScript()">Enviar</v-btn>
+          <v-btn color="primary" text @click="helpDialog = false">Cerrar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script type="module">
@@ -23,7 +78,11 @@ export default {
   data() {
     return {
       myDiagram: '',
-      myOverview: ''
+      myOverview: '',
+      helpDialog: false,
+      scriptName: 'TT-2019-B052.bson',
+      urlFile: '#',
+      db_name: ''
     }
   },
   computed: {
@@ -289,6 +348,27 @@ export default {
     loadModel() {
       this.myDiagram.model.nodeDataArray = this.nosqlDiagram.nodeDataArray
       this.myDiagram.model.linkDataArray = this.nosqlDiagram.linkDataArray
+    },
+    downloadScript() {
+      this.$store
+        .dispatch('axiosNoSQL/getMongoScript')
+        .then((response) => {
+          this.helpDialog = false
+          const scriptData = encodeURIComponent(response.data)
+          this.urlFile = `data:text/plain;charset=utf-8,${scriptData}` // application/sql
+          const dbname = this.db_name ? this.db_name : 'tt2019-B052'
+          this.scriptName = dbname + '.json'
+          const link = document.createElement('a')
+          link.href = this.urlFile
+          link.setAttribute('download', this.scriptName) // or any other extension
+          document.body.appendChild(link)
+          link.click()
+          this.$snotify.success('Archivo descargado.')
+        })
+        .catch(() => {
+          const msg = 'Ocurrio un error al obtener el script de mongoDB'
+          this.$snotify.error(msg)
+        })
     }
   }
 }

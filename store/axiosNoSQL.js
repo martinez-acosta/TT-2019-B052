@@ -6,5 +6,8 @@ export const actions = {
   },
   getGDMEntities({ commit }, payload) {
     return Service.getGDMEntities(payload)
+  },
+  getMongoScript({ commit }) {
+    return Service.getMongoScript()
   }
 }

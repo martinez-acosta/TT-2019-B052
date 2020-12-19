@@ -78,5 +78,13 @@ export default {
         Authorization: token
       }
     })
+  },
+  async getMongoScript() {
+    const token = axios.defaults.headers.common.Authorization
+    return await apiClient.get('/noRelational', {
+      headers: {
+        Authorization: token
+      }
+    })
   }
 }
