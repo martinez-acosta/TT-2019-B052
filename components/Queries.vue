@@ -90,45 +90,7 @@ export default {
           value: 'type'
         }
       ],
-      entitiesER: `
-entity User {
-  id userId unique
-  text userName
-  text userEmail
-  text[*] areasOfExpertise
-  ref Review[*] reviews
-  ref Artifact[*] likesArtifacts
-  ref Venue[*] likesVenue
-}
-
-entity Venue {
-  id venueId unique
-  text venueName
-  number year
-  text country
-  text homepage
-  text[*] topics
-  ref Artifact[*] artifacts
-}
-
-entity Artifact {
-  id artifactId unique
-  text artifactTitle
-  text[*] authors
-  text[*] keywords
-  number numRatings
-  number sumRatings
-  number avgRating
-  ref Venue[1] venue
-}
-
-entity Review {
-  id reviewId unique
-  text reviewTitle
-  text body
-  number rating
-  ref Artifact[1] artifact
-}`,
+      entitiesER: ``,
       findHeaders: [
         {
           text: 'Atributo',
@@ -161,6 +123,9 @@ entity Review {
     }
   },
   watch: {},
+  created() {
+    this.getEntitiesGdm()
+  },
   mounted() {
     // listeners
     this.$nuxt.$on('emitGivenValue', () => {
@@ -258,6 +223,26 @@ entity Review {
           .catch(() => {
             const msg =
               'Ocurrio un error durante la trandormación, revise las consultas.'
+            this.$snotify.error(msg)
+          })
+      }
+    },
+    getEntitiesGdm() {
+      if (!this.diagramaObtenido) {
+        this.$snotify.warning(
+          'No se encontro un diagrama en el contexto de la aplicación.'
+        )
+      } else {
+        this.$store
+          .dispatch('axiosNoSQL/getGDMEntities', {
+            diagram: this.diagramaObtenido
+          })
+          .then((response) => {
+            this.entitiesER = response.data
+          })
+          .catch(() => {
+            const msg =
+              'Ocurrio un error al obtener las entidades del diagrama ER, revise las consultas.'
             this.$snotify.error(msg)
           })
       }
