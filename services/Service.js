@@ -62,5 +62,13 @@ export default {
         Authorization: token
       }
     })
+  },
+  async getNoSQLDiagram(payload) {
+    const token = axios.defaults.headers.common.Authorization
+    return await apiClient.post('/noRelational', payload, {
+      headers: {
+        Authorization: token
+      }
+    })
   }
 }

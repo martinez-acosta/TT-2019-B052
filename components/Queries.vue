@@ -247,7 +247,7 @@ entity Review {
         console.log('la consulta es muy corta')
       } else {
         this.$store
-          .dispatch('axiosGDM/getNoSQLDiagram', {
+          .dispatch('axiosNoSQL/getNoSQLDiagram', {
             entities: this.entitiesER,
             queries: this.gdmQueries
           })
