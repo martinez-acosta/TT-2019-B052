@@ -38,7 +38,7 @@
           ></div>
           <ul id="contextMenu" class="menu">
             <li
-              v-show="!submenuEntity"
+              v-show="submenuEntity"
               id="givenValue"
               class="menu-item"
               @click="givenValue('givenValue')"

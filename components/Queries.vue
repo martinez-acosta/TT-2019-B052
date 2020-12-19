@@ -15,7 +15,7 @@
     </v-row>
     <v-row>
       <v-col cols="6">
-        <div style="width: 100%; height: 70%; overflow: auto;">
+        <div style="width: 100%; height: 70%; overflow: auto; font-size: 11px;">
           <ssh-pre
             language="pug"
             label="entidades del GDM"
@@ -28,7 +28,7 @@
         </div>
       </v-col>
       <v-col cols="6">
-        <v-card-title>Agrega tus consulta para el modelo GDM</v-card-title>
+        <v-card-title>Consultas modelo GDM</v-card-title>
         <v-textarea
           id="queriesGDM"
           v-model="gdmQueries"
