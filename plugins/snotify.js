@@ -5,7 +5,7 @@ import Snotify, { SnotifyPosition } from 'vue-snotify'
 const options = {
   toast: {
     position: SnotifyPosition.rightTop,
-    timeout: 500
+    timeout: 1500
   }
 }
 

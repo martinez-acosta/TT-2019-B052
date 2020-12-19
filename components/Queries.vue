@@ -1,5 +1,8 @@
 <template>
   <v-container fluid>
+    <client-only>
+      <vue-snotify></vue-snotify>
+    </client-only>
     <!------Consultas---------->
     <v-row>
       <v-btn
@@ -219,18 +222,12 @@ entity Review {
         })
         .then(this.forceRerender())
     })
-
-    this.$nuxt.$on('emitAliasEntity', () => {
-      const nodo = this.nodoObtenido
-      console.log(nodo)
-    })
   },
   beforeDestroy() {
     this.$nuxt.$off('emitGivenValue')
     this.$nuxt.$off('emitGivenRange')
     this.$nuxt.$off('emitGivenSet')
     this.$nuxt.$off('emitFindValue')
-    this.$nuxt.$off('emitAliasEntity')
   },
 
   methods: {
@@ -244,7 +241,9 @@ entity Review {
     },
     getNoSQLDiagram() {
       if (this.gdmQueries.length < 50) {
-        console.log('la consulta es muy corta')
+        this.$snotify.warning(
+          'Las consultas de acceso no pueden ser tan cortas.'
+        )
       } else {
         this.$store
           .dispatch('axiosNoSQL/getNoSQLDiagram', {
@@ -256,8 +255,10 @@ entity Review {
             const diagram = response.data.diagram
             this.$store.dispatch('vuexQueries/setNoSQLDiagram', diagram)
           })
-          .catch((error) => {
-            console.log(error)
+          .catch(() => {
+            const msg =
+              'Ocurrio un error durante la trandormación, revise las consultas.'
+            this.$snotify.error(msg)
           })
       }
     }
