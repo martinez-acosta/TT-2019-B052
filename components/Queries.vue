@@ -14,7 +14,7 @@
       >
     </v-row>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="3">
         <div style="width: 100%; height: 70%; overflow: auto; font-size: 12px;">
           <ssh-pre
             language="pug"
@@ -27,15 +27,17 @@
           </ssh-pre>
         </div>
       </v-col>
-      <v-col cols="6">
+      <v-col>
         <v-card-title>Consultas modelo GDM</v-card-title>
         <v-textarea
           id="queriesGDM"
           v-model="gdmQueries"
+          full-width
+          row-height="10"
           outlined
+          dense
           rows="24"
           label="Consultas de accesso"
-          style="font-size: 12px;"
         >
         </v-textarea>
       </v-col>

@@ -2,7 +2,15 @@
   <v-content>
     <v-container fluid>
       <v-row>
-        <SubNavBar />
+        <v-col cols="2">
+          <!--vacia-->
+        </v-col>
+        <v-col>
+          <SubNavBar />
+        </v-col>
+        <v-col cols="3">
+          <!--vacia-->
+        </v-col>
       </v-row>
       <v-row>
         <ER :showpallete="true" />

@@ -85,7 +85,7 @@
         <div id="myOverviewDiv"></div>
         <div id="myNotes" class="h-50" scrollable>
           <v-card color="white" fluid outlined>
-            <v-card-subtitle class="headline" color>
+            <v-card-subtitle class="headline">
               Notas:
             </v-card-subtitle>
             <v-card-text>
@@ -93,15 +93,14 @@
             </v-card-text>
             <v-card-subtitle class="caption">
               <v-icon small left>mdi-table-row-height</v-icon>
-              <span class="font-weight-light"
-                >DataSize: es el tamaño de dato para la transformación a
-                sentencias SQL, este campo solo acepta valores entre 1 y
-                255.</span
-              >
+              <span class="text--secondary">
+                DataSize: es el tamaño de dato para la transformación a
+                sentencias SQL, este campo solo acepta valores entre 1 y 255.
+              </span>
             </v-card-subtitle>
             <v-card-subtitle class="caption">
               <v-icon small left>mdi-format-list-bulleted-type</v-icon>
-              <span class="font-weight-light"
+              <span class="text--secondary"
                 >DataType: es el tipo de dato para la transformación a
                 sentencias SQL, se consideran solo los tipos de datos mas
                 utilizads en MySQL.</span
@@ -109,14 +108,14 @@
             </v-card-subtitle>
             <v-card-subtitle class="caption">
               <v-icon small left>mdi-null</v-icon>
-              <span class="font-weight-light"
+              <span class="text--secondary"
                 >NotNull: es el indicador para señalar si el atributo puede ser
                 o no nulo en la transformación a sentencias SQL.</span
               >
             </v-card-subtitle>
             <v-card-subtitle class="caption">
               <v-icon small left>mdi-debug-step-out</v-icon>
-              <span class="font-weight-light"
+              <span class="text--secondary"
                 >Auto Increment: es el indicador para señalar si el atributo
                 incrementara su valor de manera automatica en la transformación
                 a sentencias SQL, esta propiedad solo es tomada en cuenta para
@@ -128,7 +127,7 @@
             </v-card-subtitle>
             <v-card-subtitle class="caption">
               <v-icon small left>mdi-group</v-icon>
-              <span class="font-weight-light"
+              <span class="text--secondary"
                 >GDMType: es el tipo de dato que adoptará el atributo en la
                 tranformación al gdm del modelo NoSQL (por defecto es del tipo
                 "text").</span
