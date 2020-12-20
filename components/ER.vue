@@ -181,16 +181,16 @@
         <v-card-text font-size="24px">
           {{ msgDiagramErrors }}
           <br />
-          Puede proceder a crear las consultas de acceso para el modelo
-          noSQL(paso 2) o si lo prefiere obtener las sentencias SQL(paso 3).
+          Puede proceder a obtener las sentencias SQL(paso 2) si lo prefiere
+          escribir las consultas de acceso para el modelo noSQL(paso 3).
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn left outlined color="indigo darken-1" to="/workspace/queries">
+          <v-btn left outlined color="indigo" to="/workspace/sentencesSQL">
             Paso 2
           </v-btn>
-          <v-btn left outlined color="indigo" to="/workspace/sentencesSQL">
+          <v-btn left outlined color="indigo darken-1" to="/workspace/queries">
             Paso 3
           </v-btn>
           <v-btn color="success" @click="validDiagram = false">
@@ -963,6 +963,7 @@ export default {
     },
     cleanCanvas() {
       this.myDiagram.model = go.Model.fromJson({})
+      this.$store.dispatch('vuexER/save', this.myDiagram.model)
     },
     validateDiagram() {
       this.saveDiagramProperties()

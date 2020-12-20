@@ -223,8 +223,12 @@ export default {
       ) // end Table Panel
     ) // end Node
     // create the model for the E-R diagram
-    const nodeDataArray = this.nosqlDiagram.nodeDataArray
-    const linkDataArray = this.nosqlDiagram.linkDataArray
+    const nodeDataArray = this.nosqlDiagram
+      ? this.nosqlDiagram.nodeDataArray
+      : []
+    const linkDataArray = this.nosqlDiagram
+      ? this.nosqlDiagram.linkDataArray
+      : []
     this.myDiagram.linkTemplate = $(
       go.Link,
       {

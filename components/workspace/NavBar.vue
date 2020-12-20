@@ -14,8 +14,8 @@
         <v-tabs-slider color="yellow"></v-tabs-slider>
 
         <v-tab nuxt to="/workspace/er">1: Diagrama ER</v-tab>
-        <v-tab nuxt to="/workspace/queries">2: Consultas</v-tab>
-        <v-tab nuxt to="/workspace/sentencesSQL">3: Sentencias SQL</v-tab>
+        <v-tab nuxt to="/workspace/sentencesSQL">2: Sentencias SQL</v-tab>
+        <v-tab nuxt to="/workspace/queries">3: Consultas</v-tab>
         <v-tab nuxt to="/workspace/nosql">4: Modelo NoSQL</v-tab>
       </v-tabs>
     </template>

@@ -124,10 +124,9 @@ export default {
     }
   },
   watch: {},
-  created() {
-    this.getEntitiesGdm()
-  },
+  created() {},
   mounted() {
+    this.getEntitiesGdm()
     // listeners
     this.$nuxt.$on('emitGivenValue', () => {
       const nodo = this.nodoObtenido
@@ -229,7 +228,13 @@ export default {
       }
     },
     getEntitiesGdm() {
-      if (!this.diagramaObtenido) {
+      console.log(this.diagramaObtenido)
+      console.log(this.diagramaObtenido.nodeDataArray)
+      console.log(this.diagramaObtenido.linkDataArray)
+      if (
+        this.diagramaObtenido.nodeDataArray.length === 0 ||
+        this.diagramaObtenido.linkDataArray.length === 0
+      ) {
         this.$snotify.warning(
           'No se encontro un diagrama en el contexto de la aplicación.'
         )
