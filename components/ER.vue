@@ -246,6 +246,7 @@ export default {
     })
   },
   mounted() {
+    this.$snotify.clear()
     /* Siempre el objeto será creado cuando el componente entre en el hook mounted(). Es decir, 
     debemos recuperar el estado anterior del diagrama mediante un estado compartido entre componentes en Vuex 
     o por otro medio. Está implementado en Vuex. */

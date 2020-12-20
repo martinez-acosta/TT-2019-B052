@@ -5,7 +5,8 @@
     </client-only>
     <v-row>
       <v-toolbar dense>
-        <v-tooltip bottom>
+        <v-spacer></v-spacer>
+        <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               icon
@@ -13,7 +14,7 @@
               :download="scriptName"
               v-on="on"
               @click="helpDialog = true"
-            >
+              >Descargar Sentencias MongoDB
               <v-icon>mdi-download</v-icon>
             </v-btn>
           </template>
