@@ -228,12 +228,10 @@ export default {
       }
     },
     getEntitiesGdm() {
-      console.log(this.diagramaObtenido)
-      console.log(this.diagramaObtenido.nodeDataArray)
-      console.log(this.diagramaObtenido.linkDataArray)
+      const diagram = JSON.parse(this.diagramaObtenido)
       if (
-        this.diagramaObtenido.nodeDataArray.length === 0 ||
-        this.diagramaObtenido.linkDataArray.length === 0
+        diagram.nodeDataArray.length === 0 ||
+        diagram.linkDataArray.length === 0
       ) {
         this.$snotify.warning(
           'No se encontro un diagrama en el contexto de la aplicación.'
