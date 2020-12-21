@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <client-only>
       <vue-snotify></vue-snotify>
     </client-only>
@@ -14,11 +14,11 @@
       >
     </v-row>
     <v-row>
-      <v-col cols="3">
-        <div style="width: 100%; height: 70%; overflow: auto; font-size: 12px;">
+      <v-col cols="4">
+        <div style="width: 100%; height: 67%; overflow: auto; font-size: 12px;">
           <ssh-pre
             language="pug"
-            label="entidades del GDM"
+            label="Entidades del GDM"
             :reactive="true"
             :copy-button="false"
             :dark="false"
@@ -28,16 +28,19 @@
         </div>
       </v-col>
       <v-col>
-        <v-card-title>Consultas modelo GDM</v-card-title>
         <v-textarea
           id="queriesGDM"
           v-model="gdmQueries"
-          full-width
           outlined
-          dense
-          label="Consultas de accesso"
+          rows="23"
+          label="Consultas del GDM"
+          style="font-size: 12px;"
         >
         </v-textarea>
+
+        <!--<div style="width: 100%; height: 50%; overflow: auto; font-size: 12px;">
+          
+        </div>-->
       </v-col>
     </v-row>
     <!------Fin consultas---------->
@@ -68,7 +71,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import SshPre from 'simple-syntax-highlighter'
-import 'simple-syntax-highlighter/dist/sshpre.css'
+import '@/static/ssh-gdm.css'
 
 export default {
   components: {
@@ -77,31 +80,7 @@ export default {
   data() {
     return {
       componentKey: 0,
-      givenHeaders: [
-        {
-          text: 'Atributo',
-          align: 'start',
-          sortable: false,
-          value: 'name'
-        },
-        {
-          text: 'Valor',
-          align: 'start',
-          sortable: false,
-          value: 'type'
-        }
-      ],
       entitiesER: ``,
-      findHeaders: [
-        {
-          text: 'Atributo',
-          align: 'start',
-          sortable: false,
-          value: 'name'
-        }
-      ],
-      // givenEntries: [],
-      // findEntries: [],
       currentTab: null,
       tab: null,
       gdmQueries: '',
@@ -126,83 +105,19 @@ export default {
   watch: {},
   created() {},
   mounted() {
+    this.gdmQueries = this.queries
     this.getEntitiesGdm()
-    // listeners
-    this.$nuxt.$on('emitGivenValue', () => {
-      const nodo = this.nodoObtenido
-      const nodoConectado = this.nodoConectado
-
-      this.$store
-        .dispatch('vuexQueries/pushGivenEntry', {
-          name: nodoConectado.text + '.' + nodo.text,
-          type: 'value',
-          tab: this.currentTab,
-          nodo: this.nodoObtenido,
-          nodoConectado: this.nodoConectado
-        })
-        .then(this.forceRerender())
-    })
-
-    this.$nuxt.$on('emitGivenRange', () => {
-      const nodo = this.nodoObtenido
-      const nodoConectado = this.nodoConectado
-
-      this.$store
-        .dispatch('vuexQueries/pushGivenEntry', {
-          name: nodoConectado.text + '.' + nodo.text,
-          type: 'range',
-          tab: this.currentTab,
-          nodo: this.nodoObtenido,
-          nodoConectado: this.nodoConectado
-        })
-        .then(this.forceRerender())
-    })
-
-    this.$nuxt.$on('emitGivenSet', () => {
-      const nodo = this.nodoObtenido
-      const nodoConectado = this.nodoConectado
-
-      this.$store
-        .dispatch('vuexQueries/pushGivenEntry', {
-          name: nodoConectado.text + '.' + nodo.text,
-          type: 'set',
-          tab: this.currentTab,
-          nodo: this.nodoObtenido,
-          nodoConectado: this.nodoConectado
-        })
-        .then(this.forceRerender())
-    })
-
-    this.$nuxt.$on('emitFindValue', () => {
-      const nodo = this.nodoObtenido
-      const nodoConectado = this.nodoConectado
-
-      this.$store
-        .dispatch('vuexQueries/pushFindEntry', {
-          name: nodoConectado.text + '.' + nodo.text,
-          type: 'value',
-          tab: this.currentTab,
-          nodo: this.nodoObtenido,
-          nodoConectado: this.nodoConectado
-        })
-        .then(this.forceRerender())
-    })
   },
   beforeDestroy() {
-    this.$nuxt.$off('emitGivenValue')
-    this.$nuxt.$off('emitGivenRange')
-    this.$nuxt.$off('emitGivenSet')
-    this.$nuxt.$off('emitFindValue')
+    this.vuexSaveQueries()
   },
 
   methods: {
-    setLength(k) {
-      this.$store
-        .dispatch('vuexQueries/setLength', k)
-        .then(this.$store.dispatch('vuexQueries/setArraySize'))
-    },
     forceRerender() {
       this.componentKey += 1
+    },
+    vuexSaveQueries() {
+      this.$store.dispatch('vuexQueries/saveQueries', this.gdmQueries)
     },
     getNoSQLDiagram() {
       if (this.gdmQueries.length < 50) {

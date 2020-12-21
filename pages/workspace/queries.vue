@@ -2,10 +2,10 @@
   <v-content>
     <v-container class="ma-0 pa-0" fluid>
       <v-row no-gutters>
-        <v-col cols="6">
+        <v-col cols="7">
           <ER :showpallete="false" :readonly="true" />
         </v-col>
-        <v-col cols="6">
+        <v-col>
           <Queries />
         </v-col>
       </v-row>
