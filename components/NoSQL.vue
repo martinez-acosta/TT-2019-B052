@@ -22,15 +22,6 @@
         </v-tooltip>
 
         <v-spacer></v-spacer>
-
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-help</v-icon>
-            </v-btn>
-          </template>
-          <span>Ayuda</span>
-        </v-tooltip>
       </v-toolbar>
     </v-row>
     <v-row style="height: 80vh">

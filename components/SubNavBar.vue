@@ -33,20 +33,6 @@
         </v-btn>
         <v-divider class="mx-4" vertical></v-divider>
         <v-spacer></v-spacer>
-
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-              v-bind="attrs"
-              v-on="on"
-              @click.stop="helpDialog = true"
-            >
-              <v-icon>mdi-help</v-icon>
-            </v-btn>
-          </template>
-          <span>Ayuda</span>
-        </v-tooltip>
       </v-toolbar>
     </v-row>
   </v-container>
