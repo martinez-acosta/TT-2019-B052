@@ -875,7 +875,7 @@ export default {
 
     // Whenever the Diagram.position or Diagram.scale change,
     // update the position of all simple Parts that have a _viewPosition property.
-    this.myDiagram.addDiagramListener('ViewportBoundsChanged', function(e) {
+    this.myDiagram.addDiagramListener('ViewportBoundsChanged', (e) => {
       e.diagram.commit(function(dia) {
         // only iterates through simple Parts in the diagram, not Nodes or Links
         dia.parts.each(function(part) {
@@ -886,6 +886,51 @@ export default {
           }
         })
       }, 'fix Parts')
+    })
+    this.myDiagram.addDiagramListener('TextEdited', (e) => {
+      console.log(e)
+      // const nombreAnterior = e.parameter
+      const node = e.subject.part.data
+      // console.log('nombre editado', node.text)
+      // console.log('nombre anterior', nombreAnterior)
+      // console.log(node)
+
+      // Si es entidad
+      if (node.type === 'entity' || node.type === 'weakEntity') {
+        e.diagram.commit((diagram) => {
+          let cambiarNombre = false
+          // recorremos los nodos del diagrama
+          diagram.nodes.each((n) => {
+            // console.log(n.data) // Impresion de cada nodo
+            // Si el nodo es una entidad y si es diferente de la entidad que estamos revisando:
+            if (n.data.key !== node.key && this.isEntity(n.data.type)) {
+              if (n.data.text === node.text) {
+                console.log('Nombre repetido con la entidad: ', n.data)
+                // e.subject.part.data.text = 'Entidad'
+                cambiarNombre = true
+              }
+            }
+          })
+          if (cambiarNombre) {
+            diagram.nodes.each((n) => {
+              if (n.data.key === node.key) {
+                n.data.text = 'Entidad'
+                console.log('Nombre cambiado')
+                this.myDiagram.startTransaction()
+                this.myDiagram.updateAllRelationshipsFromData()
+                this.myDiagram.updateAllTargetBindings()
+                this.myDiagram.commitTransaction('update')
+                this.$snotify.warning(
+                  'No se permiten nombres repetidos en las entidades.'
+                )
+              }
+            })
+          }
+        }, 'Cambios')
+      }
+      // Si es relación
+      if (node.type === 'relation' || node.type === 'weakRelation') {
+      }
     })
   },
   beforeDestroy() {
@@ -899,6 +944,14 @@ export default {
   middleware: 'authenticated',
   layout: 'workspace', // layout de la aplicación (esto es de nuxt)
   methods: {
+    isEntity(tipo) {
+      console.log('entramos')
+      if (tipo === 'entity' || tipo === 'weakEntity') {
+        return true
+      } else {
+        return false
+      }
+    },
     mostrarMenuContextual() {
       if (!this.soloLectura) return this.myContextMenu
     },
