@@ -33,10 +33,8 @@
           id="queriesGDM"
           v-model="gdmQueries"
           full-width
-          row-height="10"
           outlined
           dense
-          rows="24"
           label="Consultas de accesso"
         >
         </v-textarea>
@@ -231,6 +229,9 @@ export default {
     },
     getEntitiesGdm() {
       const diagram = JSON.parse(this.diagramaObtenido)
+      if (!diagram) {
+        return
+      }
       if (
         diagram.nodeDataArray.length === 0 ||
         diagram.linkDataArray.length === 0
