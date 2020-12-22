@@ -346,9 +346,12 @@ export default {
       this.myDiagram.model.linkDataArray = this.nosqlDiagram.linkDataArray
     },
     downloadScript() {
+            this.$nuxt.$loading.start()
+
       this.$store
         .dispatch('axiosNoSQL/getMongoScript')
         .then((response) => {
+           this.$nuxt.$loading.finish()
           this.helpDialog = false
           const scriptData = encodeURIComponent(response.data)
           this.urlFile = `data:text/plain;charset=utf-8,${scriptData}` // application/sql
@@ -362,6 +365,8 @@ export default {
           this.$snotify.success('Archivo descargado.')
         })
         .catch(() => {
+          this.$nuxt.$loading.fail()
+          this.$nuxt.$loading.finish()
           const msg = 'Ocurrio un error al obtener el script de mongoDB'
           this.$snotify.error(msg)
         })
