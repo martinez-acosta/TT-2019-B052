@@ -128,15 +128,21 @@ CREATE TABLE 'customers' (
   methods: {
     getSentencesSQL() {
       const diagram = this.currentDiagram
+      this.$nuxt.$loading.start()
+
       this.$store
         .dispatch('axiosER/convertToSQL', {
           diagram,
           dbName: this.db_name
         })
         .then((response) => {
+          this.$nuxt.$loading.finish()
+
           this.sentences = response.data
         })
         .catch((error) => {
+          this.$nuxt.$loading.fail()
+          this.$nuxt.$loading.finish()
           if (error.response.status === 500) {
             this.$snotify.warning(
               '¡Algo ocurrió! No fue posible obtener las sentencias SQ del diagrama, intente más tarde.'

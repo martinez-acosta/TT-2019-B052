@@ -166,8 +166,8 @@ export default {
             this.entitiesER = '\n' + nosqlRawDiagram
           })
           .catch(() => {
-          this.$nuxt.$loading.fail()
-          this.$nuxt.$loading.finish()
+            this.$nuxt.$loading.fail()
+            this.$nuxt.$loading.finish()
             const msg =
               'Ocurrio un error al obtener las entidades del diagrama ER, revise las consultas.'
             this.$snotify.error(msg)
