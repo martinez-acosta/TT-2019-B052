@@ -155,15 +155,19 @@ export default {
           'No se encontro un diagrama en el contexto de la aplicación.'
         )
       } else {
+        this.$nuxt.$loading.start()
         this.$store
           .dispatch('axiosNoSQL/getGDMEntities', {
             diagram: this.diagramaObtenido
           })
           .then((response) => {
+            this.$nuxt.$loading.finish()
             const nosqlRawDiagram = response.data
             this.entitiesER = '\n' + nosqlRawDiagram
           })
           .catch(() => {
+          this.$nuxt.$loading.fail()
+          this.$nuxt.$loading.finish()
             const msg =
               'Ocurrio un error al obtener las entidades del diagrama ER, revise las consultas.'
             this.$snotify.error(msg)
