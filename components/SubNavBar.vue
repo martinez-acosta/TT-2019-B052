@@ -101,7 +101,6 @@ export default {
       reader.readAsText(e.target.files[0]) // do something
     },
     loadModelFromFile() {
-      console.log(this.diagramFromFile)
       const diagram = this.diagramFromFile
       if (diagram.nodeDataArray && diagram.linkDataArray) {
         this.$nuxt.$emit('LoadModelFromFile', this.diagramFromFile)

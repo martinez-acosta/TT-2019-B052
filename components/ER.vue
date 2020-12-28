@@ -9,13 +9,13 @@
         cols="2"
         class="white lighten-2 fill-height d-flex flex-column"
       >
-        <!-- <v-btn
+        <v-btn
           :download="scriptName"
           :href="urlFile"
           @click="downloadGoJSData()"
         >
-          Descargar Gojs</v-btn
-        > -->
+          Descargar Diagrama</v-btn
+        >
         <div
           v-if="mostrarPaleta"
           id="myPaletteDiv"
@@ -869,7 +869,6 @@ export default {
         this.validateDiagram()
       })
       this.$nuxt.$on('LoadModelFromFile', (data) => {
-        console.log(data)
         this.loadDiagramFromFile(data)
       })
     }
@@ -1026,7 +1025,6 @@ export default {
         })
     },
     loadDiagramFromFile(data) {
-      console.log(data)
       this.myDiagram.model = go.Model.fromJson(data)
     },
     cleanCanvas() {
@@ -1280,7 +1278,7 @@ export default {
       this.saveDiagramProperties()
       const diagram = this.myDiagram.model.toJson()
       const scriptData = encodeURIComponent(diagram)
-      this.scriptName = this.scriptName ? this.scriptName : 'prueba.json'
+      this.scriptName = new Date().toLocaleDateString() + '.json'
       this.urlFile = `data:json/plain;charset=utf-8,${scriptData}` // application/sql
       this.$snotify.success('Archivo descargado. ')
     }
