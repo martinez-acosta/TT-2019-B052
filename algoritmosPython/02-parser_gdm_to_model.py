@@ -313,8 +313,8 @@ def main():
     # Creamos el modelo GDM
     model = gdm.Model()
     
-    # input_file = open('laloVenues.gdm', 'r') 
-    input_file = open('laloEAC.gdm', 'r') 
+    input_file = open('laloVenues.gdm', 'r') 
+    #input_file = open('laloEAC.gdm', 'r') 
     lines = input_file.readlines()
     
     # Primero creamos las entidades y las consultas, porque las necesitamos para crear las referencias
