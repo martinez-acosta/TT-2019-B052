@@ -58,7 +58,7 @@ def getRefs(entity,inclusion):
         for item in entity.features.items:
             if item.name == feature_name:
                 refs.append(item)
-                break
+                #break
     return refs
 
 def getRefAliasFromQuery(query, aliasEntity):
@@ -313,7 +313,8 @@ def main():
     # Creamos el modelo GDM
     model = gdm.Model()
     
-    input_file = open('laloVenues.gdm', 'r') 
+    # input_file = open('laloVenues.gdm', 'r') 
+    input_file = open('laloEAC.gdm', 'r') 
     lines = input_file.readlines()
     
     # Primero creamos las entidades y las consultas, porque las necesitamos para crear las referencias
