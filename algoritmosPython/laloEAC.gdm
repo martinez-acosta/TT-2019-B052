@@ -1,0 +1,61 @@
+entity Player {
+  text playerName
+  boolean isAdmin
+  text playerFrags
+  id playerId unique
+  ref Session[*] HaveSession
+}
+
+entity State {
+  timestamp serverTimestamp
+  number posZ
+  number posY
+  number posX
+  id stateId unique
+  ref Session[1] session
+}
+
+entity Server {
+  text serverName
+  text serverIP
+  id serverId unique
+  ref Session[*] HostSession
+}
+
+entity Session {
+  timestamp TimeEnded
+  timestamp TimeStarted
+  id sessionId unique
+  ref State[*] statesState
+  ref Player[1] player
+  ref Server[1] server
+}
+
+query Q1_latestStateOfAPlayer:
+  select server.serverName
+  from Server as server
+  including server.HostSession as sessions
+  where server.serverId = "?"
+
+query Q2_latestStateOfAllPlayers:
+  select state.posX, state.posY, state.posZ, state.stateId
+  from State as state
+  where state.stateId = "?"
+
+query Q3_serverInfo:
+  select server.serverName, server.serverIP
+  from Server as server
+  where server.serverId = "?"
+
+query Q4_checkServer:
+  select server.serverId
+  from Server as server
+  where server.serverId = "?"
+
+query Q5_playerSessions:
+  select session.sessionId
+  from Session as session
+  including session.player as player
+  where player.playerId = "?"
+    
+    
