@@ -1,6 +1,6 @@
 db.createCollection("Venue", {
   validator: {
-    $jsonSchema: {    bsonType: "object",
+    $jsonSchema: {    required: ["venueName","year","homepage","country","topics"],    bsonType: "object",
     properties: {
 venueName: { bsonType: "string"}
 ,year: { bsonType: "double"}
@@ -22,7 +22,7 @@ artifactRef: { bsonType: "objectId"}
 })
 db.createCollection("Artifact", {
   validator: {
-    $jsonSchema: {    bsonType: "object",
+    $jsonSchema: {    required: ["authors","numRatings","avgRating","sumRatings","artifactTitle","keywords"],    bsonType: "object",
     properties: {
 artifactId: { bsonType: "objectId"}
 ,authors: { bsonType: "string"}
@@ -38,7 +38,7 @@ artifactId: { bsonType: "objectId"}
 })
 db.createCollection("User", {
   validator: {
-    $jsonSchema: {    bsonType: "object",
+    $jsonSchema: {    required: ["userName","userEmail","areasOfExpertise"],    bsonType: "object",
     properties: {
 userId: { bsonType: "objectId"}
 ,userName: { bsonType: "string"}

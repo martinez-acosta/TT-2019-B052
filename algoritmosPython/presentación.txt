@@ -1,0 +1,40 @@
+En el contenido debe ir la problemática, los objetivos y mostrar enseguida la arquitectura del sistema.
+
+En la arquitectura se deben mostrar las herramientas que usamos. Se puede hacer énfasis en los modulos esenciales para la funcionalidad del sistema, como los modulos er a relacional, pero ayudándose de la arquitectura que usamos.
+
+Luego viene la demostración del sistema.
+
+Mencionar trabajo a futuro.
+
+Hace falta: Requerimientos técnicos que se necesita para que funcione el sistema.
+-----------------------------------------------------------------------------------------
+
+herramienta case, es un software que te asiste a desarrollar de manera más simple.
+
+NoSQL: clave-valor, orientado a columnas, orientado a documentos y orientado a grafos.
+
+clave-valor está diseñado para diseñado para almacenar, recuperar y administrar arreglos
+asociativos.
+
+Gestores orientado a columnas:  Amazon SimpleDB, Cassandra, Cloudata, Druid
+Gestores orientados a documentos: ArangoDB, Azure, BagriDB, MongoDB
+Gestores orientados a grafos: AllegroGraph, ArangoDB, Infinite Graph y GraphBase
+Gestores clave-valor: Aerospike, Azure Table Storage y BangDB.
+
+
+Axios is a very popular JavaScript library you can use to perform HTTP requests
+
+Vuex is a state management pattern + library for Vue.js applications. It serves as a centralized store for all the components in an application, with rules ensuring that the state can only be mutated in a predictable fashion
+
+Gramática
+Es una forma de describir un lenguaje formal.
+ La gramática permite generar cadenas a partir de un simbolo
+inicial y aplicando reglas que indican como ciertas
+combinaciones de símbolos pueden ser reemplazadas
+usando otras combinaciones de símbolos
+ Una Gramática Formal G se compone de:
+ Un conjunto finito de Símbolos No Terminales (N)
+ Un conjunto finito de Símbolos Terminales (Σ)
+ Un conjunto finito de Reglas de Producción (P)
+
+¿Qué problemáticas inherentes (de los sistemas relacionales) resuelven los sistemas NoSQL?

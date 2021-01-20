@@ -73,6 +73,17 @@ def writeFile(output_file,collection):
     output_file.write("db.createCollection(\"" + collection.name + "\", {\n")
     output_file.write("  validator: {\n")
     output_file.write("    $jsonSchema: {")
+    output_file.write("    required: [")
+    arr = collection.root.fields.items
+    cadena = ''
+    for i in range(len(arr)):
+        if "Array" not in arr[i].name and i < len(arr)-1 and arr[i].type.name != "ID":
+            cadena += "\"" + arr[i].name + "\","
+        elif "Array" not in arr[i].name and arr[i].type.name != "ID":
+            cadena += "\"" + arr[i].name + "\""
+    cadena = cadena[:-1]
+    output_file.write(cadena)
+    output_file.write("],")
     output_file.write("    bsonType: \"object\",\n")
     output_file.write("    properties: {\n")
     
